@@ -35,5 +35,9 @@ sysinfo.txt
 
 
 /UMI3D-pico-browser/Assets/XR/GlTFSceneExtensions.cs.meta
+# Excluded folder.
 /UMI3D-pico-browser/Assets/EXCLUDED.meta
 /UMI3D-pico-browser/Assets/EXCLUDED
+# Sample Pico SDK.
+/UMI3D-pico-browser/Assets/Samples.meta
+/UMI3D-pico-browser/Assets/Samples
