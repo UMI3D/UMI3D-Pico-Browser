@@ -718,7 +718,7 @@ PlayerSettings:
   incrementalIl2cppBuild: {}
   suppressCommonWarnings: 1
   allowUnsafeCode: 0
-  useDeterministicCompilation: 1
+  useDeterministicCompilation: 0
   enableRoslynAnalyzers: 1
   selectedPlatform: 2
   additionalIl2CppArgs: 
