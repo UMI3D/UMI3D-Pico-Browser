@@ -20,6 +20,7 @@ using System.Runtime.CompilerServices;
 using umi3d.cdk.collaboration;
 using umi3d.cdk.userCapture;
 using umi3d.common.userCapture;
+using umi3dVRBrowsersBase.connection;
 using UnityEngine;
 
 namespace umi3dVRBrowsersBase.ikManagement
@@ -47,7 +48,17 @@ namespace umi3dVRBrowsersBase.ikManagement
         public GameObject RightFoot;
 
         [HideInInspector]
+        public Animator Animator;
+        [HideInInspector]
+        public SetUpAvatarHeight AvatarHeight;
+        [HideInInspector]
         public UMI3DCollaborationClientUserTracking Tracking;
+        [HideInInspector]
+        public FootTargetBehavior FootBehaviour;
+        [HideInInspector]
+        public VirtualObjectBodyInteraction LeftFootBodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteraction RightFootBodyInteraction;
 
         public void CreateYbotHierarchy()
         {
@@ -77,16 +88,32 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         protected void SetAvatar()
         {
+            if (Avatar.GetComponent<SetUpAvatarHeight>() == null) AvatarHeight = Avatar.AddComponent<SetUpAvatarHeight>();
             if (Avatar.GetComponent<UMI3DCollaborationClientUserTracking>() == null) Tracking = Avatar.AddComponent<UMI3DCollaborationClientUserTracking>();
             if (Skeleton.GetComponent<UMI3DClientUserTrackingBone>() == null) Skeleton.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.CenterFeet;
-            if (Ybot.GetComponent<Animator>() == null) Ybot.AddComponent<Animator>();
+            if (Ybot.GetComponent<Animator>() == null) Animator = Ybot.AddComponent<Animator>();
             if (Ybot.GetComponent<PlayerMovement>() == null) Ybot.AddComponent<PlayerMovement>();
             if (AlphaJoints.GetComponent<SkinnedMeshRenderer>() == null) AlphaJoints.AddComponent<SkinnedMeshRenderer>();
             if (AlphaSurface.GetComponent<SkinnedMeshRenderer>() == null) AlphaSurface.AddComponent<SkinnedMeshRenderer>();
+            if (Feet.GetComponent<FootTargetBehavior>() == null)  FootBehaviour = Feet.AddComponent<FootTargetBehavior>();
+            if (LeftFoot.GetComponent<VirtualObjectBodyInteraction>() == null) LeftFootBodyInteraction = LeftFoot.AddComponent<VirtualObjectBodyInteraction>();
+            LeftFootBodyInteraction.goal = AvatarIKGoal.LeftFoot;
+            if (RightFoot.GetComponent<VirtualObjectBodyInteraction>() == null) RightFootBodyInteraction = RightFoot.AddComponent<VirtualObjectBodyInteraction>();
+            RightFootBodyInteraction.goal = AvatarIKGoal.RightFoot;
+
+            AvatarHeight.OVRAnchor = Umi3dPlayerManager.Instance.MainCamera?.transform;
+            AvatarHeight.skeletonContainer = Umi3dPlayerManager.Instance.IkManager.Skeleton?.transform;
+            AvatarHeight.FootTargetBehavior = FootBehaviour;
 
             Tracking.skeletonContainer = Skeleton.transform;
             Tracking.viewpoint = Umi3dPlayerManager.Instance.MainCamera?.transform;
             Tracking.viewpointBonetype = BoneType.Head;
+
+            FootBehaviour.FollowedAvatarNode = Avatar.transform;
+            FootBehaviour.OVRRig = Umi3dPlayerManager.Instance.Player?.transform;
+            FootBehaviour.SkeletonAnimator = Animator;
+            FootBehaviour.LeftTarget = LeftFootBodyInteraction;
+            FootBehaviour.RightTarget = RightFootBodyInteraction;
         }
     }
 }

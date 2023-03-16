@@ -38,7 +38,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         public TeleportArc LeftArc;
         [Tooltip("Right teleporting arc")]
         public TeleportArc RightArc;
-        // TODO snap turn 
 
         [Header("Avatar")]
         [Tooltip("The animator controller.")]
@@ -58,6 +57,8 @@ namespace umi3dVRBrowsersBase.ikManagement
         public VRInteractionMapper InteractionMapper;
         [HideInInspector]
         public Umi3dIkManager IkManager;
+        [HideInInspector]
+        public SnapTurn SnapTurn;
 
 
         private void OnValidate()
@@ -74,6 +75,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (this.GetComponent<umi3d.cdk.UMI3DNavigation>() == null) Navigation = this.AddComponent<umi3d.cdk.UMI3DNavigation>();
             if (this.GetComponent<WaitForServer>() == null) this.AddComponent<WaitForServer>();
             if (this.GetComponent<VRInteractionMapper>() == null) InteractionMapper = this.AddComponent<VRInteractionMapper>();
+            if (this.GetComponent<SnapTurn>() == null) SnapTurn = this.AddComponent<SnapTurn>();
 
             if (Navigation.navigations == null) Navigation.navigations = new List<AbstractNavigation>();
             if (!Navigation.navigations.Contains(VRNavigation)) Navigation.navigations.Add(VRNavigation);
