@@ -17,22 +17,20 @@ using MathNet.Numerics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using umi3d.cdk.collaboration;
+using umi3d.cdk.userCapture;
+using umi3d.common.userCapture;
 using UnityEngine;
 
 namespace umi3dVRBrowsersBase.ikManagement
 {
-    public class Umi3dIkManager : MonoBehaviour
+    [System.Serializable]
+    public class Umi3dIkManager
     {
-        [Header("Avatar")]
-        [Tooltip("The animator controller.")]
-        public RuntimeAnimatorController Controller;
-        [Tooltip("The avatar")]
-        public Avatar Avatar;
-        [Tooltip("Mesh for the join")]
-        public Mesh Join;
-        [Tooltip("Mesh for the surface")]
-        public Mesh Surface;
-
+        [HideInInspector]
+        public GameObject Avatar;
+        [HideInInspector]
+        public GameObject Skeleton;
         [HideInInspector]
         public GameObject Ybot;
         [HideInInspector]
@@ -41,36 +39,54 @@ namespace umi3dVRBrowsersBase.ikManagement
         public GameObject AlphaSurface;
         [HideInInspector]
         public Umi3dMixamorigManager Mixamorig;
+        [HideInInspector]
+        public GameObject Feet;
+        [HideInInspector]
+        public GameObject LeftFoot;
+        [HideInInspector]
+        public GameObject RightFoot;
 
-        [ContextMenu("Create Ybot Hierarchy")]
-        protected void CreateYbotHierarchy()
+        [HideInInspector]
+        public UMI3DCollaborationClientUserTracking Tracking;
+
+        public void CreateYbotHierarchy()
         {
+            if (Avatar == null) Avatar = new GameObject($"Avatar");
+            if (Skeleton == null) Skeleton = new GameObject($"Skeleton");
             if (Ybot == null) Ybot = new GameObject($"Ybot");
             if (AlphaJoints == null) AlphaJoints = new GameObject($"AlphaJoints");
             if (AlphaSurface == null) AlphaSurface = new GameObject($"AlphaSurface");
             if (Mixamorig == null) Mixamorig = new Umi3dMixamorigManager();
+            if (Feet == null) Feet = new GameObject($"Feet");
+            if (LeftFoot == null) LeftFoot = new GameObject($"LeftFoot");
+            if (RightFoot == null) RightFoot = new GameObject($"RightFoot");
 
-            this.gameObject.Add(Ybot);
+            Mixamorig.CreateMixamorigHierarchy();
+
+            Avatar.Add(Skeleton);
+            Skeleton.Add(Ybot);
             Ybot.Add(AlphaJoints);
             Ybot.Add(AlphaSurface);
-            Mixamorig.Ybot = Ybot;
-            Mixamorig.CreateMixamorigHierarchy();
             Ybot.Add(Mixamorig.Hips);
+            Avatar.Add(Feet);
+            Feet.Add(LeftFoot);
+            Feet.Add(RightFoot);
 
-            SetYbot();
+            SetAvatar();
         }
 
-        protected void SetYbot()
+        protected void SetAvatar()
         {
+            if (Avatar.GetComponent<UMI3DCollaborationClientUserTracking>() == null) Tracking = Avatar.AddComponent<UMI3DCollaborationClientUserTracking>();
+            if (Skeleton.GetComponent<UMI3DClientUserTrackingBone>() == null) Skeleton.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.CenterFeet;
             if (Ybot.GetComponent<Animator>() == null) Ybot.AddComponent<Animator>();
             if (Ybot.GetComponent<PlayerMovement>() == null) Ybot.AddComponent<PlayerMovement>();
             if (AlphaJoints.GetComponent<SkinnedMeshRenderer>() == null) AlphaJoints.AddComponent<SkinnedMeshRenderer>();
             if (AlphaSurface.GetComponent<SkinnedMeshRenderer>() == null) AlphaSurface.AddComponent<SkinnedMeshRenderer>();
-        }
 
-        private void Reset()
-        {
-            CreateYbotHierarchy();
+            Tracking.skeletonContainer = Skeleton.transform;
+            Tracking.viewpoint = Umi3dPlayerManager.Instance.MainCamera?.transform;
+            Tracking.viewpointBonetype = BoneType.Head;
         }
     }
 }

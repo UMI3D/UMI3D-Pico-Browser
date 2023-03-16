@@ -15,15 +15,15 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.cdk.userCapture;
+using umi3d.common.userCapture;
 using UnityEngine;
 
 namespace umi3dVRBrowsersBase.ikManagement
 {
+    [System.Serializable]
     public class Umi3dMixamorigManager
     {
-        [HideInInspector]
-        public GameObject Ybot;
-
         [HideInInspector]
         public GameObject Hips;
 
@@ -243,8 +243,6 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         public void CreateMixamorigHierarchy()
         {
-            if (Ybot == null) UnityEngine.Debug.LogError($"Bind Ybot to this");
-
             #region Create GO
 
             if (Hips == null) Hips = new GameObject($"{RIG}Hips");
@@ -349,111 +347,112 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             #endregion
 
-            #region Add component
+            #region Add component UMI3DClientUserTrackingBone
 
-            if (Hips == null) Hips = new GameObject($"{RIG}Hips");
+            if (Hips.GetComponent<UMI3DClientUserTrackingBone>() == null) Hips.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
             {
-                if (LeftUpLeg == null) LeftUpLeg = new GameObject($"{RIG}LeftUpLeg");
-                if (LeftLeg == null) LeftLeg = new GameObject($"{RIG}LeftLeg");
-                if (LeftFoot == null) LeftFoot = new GameObject($"{RIG}LeftFoot");
-                if (LeftToeBase == null) LeftToeBase = new GameObject($"{RIG}LeftToeBase");
-                if (LeftToeEnd == null) LeftToeEnd = new GameObject($"{RIG}LeftToeEnd");
+                if (LeftUpLeg.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftUpLeg.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftHip;
+                if (LeftLeg.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftLeg.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftKnee;
+                if (LeftFoot.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftFoot.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftAnkle;
+                if (LeftToeBase.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftToeBase.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftToeBase;
+                if (LeftToeEnd.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftToeEnd.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.None;
             }
             {
-                if (RightUpLeg == null) RightUpLeg = new GameObject($"{RIG}RightUpLeg");
-                if (RightLeg == null) RightLeg = new GameObject($"{RIG}RightLeg");
-                if (RightFoot == null) RightFoot = new GameObject($"{RIG}RightFoot");
-                if (RightToeBase == null) RightToeBase = new GameObject($"{RIG}RightToeBase");
-                if (RightToeEnd == null) RightToeEnd = new GameObject($"{RIG}RightToeEnd");
+                if (RightUpLeg.GetComponent<UMI3DClientUserTrackingBone>() == null) RightUpLeg.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightHip;
+                if (RightLeg.GetComponent<UMI3DClientUserTrackingBone>() == null) RightLeg.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightKnee;
+                if (RightFoot.GetComponent<UMI3DClientUserTrackingBone>() == null) RightFoot.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightAnkle;
+                if (RightToeBase.GetComponent<UMI3DClientUserTrackingBone>() == null) RightToeBase.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightToeBase;
+                if (RightToeEnd.GetComponent<UMI3DClientUserTrackingBone>() == null) RightToeEnd.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.None;
             }
             {
-                if (Spine0 == null) Spine0 = new GameObject($"{RIG}Spine0");
-                if (Spine1 == null) Spine1 = new GameObject($"{RIG}Spine1");
-                if (Spine2 == null) Spine2 = new GameObject($"{RIG}Spine2");
+                if (Spine0.GetComponent<UMI3DClientUserTrackingBone>() == null) Spine0.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Spine;
+                if (Spine1.GetComponent<UMI3DClientUserTrackingBone>() == null) Spine1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Chest;
+                if (Spine2.GetComponent<UMI3DClientUserTrackingBone>() == null) Spine2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.UpperChest;
                 {
-                    if (LeftShoulder == null) LeftShoulder = new GameObject($"{RIG}LeftShoulder");
-                    if (LeftArm == null) LeftArm = new GameObject($"{RIG}LeftArm");
-                    if (LeftForearm == null) LeftForearm = new GameObject($"{RIG}LeftForearm");
-                    if (LeftHand == null) LeftHand = new GameObject($"{RIG}LeftHand");
+                    if (LeftShoulder.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftShoulder.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftShoulder;
+                    if (LeftArm.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftArm.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftUpperArm;
+                    if (LeftForearm.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftForearm.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftForearm;
+                    if (LeftHand.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHand.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftHand;
                     {
-                        if (LeftHandIndex1 == null) LeftHandIndex1 = new GameObject($"{RIG}LeftHandIndex1");
-                        if (LeftHandIndex2 == null) LeftHandIndex2 = new GameObject($"{RIG}LeftHandIndex2");
-                        if (LeftHandIndex3 == null) LeftHandIndex3 = new GameObject($"{RIG}LeftHandIndex3");
-                        if (LeftHandIndex4 == null) LeftHandIndex4 = new GameObject($"{RIG}LeftHandIndex4");
+                        if (LeftHandIndex1.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandIndex1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftIndexProximal;
+                        if (LeftHandIndex2.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandIndex2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftIndexIntermediate;
+                        if (LeftHandIndex3.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandIndex3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftIndexDistal;
+                        //if (LeftHandIndex4.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandIndex4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.None;
                     }
                     {
-                        if (LeftHandMiddle1 == null) LeftHandMiddle1 = new GameObject($"{RIG}LeftHandMiddle1");
-                        if (LeftHandMiddle2 == null) LeftHandMiddle2 = new GameObject($"{RIG}LeftHandMiddle2");
-                        if (LeftHandMiddle3 == null) LeftHandMiddle3 = new GameObject($"{RIG}LeftHandMiddle3");
-                        if (LeftHandMiddle4 == null) LeftHandMiddle4 = new GameObject($"{RIG}LeftHandMiddle4");
+                        if (LeftHandMiddle1.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandMiddle1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftMiddleProximal;
+                        if (LeftHandMiddle2.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandMiddle2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftMiddleIntermediate;
+                        if (LeftHandMiddle3.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandMiddle3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftMiddleDistal;
+                        //if (LeftHandMiddle4.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandMiddle4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
                     }
                     {
-                        if (LeftHandPinky1 == null) LeftHandPinky1 = new GameObject($"{RIG}LeftHandPinky1");
-                        if (LeftHandPinky2 == null) LeftHandPinky2 = new GameObject($"{RIG}LeftHandPinky2");
-                        if (LeftHandPinky3 == null) LeftHandPinky3 = new GameObject($"{RIG}LeftHandPinky3");
-                        if (LeftHandPinky4 == null) LeftHandPinky4 = new GameObject($"{RIG}LeftHandPinky4");
+                        if (LeftHandPinky1.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandPinky1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftLittleProximal;
+                        if (LeftHandPinky2.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandPinky2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftLittleIntermediate;
+                        if (LeftHandPinky3.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandPinky3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftLittleDistal;
+                        //if (LeftHandPinky4.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandPinky4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
                     }
                     {
-                        if (LeftHandRing1 == null) LeftHandRing1 = new GameObject($"{RIG}LeftHandRing1");
-                        if (LeftHandRing2 == null) LeftHandRing2 = new GameObject($"{RIG}LeftHandRing2");
-                        if (LeftHandRing3 == null) LeftHandRing3 = new GameObject($"{RIG}LeftHandRing3");
-                        if (LeftHandRing4 == null) LeftHandRing4 = new GameObject($"{RIG}LeftHandRing4");
+                        if (LeftHandRing1.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandRing1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftRingProximal;
+                        if (LeftHandRing2.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandRing2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftRingIntermediate;
+                        if (LeftHandRing3.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandRing3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftRingDistal;
+                        //if (LeftHandRing4.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandRing4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
                     }
                     {
-                        if (LeftHandThumb1 == null) LeftHandThumb1 = new GameObject($"{RIG}LeftHandThumb1");
-                        if (LeftHandThumb2 == null) LeftHandThumb2 = new GameObject($"{RIG}LeftHandThumb2");
-                        if (LeftHandThumb3 == null) LeftHandThumb3 = new GameObject($"{RIG}LeftHandThumb3");
-                        if (LeftHandThumb4 == null) LeftHandThumb4 = new GameObject($"{RIG}LeftHandThumb4");
+                        if (LeftHandThumb1.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandThumb1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftThumbProximal;
+                        if (LeftHandThumb2.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandThumb2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftThumbIntermediate;
+                        if (LeftHandThumb3.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandThumb3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftThumbDistal;
+                        //if (LeftHandThumb4.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandThumb4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
                     }
                 }
                 {
-                    if (Neck == null) Neck = new GameObject($"{RIG}Neck");
-                    if (Head == null) Head = new GameObject($"{RIG}Head");
-                    if (HeadTop == null) HeadTop = new GameObject($"{RIG}HeadTop");
-                    if (LeftEye == null) LeftEye = new GameObject($"{RIG}LeftEye");
-                    if (RightEye == null) RightEye = new GameObject($"{RIG}RightEye");
+                    if (Neck.GetComponent<UMI3DClientUserTrackingBone>() == null) Neck.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Neck;
+                    if (Head.GetComponent<UMI3DClientUserTrackingBone>() == null) Head.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Head;
+                    //if (HeadTop.GetComponent<UMI3DClientUserTrackingBone>() == null) HeadTop.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.None;
+                    //if (LeftEye.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftEye.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.None;
+                    //if (RightEye.GetComponent<UMI3DClientUserTrackingBone>() == null) RightEye.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.None;
                 }
                 {
-                    if (RightShoulder == null) RightShoulder = new GameObject($"{RIG}RightShoulder");
-                    if (RightArm == null) RightArm = new GameObject($"{RIG}RightArm");
-                    if (RightForearm == null) RightForearm = new GameObject($"{RIG}RightForearm");
-                    if (RightHand == null) RightHand = new GameObject($"{RIG}RightHand");
+                    if (RightShoulder.GetComponent<UMI3DClientUserTrackingBone>() == null) RightShoulder.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightShoulder;
+                    if (RightArm.GetComponent<UMI3DClientUserTrackingBone>() == null) RightArm.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightUpperArm;
+                    if (RightForearm.GetComponent<UMI3DClientUserTrackingBone>() == null) RightForearm.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightForearm;
+                    if (RightHand.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHand.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightHand;
                     {
-                        if (RightHandIndex1 == null) RightHandIndex1 = new GameObject($"{RIG}RightHandIndex1");
-                        if (RightHandIndex2 == null) RightHandIndex2 = new GameObject($"{RIG}RightHandIndex2");
-                        if (RightHandIndex3 == null) RightHandIndex3 = new GameObject($"{RIG}RightHandIndex3");
-                        if (RightHandIndex4 == null) RightHandIndex4 = new GameObject($"{RIG}RightHandIndex4");
+                        if (RightHandIndex1.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandIndex1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightIndexProximal;
+                        if (RightHandIndex2.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandIndex2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightIndexIntermediate;
+                        if (RightHandIndex3.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandIndex3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightIndexDistal;
+                        //if (RightHandIndex4.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandIndex4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
                     }
                     {
-                        if (RightHandMiddle1 == null) RightHandMiddle1 = new GameObject($"{RIG}RightHandMiddle1");
-                        if (RightHandMiddle2 == null) RightHandMiddle2 = new GameObject($"{RIG}RightHandMiddle2");
-                        if (RightHandMiddle3 == null) RightHandMiddle3 = new GameObject($"{RIG}RightHandMiddle3");
-                        if (RightHandMiddle4 == null) RightHandMiddle4 = new GameObject($"{RIG}RightHandMiddle4");
+                        if (RightHandMiddle1.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandMiddle1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightMiddleProximal;
+                        if (RightHandMiddle2.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandMiddle2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightMiddleIntermediate;
+                        if (RightHandMiddle3.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandMiddle3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightMiddleDistal;
+                        //if (RightHandMiddle4.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandMiddle4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
                     }
                     {
-                        if (RightHandPinky1 == null) RightHandPinky1 = new GameObject($"{RIG}RightHandPinky1");
-                        if (RightHandPinky2 == null) RightHandPinky2 = new GameObject($"{RIG}RightHandPinky2");
-                        if (RightHandPinky3 == null) RightHandPinky3 = new GameObject($"{RIG}RightHandPinky3");
-                        if (RightHandPinky4 == null) RightHandPinky4 = new GameObject($"{RIG}RightHandPinky4");
+                        if (RightHandPinky1.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandPinky1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
+                        if (RightHandPinky2.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandPinky2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightLittleIntermediate;
+                        if (RightHandPinky3.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandPinky3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightLittleDistal;
+                        //if (RightHandPinky4.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandPinky4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
                     }
                     {
-                        if (RightHandRing1 == null) RightHandRing1 = new GameObject($"{RIG}RightHandRing1");
-                        if (RightHandRing2 == null) RightHandRing2 = new GameObject($"{RIG}RightHandRing2");
-                        if (RightHandRing3 == null) RightHandRing3 = new GameObject($"{RIG}RightHandRing3");
-                        if (RightHandRing4 == null) RightHandRing4 = new GameObject($"{RIG}RightHandRing4");
+                        if (RightHandRing1.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandRing1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightRingProximal;
+                        if (RightHandRing2.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandRing2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightRingIntermediate;
+                        if (RightHandRing3.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandRing3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightRingDistal;
+                        //if (RightHandRing4.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandRing4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
                     }
                     {
-                        if (RightHandThumb1 == null) RightHandThumb1 = new GameObject($"{RIG}RightHandThumb1");
-                        if (RightHandThumb2 == null) RightHandThumb2 = new GameObject($"{RIG}RightHandThumb2");
-                        if (RightHandThumb3 == null) RightHandThumb3 = new GameObject($"{RIG}RightHandThumb3");
-                        if (RightHandThumb4 == null) RightHandThumb4 = new GameObject($"{RIG}RightHandThumb4");
+                        if (RightHandThumb1.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandThumb1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightThumbProximal;
+                        if (RightHandThumb2.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandThumb2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightThumbIntermediate;
+                        if (RightHandThumb3.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandThumb3.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightThumbDistal;
+                        //if (RightHandThumb4.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandThumb4.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
                     }
                 }
             }
 
             #endregion
 
-            Ybot.Add(Hips);
+            #region Update Hierachy
+
             {
                 Hips.Add(LeftUpLeg);
                 LeftUpLeg.Add(LeftLeg);
@@ -552,6 +551,9 @@ namespace umi3dVRBrowsersBase.ikManagement
                     }
                 }
             }
+
+            #endregion
+
         }
     }
 }
