@@ -100,7 +100,7 @@ namespace umi3dVRBrowsersBase.interactions.input
                 menuItem = new InputMenuItem()
                 {
                     dto = interaction as ParameterType,
-                    Name = interaction.name
+                    Name = string.IsNullOrEmpty(interaction.name) ? interaction.GetType().Name : interaction.name,
                 };
 
                 menuItem.NotifyValueChange((interaction as ParameterType).value);
@@ -133,6 +133,7 @@ namespace umi3dVRBrowsersBase.interactions.input
                 menuItem.Subscribe(callback);
 
                 currentInteraction = interaction;
+                Menu?.Add(menuItem);
             }
             else
             {
@@ -144,6 +145,7 @@ namespace umi3dVRBrowsersBase.interactions.input
         {
             menuItem.UnSubscribe(callback);
             PlayerMenuManager.Instance.CtrlToolMenu.RemoveParameter((controller as VRController).type, menuItem);
+            Menu?.Remove(menuItem);
         }
 
         /// <summary>
@@ -174,6 +176,7 @@ namespace umi3dVRBrowsersBase.interactions.input
         {
             currentInteraction = null;
             PlayerMenuManager.Instance.CtrlToolMenu.RemoveParameter((controller as VRController).type, menuItem);
+            Menu?.Remove(menuItem);
         }
 
         /// <summary>
