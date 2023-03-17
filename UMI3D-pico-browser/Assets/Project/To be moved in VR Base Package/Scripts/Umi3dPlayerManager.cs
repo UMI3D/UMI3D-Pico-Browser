@@ -27,13 +27,46 @@ using UnityEngine.UI;
 
 namespace umi3dVRBrowsersBase.ikManagement
 {
-    public class Umi3dPlayerManager : PersistentSingleBehaviour<Umi3dPlayerManager>
+    public interface IUmi3dPlayer
     {
-        [Header("Player")]
+        void OnValidate()
+        {
+            OnPlayerFieldUpdate();
+            OnMainCameraFieldUpdate();
+            OnLeftArcFieldUpdate();
+            OnRightArcFieldUpdate();
+            OnAnimatorFieldUpdate();
+            OnAvatarFieldUpdate();
+            OnJoinMeshFieldUpdate();
+            OnSurfaceMeshFieldUpdate();
+        }
+        void OnPlayerFieldUpdate();
+        void OnMainCameraFieldUpdate();
+        void OnLeftHandFieldUpdate();
+        void OnRightHandFieldUpdate();
+
+        void OnLeftArcFieldUpdate();
+        void OnRightArcFieldUpdate();
+
+        void OnAnimatorFieldUpdate();
+        void OnAvatarFieldUpdate();
+        void OnJoinMeshFieldUpdate();
+        void OnSurfaceMeshFieldUpdate();
+    }
+
+    public class Umi3dPlayerManager : PersistentSingleBehaviour<Umi3dPlayerManager>, IUmi3dPlayer
+    {
+        [Header("Player Extern SDK")]
         [Tooltip("Player, the XR root")]
         public GameObject Player;
         [Tooltip("Main camera")]
         public Camera MainCamera;
+        [Tooltip("Player left hand")]
+        public GameObject LeftHand;
+        [Tooltip("player right hand")]
+        public GameObject RightHand;
+
+        [Header("Player Umi3d SDK")]
         [Tooltip("Left teleporting arc")]
         public TeleportArc LeftArc;
         [Tooltip("Right teleporting arc")]
@@ -41,50 +74,67 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         [Header("Avatar")]
         [Tooltip("The animator controller.")]
-        public RuntimeAnimatorController Controller;
+        public RuntimeAnimatorController AnimatorController;
         [Tooltip("The avatar")]
         public Avatar Avatar;
-        [Tooltip("Mesh for the join")]
-        public Mesh Join;
+        [Tooltip("Mesh for the joints")]
+        public Mesh MeshJoints;
         [Tooltip("Mesh for the surface")]
-        public Mesh Surface;
+        public Mesh MeshSurface;
+
+        #region Components
 
         [HideInInspector]
         public umi3dVRBrowsersBase.navigation.UMI3DNavigation VRNavigation;
         [HideInInspector]
         public umi3d.cdk.UMI3DNavigation Navigation;
         [HideInInspector]
-        public VRInteractionMapper InteractionMapper;
+        public WaitForServer WaitForServer;
         [HideInInspector]
-        public Umi3dIkManager IkManager;
+        public VRInteractionMapper InteractionMapper;
         [HideInInspector]
         public SnapTurn SnapTurn;
 
+        #endregion
+
+        #region Sub manager class
+
+        [HideInInspector]
+        public Umi3dIkManager IkManager;
+
+        #endregion
 
         private void OnValidate()
         {
-            if (Player != null) Player.Add(IkManager.Avatar);
-            else this.gameObject.Add(IkManager.Avatar);
-            if (IkManager != null && MainCamera != null) IkManager.Tracking.viewpoint = MainCamera.transform;
+            var umi3dPlayer = this as IUmi3dPlayer;
+            umi3dPlayer.OnValidate();
         }
 
         [ContextMenu("Create Player")]
         protected void CreatePlayer()
         {
-            if (this.GetComponent<umi3dVRBrowsersBase.navigation.UMI3DNavigation>() == null) VRNavigation = this.AddComponent<umi3dVRBrowsersBase.navigation.UMI3DNavigation>();
-            if (this.GetComponent<umi3d.cdk.UMI3DNavigation>() == null) Navigation = this.AddComponent<umi3d.cdk.UMI3DNavigation>();
-            if (this.GetComponent<WaitForServer>() == null) this.AddComponent<WaitForServer>();
-            if (this.GetComponent<VRInteractionMapper>() == null) InteractionMapper = this.AddComponent<VRInteractionMapper>();
-            if (this.GetComponent<SnapTurn>() == null) SnapTurn = this.AddComponent<SnapTurn>();
-
-            if (Navigation.navigations == null) Navigation.navigations = new List<AbstractNavigation>();
-            if (!Navigation.navigations.Contains(VRNavigation)) Navigation.navigations.Add(VRNavigation);
+            AddComponents();
+            SetComponents();
 
             if (IkManager == null) IkManager = new Umi3dIkManager();
-
             IkManager.CreateYbotHierarchy();
-            if (Player != null) Player.Add(IkManager.Avatar);
-            else this.gameObject.Add(IkManager.Avatar);
+
+            OnValidate();
+        }
+
+        protected void AddComponents()
+        {
+            if (VRNavigation == null) VRNavigation = this.AddComponent<umi3dVRBrowsersBase.navigation.UMI3DNavigation>();
+            if (Navigation == null) Navigation = this.AddComponent<umi3d.cdk.UMI3DNavigation>();
+            if (WaitForServer == null) WaitForServer = this.AddComponent<WaitForServer>();
+            if (InteractionMapper == null) InteractionMapper = this.AddComponent<VRInteractionMapper>();
+            if (SnapTurn == null) SnapTurn = this.AddComponent<SnapTurn>();
+        }
+
+        protected void SetComponents()
+        {
+            if (Navigation.navigations == null) Navigation.navigations = new List<AbstractNavigation>();
+            if (!Navigation.navigations.Contains(VRNavigation)) Navigation.navigations.Add(VRNavigation);
         }
 
         /// <summary>
@@ -114,6 +164,74 @@ namespace umi3dVRBrowsersBase.ikManagement
         private void Reset()
         {
             CreatePlayer();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPlayerFieldUpdate()
+        {
+            //if (Player != null) Player.Add(IkManager.Avatar);
+            //else this.gameObject.Add(IkManager.Avatar);
+            if (Player == null) return;
+
+            this.gameObject.Add(Player);
+
+            (IkManager as IUmi3dPlayer)?.OnPlayerFieldUpdate();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnMainCameraFieldUpdate()
+        {
+            if (MainCamera == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnMainCameraFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnLeftHandFieldUpdate()
+        {
+            if (LeftHand == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnLeftHandFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnRightHandFieldUpdate()
+        {
+            if (RightHand == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnRightHandFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnLeftArcFieldUpdate()
+        {
+            (IkManager as IUmi3dPlayer)?.OnLeftArcFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnRightArcFieldUpdate()
+        {
+            (IkManager as IUmi3dPlayer)?.OnRightArcFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnAvatarFieldUpdate()
+        {
+            (IkManager as IUmi3dPlayer)?.OnAvatarFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
+        {
+            (IkManager as IUmi3dPlayer)?.OnJoinMeshFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
+        {
+            (IkManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnAnimatorFieldUpdate()
+        {
+            (IkManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
         }
     }
 }

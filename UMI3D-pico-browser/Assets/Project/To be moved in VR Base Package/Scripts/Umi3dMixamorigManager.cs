@@ -239,6 +239,15 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         #endregion
 
+        #region Components
+
+        [HideInInspector]
+        public VirtualObjectBodyInteraction LeftHandBodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteraction RightHandBodyInteraction;
+
+        #endregion
+
         const string RIG = "mixamorig:";
 
         public void CreateMixamorigHierarchy()
@@ -346,9 +355,12 @@ namespace umi3dVRBrowsersBase.ikManagement
             }
 
             #endregion
+            AddComponents();
+            SetHierarchy();
+        }
 
-            #region Add component UMI3DClientUserTrackingBone
-
+        protected void AddComponents()
+        {
             if (Hips.GetComponent<UMI3DClientUserTrackingBone>() == null) Hips.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.Hips;
             {
                 if (LeftUpLeg.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftUpLeg.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftHip;
@@ -373,6 +385,7 @@ namespace umi3dVRBrowsersBase.ikManagement
                     if (LeftArm.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftArm.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftUpperArm;
                     if (LeftForearm.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftForearm.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftForearm;
                     if (LeftHand.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHand.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftHand;
+                    if (LeftHandBodyInteraction == null) LeftHandBodyInteraction = LeftHand.AddComponent<VirtualObjectBodyInteraction>();
                     {
                         if (LeftHandIndex1.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandIndex1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftIndexProximal;
                         if (LeftHandIndex2.GetComponent<UMI3DClientUserTrackingBone>() == null) LeftHandIndex2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.LeftIndexIntermediate;
@@ -416,6 +429,7 @@ namespace umi3dVRBrowsersBase.ikManagement
                     if (RightArm.GetComponent<UMI3DClientUserTrackingBone>() == null) RightArm.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightUpperArm;
                     if (RightForearm.GetComponent<UMI3DClientUserTrackingBone>() == null) RightForearm.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightForearm;
                     if (RightHand.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHand.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightHand;
+                    if (RightHandBodyInteraction == null) RightHandBodyInteraction = RightHand.AddComponent<VirtualObjectBodyInteraction>();
                     {
                         if (RightHandIndex1.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandIndex1.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightIndexProximal;
                         if (RightHandIndex2.GetComponent<UMI3DClientUserTrackingBone>() == null) RightHandIndex2.AddComponent<UMI3DClientUserTrackingBone>().boneType = BoneType.RightIndexIntermediate;
@@ -448,11 +462,18 @@ namespace umi3dVRBrowsersBase.ikManagement
                     }
                 }
             }
+        }
 
-            #endregion
+        protected void SetComponents()
+        {
+            LeftHandBodyInteraction.goal = AvatarIKGoal.LeftHand;
+            RightHandBodyInteraction.goal = AvatarIKGoal.RightHand;
 
-            #region Update Hierachy
 
+        }
+
+        protected void SetHierarchy()
+        {
             {
                 Hips.Add(LeftUpLeg);
                 LeftUpLeg.Add(LeftLeg);
@@ -551,9 +572,6 @@ namespace umi3dVRBrowsersBase.ikManagement
                     }
                 }
             }
-
-            #endregion
-
         }
     }
 }
