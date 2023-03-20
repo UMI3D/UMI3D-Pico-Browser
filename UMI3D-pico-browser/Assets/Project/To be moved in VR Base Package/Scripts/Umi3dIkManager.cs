@@ -177,6 +177,33 @@ namespace umi3dVRBrowsersBase.ikManagement
             RightFoot.transform.localScale = new Vector3(.01f, .01f, .01f);
         }
 
+        void IUmi3dPlayer.OnAnimatorFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.AnimatorController == null) return;
+            Animator.runtimeAnimatorController = Umi3dPlayerManager.Instance.AnimatorController;
+        }
+
+        void IUmi3dPlayer.OnAvatarFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.Avatar == null) return;
+            Animator.avatar = Umi3dPlayerManager.Instance.Avatar;
+        }
+
+        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.MeshJoints == null) return;
+            MeshJoints.sharedMesh = Umi3dPlayerManager.Instance.MeshJoints;
+        }
+
+        void IUmi3dPlayer.OnLeftArcFieldUpdate()
+        {
+        }
+
+        void IUmi3dPlayer.OnLeftHandFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.LeftHand == null) return;
+        }
+
         void IUmi3dPlayer.OnMainCameraFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.MainCamera == null) return;
@@ -196,9 +223,8 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (FootBehaviour != null) FootBehaviour.OVRRig = Umi3dPlayerManager.Instance.Player.transform;
         }
 
-        void IUmi3dPlayer.OnLeftHandFieldUpdate()
+        void IUmi3dPlayer.OnRightArcFieldUpdate()
         {
-            if (Umi3dPlayerManager.Instance.LeftHand == null) return;
         }
 
         void IUmi3dPlayer.OnRightHandFieldUpdate()
@@ -206,36 +232,10 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (Umi3dPlayerManager.Instance.RightHand == null) return;
         }
 
-        void IUmi3dPlayer.OnLeftArcFieldUpdate()
-        {
-        }
-
-        void IUmi3dPlayer.OnRightArcFieldUpdate()
-        {
-        }
-
-        void IUmi3dPlayer.OnAvatarFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.Avatar == null) return;
-            Animator.avatar = Umi3dPlayerManager.Instance.Avatar;
-        }
-
-        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.MeshJoints == null) return;
-            MeshJoints.sharedMesh = Umi3dPlayerManager.Instance.MeshJoints;
-        }
-
         void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.MeshSurface == null) return;
             MeshSurface.sharedMesh = Umi3dPlayerManager.Instance.MeshSurface;
-        }
-
-        void IUmi3dPlayer.OnAnimatorFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.AnimatorController == null) return;
-            Animator.runtimeAnimatorController = Umi3dPlayerManager.Instance.AnimatorController;
         }
     }
 }

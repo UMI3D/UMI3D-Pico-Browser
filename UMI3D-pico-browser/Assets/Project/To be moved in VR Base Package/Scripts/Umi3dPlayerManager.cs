@@ -39,6 +39,8 @@ namespace umi3dVRBrowsersBase.ikManagement
             OnAvatarFieldUpdate();
             OnJoinMeshFieldUpdate();
             OnSurfaceMeshFieldUpdate();
+            OnLeftHandFieldUpdate();
+            OnRightHandFieldUpdate();
         }
         void OnPlayerFieldUpdate();
         void OnMainCameraFieldUpdate();
@@ -101,6 +103,8 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         [HideInInspector]
         public Umi3dIkManager IkManager;
+        [HideInInspector]
+        public Umi3dHandManager HandManager;
 
         #endregion
 
@@ -118,6 +122,9 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             if (IkManager == null) IkManager = new Umi3dIkManager();
             IkManager.CreateYbotHierarchy();
+            this.gameObject.Add(IkManager.Avatar);
+            if (HandManager == null) HandManager = new Umi3dHandManager();
+            HandManager.CreateHands();
 
             OnValidate();
         }
@@ -169,15 +176,50 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        void IUmi3dPlayer.OnPlayerFieldUpdate()
+        void IUmi3dPlayer.OnAnimatorFieldUpdate()
         {
-            //if (Player != null) Player.Add(IkManager.Avatar);
-            //else this.gameObject.Add(IkManager.Avatar);
-            if (Player == null) return;
+            (IkManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
+        }
 
-            this.gameObject.Add(Player);
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnAvatarFieldUpdate()
+        {
+            (IkManager as IUmi3dPlayer)?.OnAvatarFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnAvatarFieldUpdate();
+        }
 
-            (IkManager as IUmi3dPlayer)?.OnPlayerFieldUpdate();
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
+        {
+            (IkManager as IUmi3dPlayer)?.OnJoinMeshFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnJoinMeshFieldUpdate();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnLeftArcFieldUpdate()
+        {
+            (IkManager as IUmi3dPlayer)?.OnLeftArcFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnLeftArcFieldUpdate();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnLeftHandFieldUpdate()
+        {
+            if (LeftHand == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnLeftHandFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnLeftHandFieldUpdate();
+
+            LeftHand.Add(HandManager.LeftHand.RootHand);
         }
 
         /// <summary>
@@ -188,50 +230,57 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (MainCamera == null) return;
 
             (IkManager as IUmi3dPlayer)?.OnMainCameraFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
         }
 
-        void IUmi3dPlayer.OnLeftHandFieldUpdate()
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPlayerFieldUpdate()
         {
-            if (LeftHand == null) return;
+            //if (Player != null) Player.Add(IkManager.Avatar);
+            //else this.gameObject.Add(IkManager.Avatar);
+            if (Player == null) return;
 
-            (IkManager as IUmi3dPlayer)?.OnLeftHandFieldUpdate();
+            this.gameObject.Add(Player);
+
+            (IkManager as IUmi3dPlayer)?.OnPlayerFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnPlayerFieldUpdate();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        void IUmi3dPlayer.OnRightArcFieldUpdate()
+        {
+            if (RightArc == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnRightArcFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnRightArcFieldUpdate();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnRightHandFieldUpdate()
         {
             if (RightHand == null) return;
 
             (IkManager as IUmi3dPlayer)?.OnRightHandFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnRightHandFieldUpdate();
+
+            RightHand.Add(HandManager.RightHand.RootHand);
         }
 
-        void IUmi3dPlayer.OnLeftArcFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnLeftArcFieldUpdate();
-        }
-
-        void IUmi3dPlayer.OnRightArcFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnRightArcFieldUpdate();
-        }
-
-        void IUmi3dPlayer.OnAvatarFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnAvatarFieldUpdate();
-        }
-
-        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnJoinMeshFieldUpdate();
-        }
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
         {
-            (IkManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
-        }
+            if (RightHand == null) return;
 
-        void IUmi3dPlayer.OnAnimatorFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
+            (IkManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
         }
     }
 }
