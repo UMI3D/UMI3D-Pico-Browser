@@ -20,7 +20,7 @@ using UnityEngine;
 namespace umi3dVRBrowsersBase.ikManagement
 {
     [System.Serializable]
-    public class Umi3dHandController
+    public class Umi3dHandController : IUmi3dPlayerLife
     {
         [HideInInspector]
         public AvatarIKGoal Goal;
@@ -30,26 +30,26 @@ namespace umi3dVRBrowsersBase.ikManagement
         [HideInInspector]
         public GameObject IkTarget;
         [HideInInspector]
-        public GameObject BasicHand;
-        [HideInInspector]
         public GameObject TeleportArc;
 
-        public void CreateHand()
+        [HideInInspector]
+        public Umi3dBasicHand BasicHand;
+
+        void IUmi3dPlayerLife.Create()
         {
             if (RootHand == null) RootHand = new GameObject($"UMI3D {Goal} Anchor");
             if (IkTarget == null) IkTarget = new GameObject($"IK {Goal} Anchor");
-            if (BasicHand == null) BasicHand = new GameObject($"Basic {Goal}");
             if (TeleportArc == null) TeleportArc = new GameObject($"{Goal} Teleport Arc");
-            CreateBasicHand();
+
+            if (BasicHand == null) BasicHand = new Umi3dBasicHand { Goal = Goal };
+
+            (BasicHand as IUmi3dPlayerLife).Create();
+
             CreateTeleportArc();
 
             SetHierarchy();
         }
 
-        protected void CreateBasicHand()
-        {
-
-        }
 
         protected void CreateTeleportArc()
         {
@@ -59,8 +59,28 @@ namespace umi3dVRBrowsersBase.ikManagement
         protected void SetHierarchy()
         {
             RootHand.Add(IkTarget);
-            RootHand.Add(BasicHand);
+            RootHand.Add(BasicHand.BasicHand);
             RootHand.Add(TeleportArc);
+        }
+
+        void IUmi3dPlayerLife.AddComponents()
+        {
+            (BasicHand as IUmi3dPlayerLife).AddComponents();
+        }
+
+        void IUmi3dPlayerLife.SetComponents()
+        {
+            (BasicHand as IUmi3dPlayerLife).SetComponents();
+        }
+
+        void IUmi3dPlayerLife.SetHierarchy()
+        {
+            (BasicHand as IUmi3dPlayerLife).SetHierarchy();
+        }
+
+        void IUmi3dPlayerLife.Clear()
+        {
+            (BasicHand as IUmi3dPlayerLife).Clear();
         }
     }
 }

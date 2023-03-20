@@ -20,21 +20,66 @@ using UnityEngine;
 namespace umi3dVRBrowsersBase.ikManagement
 {
     [System.Serializable]
-    public class Umi3dHandManager: IUmi3dPlayer
+    public class Umi3dHandManager: IUmi3dPlayer, IUmi3dPlayerLife
     {
         [HideInInspector]
         public Umi3dHandController LeftHand;
         [HideInInspector]
         public Umi3dHandController RightHand;
 
-        public void CreateHands()
+        #region IUmi3dPlayerLife
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayerLife.Create()
         {
             if (LeftHand == null) LeftHand = new Umi3dHandController { Goal = AvatarIKGoal.LeftHand };
             if (RightHand == null) RightHand = new Umi3dHandController { Goal = AvatarIKGoal.RightHand };
 
-            LeftHand.CreateHand();
-            RightHand.CreateHand();
+            (LeftHand as IUmi3dPlayerLife).Create();
+            (RightHand as IUmi3dPlayerLife).Create();
         }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayerLife.AddComponents()
+        {
+            (LeftHand as IUmi3dPlayerLife).AddComponents();
+            (RightHand as IUmi3dPlayerLife).AddComponents();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayerLife.SetComponents()
+        {
+            (LeftHand as IUmi3dPlayerLife).SetComponents();
+            (RightHand as IUmi3dPlayerLife).SetComponents();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayerLife.SetHierarchy()
+        {
+            (LeftHand as IUmi3dPlayerLife).SetHierarchy();
+            (RightHand as IUmi3dPlayerLife).SetHierarchy();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayerLife.Clear()
+        {
+            (LeftHand as IUmi3dPlayerLife).Clear();
+            (RightHand as IUmi3dPlayerLife).Clear();
+        }
+
+        #endregion
+
+        #region IUmi3dPlayer
 
         /// <summary>
         /// <inheritdoc/>
@@ -115,5 +160,7 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             if (Umi3dPlayerManager.Instance.MeshSurface == null) return;
         }
+
+        #endregion
     }
 }

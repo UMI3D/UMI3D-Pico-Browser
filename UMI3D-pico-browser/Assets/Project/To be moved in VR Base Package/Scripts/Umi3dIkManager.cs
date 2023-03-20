@@ -27,7 +27,7 @@ using UnityEngine;
 namespace umi3dVRBrowsersBase.ikManagement
 {
     [System.Serializable]
-    public class Umi3dIkManager: IUmi3dPlayer
+    public class Umi3dIkManager: IUmi3dPlayer, IUmi3dPlayerLife
     {
         #region Children
 
@@ -81,13 +81,9 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         #endregion
 
-        public void CreateYbotHierarchy()
+        void IUmi3dPlayerLife.Create()
         {
             CreateChildren();
-            SetHierarchy();
-            AddComponents();
-
-            SetComponents();
         }
 
         protected void CreateChildren()
@@ -105,7 +101,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             Mixamorig.CreateMixamorigHierarchy();
         }
 
-        protected void SetHierarchy()
+        void IUmi3dPlayerLife.SetHierarchy()
         {
             Avatar.Add(Skeleton);
             Skeleton.Add(Ybot);
@@ -117,7 +113,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             Feet.Add(RightFoot);
         }
 
-        protected void AddComponents()
+        void IUmi3dPlayerLife.AddComponents()
         {
             if (AvatarHeight == null) AvatarHeight = Avatar.AddComponent<SetUpAvatarHeight>();
             if (CollaborationTracking == null) CollaborationTracking = Avatar.AddComponent<UMI3DCollaborationClientUserTracking>();
@@ -132,7 +128,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (RightFootBodyInteraction == null) RightFootBodyInteraction = RightFoot.AddComponent<VirtualObjectBodyInteraction>();
         }
 
-        protected void SetComponents()
+        void IUmi3dPlayerLife.SetComponents()
         {
             AvatarHeight.IKControl = IkControl;
             AvatarHeight.Neck = Mixamorig.Neck.transform;
@@ -176,6 +172,13 @@ namespace umi3dVRBrowsersBase.ikManagement
             LeftFoot.transform.localScale = new Vector3(.01f, .01f, .01f);
             RightFoot.transform.localScale = new Vector3(.01f, .01f, .01f);
         }
+
+        void IUmi3dPlayerLife.Clear()
+        {
+
+        }
+
+        #region IUmi3dPlayer
 
         void IUmi3dPlayer.OnAnimatorFieldUpdate()
         {
@@ -237,5 +240,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (Umi3dPlayerManager.Instance.MeshSurface == null) return;
             MeshSurface.sharedMesh = Umi3dPlayerManager.Instance.MeshSurface;
         }
+
+        #endregion
     }
 }

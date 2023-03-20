@@ -56,7 +56,16 @@ namespace umi3dVRBrowsersBase.ikManagement
         void OnSurfaceMeshFieldUpdate();
     }
 
-    public class Umi3dPlayerManager : PersistentSingleBehaviour<Umi3dPlayerManager>, IUmi3dPlayer
+    public interface IUmi3dPlayerLife
+    {
+        void Create();
+        void AddComponents();
+        void SetComponents();
+        void SetHierarchy();
+        void Clear();
+    }
+
+    public class Umi3dPlayerManager : PersistentSingleBehaviour<Umi3dPlayerManager>, IUmi3dPlayer, IUmi3dPlayerLife
     {
         [Header("Player Extern SDK")]
         [Tooltip("Player, the XR root")]
@@ -114,34 +123,74 @@ namespace umi3dVRBrowsersBase.ikManagement
             umi3dPlayer.OnValidate();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         [ContextMenu("Create Player")]
-        protected void CreatePlayer()
+        void IUmi3dPlayerLife.Create()
         {
-            AddComponents();
-            SetComponents();
-
             if (IkManager == null) IkManager = new Umi3dIkManager();
-            IkManager.CreateYbotHierarchy();
-            this.gameObject.Add(IkManager.Avatar);
             if (HandManager == null) HandManager = new Umi3dHandManager();
-            HandManager.CreateHands();
+
+            (IkManager as IUmi3dPlayerLife).Create();
+            (HandManager as IUmi3dPlayerLife).Create();
+
+            (this as IUmi3dPlayerLife).AddComponents();
+            (this as IUmi3dPlayerLife).SetComponents();
+            (this as IUmi3dPlayerLife).SetHierarchy();
 
             OnValidate();
         }
 
-        protected void AddComponents()
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayerLife.AddComponents()
         {
             if (VRNavigation == null) VRNavigation = this.AddComponent<umi3dVRBrowsersBase.navigation.UMI3DNavigation>();
             if (Navigation == null) Navigation = this.AddComponent<umi3d.cdk.UMI3DNavigation>();
             if (WaitForServer == null) WaitForServer = this.AddComponent<WaitForServer>();
             if (InteractionMapper == null) InteractionMapper = this.AddComponent<VRInteractionMapper>();
             if (SnapTurn == null) SnapTurn = this.AddComponent<SnapTurn>();
+
+            (IkManager as IUmi3dPlayerLife).AddComponents();
+            (HandManager as IUmi3dPlayerLife).AddComponents();
         }
 
-        protected void SetComponents()
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayerLife.SetComponents()
         {
             if (Navigation.navigations == null) Navigation.navigations = new List<AbstractNavigation>();
             if (!Navigation.navigations.Contains(VRNavigation)) Navigation.navigations.Add(VRNavigation);
+
+            (IkManager as IUmi3dPlayerLife).SetComponents();
+            (HandManager as IUmi3dPlayerLife).SetComponents();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayerLife.SetHierarchy() 
+        {
+            this.gameObject.Add(IkManager.Avatar);
+
+            (IkManager as IUmi3dPlayerLife).SetHierarchy();
+            (HandManager as IUmi3dPlayerLife).SetHierarchy();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        [ContextMenu("Clear Player")]
+        void IUmi3dPlayerLife.Clear()
+        {
+            (IkManager as IUmi3dPlayerLife).Clear();
+            (HandManager as IUmi3dPlayerLife).Clear();
+
+            IkManager = null;
+            HandManager = null;
         }
 
         /// <summary>
@@ -170,7 +219,7 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         private void Reset()
         {
-            CreatePlayer();
+            (this as IUmi3dPlayerLife).Create();
         }
 
         /// <summary>
@@ -238,8 +287,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// </summary>
         void IUmi3dPlayer.OnPlayerFieldUpdate()
         {
-            //if (Player != null) Player.Add(IkManager.Avatar);
-            //else this.gameObject.Add(IkManager.Avatar);
             if (Player == null) return;
 
             this.gameObject.Add(Player);
