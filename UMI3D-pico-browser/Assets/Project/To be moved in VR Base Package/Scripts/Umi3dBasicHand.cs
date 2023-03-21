@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.common.userCapture;
 using UnityEngine;
 
 namespace umi3dVRBrowsersBase.ikManagement
@@ -25,12 +26,14 @@ namespace umi3dVRBrowsersBase.ikManagement
         [HideInInspector]
         public AvatarIKGoal Goal;
 
+        #region GameObjects
+
         [HideInInspector]
         public GameObject BasicHand;
 
         [HideInInspector]
         public GameObject Sphere;
-        
+
         #region Thumb
 
         [HideInInspector]
@@ -96,6 +99,83 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         #endregion
 
+        #endregion
+
+        #region Components
+
+        [HideInInspector]
+        public VirtualObjectBodyInteraction HandBodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionEndBone SphereBodyInteraction;
+
+        #region Thumb
+
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Thumb1BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Thumb2BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Thumb3BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionEndBone Thumb4BodyInteraction;
+
+        #endregion
+
+        #region Index
+
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Index1BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Index2BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Index3BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionEndBone Index4BodyInteraction;
+
+        #endregion
+
+        #region Middle
+
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Middle1BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Middle2BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Middle3BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionEndBone Middle4BodyInteraction;
+
+        #endregion
+
+        #region Ring
+
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Ring1BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Ring2BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Ring3BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionEndBone Ring4BodyInteraction;
+
+        #endregion
+
+        #region Pinky
+
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Pinky1BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Pinky2BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionBone Pinky3BodyInteraction;
+        [HideInInspector]
+        public VirtualObjectBodyInteractionEndBone Pinky4BodyInteraction;
+
+        #endregion
+
+        #endregion
+
+
         void IUmi3dPlayerLife.Create()
         {
             if (BasicHand == null) BasicHand = new GameObject($"Basic {Goal}");
@@ -134,12 +214,68 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         void IUmi3dPlayerLife.AddComponents()
         {
-
+            if (HandBodyInteraction == null) HandBodyInteraction = BasicHand.AddComponent<VirtualObjectBodyInteraction>();
+            if (SphereBodyInteraction == null) SphereBodyInteraction = Sphere.AddComponent<VirtualObjectBodyInteractionEndBone>();
+            {
+                if (Thumb1BodyInteraction == null) Thumb1BodyInteraction = Thumb1.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Thumb2BodyInteraction == null) Thumb2BodyInteraction = Thumb2.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Thumb3BodyInteraction == null) Thumb3BodyInteraction = Thumb3.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Thumb4BodyInteraction == null) Thumb4BodyInteraction = Thumb4.AddComponent<VirtualObjectBodyInteractionEndBone>();
+            }
+            {
+                if (Index1BodyInteraction == null) Index1BodyInteraction = Index1.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Index2BodyInteraction == null) Index2BodyInteraction = Index2.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Index3BodyInteraction == null) Index3BodyInteraction = Index3.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Index4BodyInteraction == null) Index4BodyInteraction = Index4.AddComponent<VirtualObjectBodyInteractionEndBone>();
+            }
+            {
+                if (Middle1BodyInteraction == null) Middle1BodyInteraction = Middle1.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Middle2BodyInteraction == null) Middle2BodyInteraction = Middle2.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Middle3BodyInteraction == null) Middle3BodyInteraction = Middle3.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Middle4BodyInteraction == null) Middle4BodyInteraction = Middle4.AddComponent<VirtualObjectBodyInteractionEndBone>();
+            }
+            {
+                if (Ring1BodyInteraction == null) Ring1BodyInteraction = Ring1.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Ring2BodyInteraction == null) Ring2BodyInteraction = Ring2.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Ring3BodyInteraction == null) Ring3BodyInteraction = Ring3.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Ring4BodyInteraction == null) Ring4BodyInteraction = Ring4.AddComponent<VirtualObjectBodyInteractionEndBone>();
+            }
+            {
+                if (Pinky1BodyInteraction == null) Pinky1BodyInteraction = Pinky1.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Pinky2BodyInteraction == null) Pinky2BodyInteraction = Pinky2.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Pinky3BodyInteraction == null) Pinky3BodyInteraction = Pinky3.AddComponent<VirtualObjectBodyInteractionBone>();
+                if (Pinky4BodyInteraction == null) Pinky4BodyInteraction = Pinky4.AddComponent<VirtualObjectBodyInteractionEndBone>();
+            }
         }
 
         void IUmi3dPlayerLife.SetComponents()
         {
-
+            HandBodyInteraction.goal = Goal;
+            {
+                Thumb1BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftThumbProximal : HumanBodyBones.RightThumbProximal;
+                Thumb2BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftThumbIntermediate : HumanBodyBones.RightThumbIntermediate;
+                Thumb3BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftThumbDistal : HumanBodyBones.RightThumbDistal;
+            }
+            {
+                Index1BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftIndexProximal : HumanBodyBones.RightIndexProximal;
+                Index2BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftIndexIntermediate : HumanBodyBones.RightIndexIntermediate;
+                Index3BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftIndexDistal : HumanBodyBones.RightIndexDistal;
+            }
+            {
+                Middle1BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftMiddleProximal : HumanBodyBones.RightMiddleProximal;
+                Middle2BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftMiddleIntermediate : HumanBodyBones.RightMiddleIntermediate;
+                Middle3BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftMiddleDistal : HumanBodyBones.RightMiddleDistal;
+            }
+            {
+                Ring1BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftRingProximal : HumanBodyBones.RightRingProximal;
+                Ring2BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftRingIntermediate : HumanBodyBones.RightRingIntermediate;
+                Ring3BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftRingDistal : HumanBodyBones.RightRingDistal;
+            }
+            {
+                Pinky1BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftLittleProximal : HumanBodyBones.RightLittleProximal;
+                Pinky2BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftLittleIntermediate : HumanBodyBones.RightLittleIntermediate;
+                Pinky3BodyInteraction.bone = Goal == AvatarIKGoal.LeftHand ? HumanBodyBones.LeftLittleDistal : HumanBodyBones.RightLittleDistal;
+            }
         }
 
         void IUmi3dPlayerLife.SetHierarchy()
