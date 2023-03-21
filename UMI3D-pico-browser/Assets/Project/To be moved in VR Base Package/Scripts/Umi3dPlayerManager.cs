@@ -49,6 +49,8 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         void OnLeftArcFieldUpdate();
         void OnRightArcFieldUpdate();
+        void OnPrefabArcImpactNotPossibleFieldUpdate();
+        void OnPrefabArcImpactFieldUpdate();
 
         void OnAnimatorFieldUpdate();
         void OnAvatarFieldUpdate();
@@ -82,6 +84,10 @@ namespace umi3dVRBrowsersBase.ikManagement
         public TeleportArc LeftArc;
         [Tooltip("Right teleporting arc")]
         public TeleportArc RightArc;
+        [Tooltip("Prefab for the arc impact not possible")]
+        public GameObject PrefabArcImpactNotPossible;
+        [Tooltip("Prefab for the arc impact")]
+        public GameObject PrefabArcImpact;
 
         [Header("Avatar")]
         [Tooltip("The animator controller.")]
@@ -317,6 +323,30 @@ namespace umi3dVRBrowsersBase.ikManagement
             (HandManager as IUmi3dPlayer)?.OnRightHandFieldUpdate();
 
             RightHand.Add(HandManager.RightHand.RootHand);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        void IUmi3dPlayer.OnPrefabArcImpactFieldUpdate()
+        {
+            if (PrefabArcImpact == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnPrefabArcImpactFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnPrefabArcImpactFieldUpdate();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        void IUmi3dPlayer.OnPrefabArcImpactNotPossibleFieldUpdate()
+        {
+            if (PrefabArcImpactNotPossible == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnPrefabArcImpactNotPossibleFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnPrefabArcImpactNotPossibleFieldUpdate();
         }
 
         /// <summary>

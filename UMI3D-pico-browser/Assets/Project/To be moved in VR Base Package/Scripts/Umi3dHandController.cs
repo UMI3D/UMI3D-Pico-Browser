@@ -20,7 +20,7 @@ using UnityEngine;
 namespace umi3dVRBrowsersBase.ikManagement
 {
     [System.Serializable]
-    public class Umi3dHandController : IUmi3dPlayerLife
+    public class Umi3dHandController : IUmi3dPlayerLife, IUmi3dPlayer
     {
         [HideInInspector]
         public AvatarIKGoal Goal;
@@ -35,6 +35,11 @@ namespace umi3dVRBrowsersBase.ikManagement
         [HideInInspector]
         public Umi3dBasicHand BasicHand;
 
+        #region IUmi3dPlayerLife
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.Create()
         {
             if (RootHand == null) RootHand = new GameObject($"UMI3D {Goal} Anchor");
@@ -44,10 +49,6 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (BasicHand == null) BasicHand = new Umi3dBasicHand { Goal = Goal };
 
             (BasicHand as IUmi3dPlayerLife).Create();
-
-            CreateTeleportArc();
-
-            SetHierarchy();
         }
 
 
@@ -56,31 +57,130 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         }
 
-        protected void SetHierarchy()
-        {
-            RootHand.Add(IkTarget);
-            RootHand.Add(BasicHand.BasicHand);
-            RootHand.Add(TeleportArc);
-        }
-
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.AddComponents()
         {
             (BasicHand as IUmi3dPlayerLife).AddComponents();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.SetComponents()
         {
             (BasicHand as IUmi3dPlayerLife).SetComponents();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.SetHierarchy()
         {
             (BasicHand as IUmi3dPlayerLife).SetHierarchy();
+
+            RootHand.Add(IkTarget);
+            RootHand.Add(BasicHand.BasicHand);
+            RootHand.Add(TeleportArc);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.Clear()
         {
             (BasicHand as IUmi3dPlayerLife).Clear();
         }
+
+        #endregion
+
+        #region IUmi3dPlayer
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPlayerFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnMainCameraFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnLeftHandFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnRightHandFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnLeftArcFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnRightArcFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabArcImpactNotPossibleFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabArcImpactFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnAnimatorFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnAvatarFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
+        {
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
+        {
+        }
+
+        #endregion
     }
 }

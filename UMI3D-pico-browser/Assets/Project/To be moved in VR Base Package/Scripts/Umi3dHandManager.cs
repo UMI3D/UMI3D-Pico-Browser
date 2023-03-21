@@ -156,6 +156,19 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        void IUmi3dPlayer.OnPrefabArcImpactFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabArcImpact == null) return;
+        }
+
+        void IUmi3dPlayer.OnPrefabArcImpactNotPossibleFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabArcImpactNotPossible == null) return;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.MeshSurface == null) return;

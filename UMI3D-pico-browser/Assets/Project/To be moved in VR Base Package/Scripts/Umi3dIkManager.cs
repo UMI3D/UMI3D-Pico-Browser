@@ -81,11 +81,17 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         #endregion
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.Create()
         {
             CreateChildren();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         protected void CreateChildren()
         {
             if (Avatar == null) Avatar = new GameObject($"Avatar");
@@ -101,6 +107,9 @@ namespace umi3dVRBrowsersBase.ikManagement
             Mixamorig.CreateMixamorigHierarchy();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.SetHierarchy()
         {
             Avatar.Add(Skeleton);
@@ -113,6 +122,9 @@ namespace umi3dVRBrowsersBase.ikManagement
             Feet.Add(RightFoot);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.AddComponents()
         {
             if (AvatarHeight == null) AvatarHeight = Avatar.AddComponent<SetUpAvatarHeight>();
@@ -128,6 +140,9 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (RightFootBodyInteraction == null) RightFootBodyInteraction = RightFoot.AddComponent<VirtualObjectBodyInteraction>();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.SetComponents()
         {
             AvatarHeight.IKControl = IkControl;
@@ -173,6 +188,9 @@ namespace umi3dVRBrowsersBase.ikManagement
             RightFoot.transform.localScale = new Vector3(.01f, .01f, .01f);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayerLife.Clear()
         {
 
@@ -180,33 +198,51 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         #region IUmi3dPlayer
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnAnimatorFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.AnimatorController == null) return;
             Animator.runtimeAnimatorController = Umi3dPlayerManager.Instance.AnimatorController;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnAvatarFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.Avatar == null) return;
             Animator.avatar = Umi3dPlayerManager.Instance.Avatar;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnJoinMeshFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.MeshJoints == null) return;
             MeshJoints.sharedMesh = Umi3dPlayerManager.Instance.MeshJoints;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnLeftArcFieldUpdate()
         {
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnLeftHandFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.LeftHand == null) return;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnMainCameraFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.MainCamera == null) return;
@@ -219,6 +255,9 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (Umi3dPlayerManager.Instance.MainCamera.gameObject.GetComponent<BasicAllVolumesTracker>() == null) Umi3dPlayerManager.Instance.MainCamera.gameObject.AddComponent<BasicAllVolumesTracker>();
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnPlayerFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.Player == null) return;
@@ -226,15 +265,42 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (FootBehaviour != null) FootBehaviour.OVRRig = Umi3dPlayerManager.Instance.Player.transform;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnRightArcFieldUpdate()
         {
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnRightHandFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.RightHand == null) return;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        void IUmi3dPlayer.OnPrefabArcImpactFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabArcImpact == null) return;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        void IUmi3dPlayer.OnPrefabArcImpactNotPossibleFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabArcImpactNotPossible == null) return;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.MeshSurface == null) return;
