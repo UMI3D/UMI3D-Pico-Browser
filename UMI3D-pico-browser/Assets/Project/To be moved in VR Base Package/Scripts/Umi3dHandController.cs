@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3dVRBrowsersBase.navigation;
 using UnityEngine;
 
 namespace umi3dVRBrowsersBase.ikManagement
@@ -33,7 +34,17 @@ namespace umi3dVRBrowsersBase.ikManagement
         public GameObject TeleportArc;
 
         [HideInInspector]
+        public Umi3dInputController InputController;
+        [HideInInspector]
+        public VirtualObjectBodyInteraction IkTargetBodyInteraction;
+        [HideInInspector]
         public Umi3dBasicHand BasicHand;
+        [HideInInspector]
+        public GameObject ArcImpactNotPossible;
+        [HideInInspector]
+        public GameObject ArcImpact;
+        [HideInInspector]
+        public TeleportArc ArcController;
 
         #region IUmi3dPlayerLife
 
@@ -43,18 +54,14 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayerLife.Create()
         {
             if (RootHand == null) RootHand = new GameObject($"UMI3D {Goal} Anchor");
-            if (IkTarget == null) IkTarget = new GameObject($"IK {Goal} Anchor");
+            if (IkTarget == null) IkTarget = new GameObject($"IK {Goal} Target");
             if (TeleportArc == null) TeleportArc = new GameObject($"{Goal} Teleport Arc");
 
+            if (InputController == null) InputController = new Umi3dInputController { Goal = Goal };
             if (BasicHand == null) BasicHand = new Umi3dBasicHand { Goal = Goal };
 
             (BasicHand as IUmi3dPlayerLife).Create();
-        }
-
-
-        protected void CreateTeleportArc()
-        {
-
+            (InputController as IUmi3dPlayerLife).Create();
         }
 
         /// <summary>
@@ -63,6 +70,10 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayerLife.AddComponents()
         {
             (BasicHand as IUmi3dPlayerLife).AddComponents();
+            (InputController as IUmi3dPlayerLife).AddComponents();
+
+            if (IkTargetBodyInteraction == null) IkTargetBodyInteraction = IkTarget.AddComponent<VirtualObjectBodyInteraction>();
+            if (ArcController == null) ArcController = TeleportArc.AddComponent<TeleportArc>();
         }
 
         /// <summary>
@@ -71,6 +82,13 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayerLife.SetComponents()
         {
             (BasicHand as IUmi3dPlayerLife).SetComponents();
+            (InputController as IUmi3dPlayerLife).SetComponents();
+
+            IkTargetBodyInteraction.goal = Goal;
+
+            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Add navmesh to layer");
+            ArcController.rayStartPoint = TeleportArc.transform;
+            ArcController.navmeshLayer = LayerMask.NameToLayer("Navmesh"); 
         }
 
         /// <summary>
@@ -79,7 +97,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayerLife.SetHierarchy()
         {
             (BasicHand as IUmi3dPlayerLife).SetHierarchy();
+            (InputController as IUmi3dPlayerLife).SetHierarchy();
 
+            RootHand.Add(InputController.Controller);
             RootHand.Add(IkTarget);
             RootHand.Add(BasicHand.BasicHand);
             RootHand.Add(TeleportArc);
@@ -91,6 +111,7 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayerLife.Clear()
         {
             (BasicHand as IUmi3dPlayerLife).Clear();
+            (InputController as IUmi3dPlayerLife).Clear();
         }
 
         #endregion
@@ -128,22 +149,13 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        void IUmi3dPlayer.OnLeftArcFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnRightArcFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         void IUmi3dPlayer.OnPrefabArcImpactNotPossibleFieldUpdate()
         {
+            if (Umi3dPlayerManager.Instance.PrefabArcImpactNotPossible == null) return;
+
+            if (ArcImpactNotPossible == null) ArcImpactNotPossible = GameObject.Instantiate(Umi3dPlayerManager.Instance.PrefabArcImpactNotPossible);
+            TeleportArc.Add(ArcImpactNotPossible);
+            ArcController.impactPoint = ArcImpact;
         }
 
         /// <summary>
@@ -151,6 +163,20 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// </summary>
         void IUmi3dPlayer.OnPrefabArcImpactFieldUpdate()
         {
+            if (Umi3dPlayerManager.Instance.PrefabArcImpact == null) return;
+
+            if (ArcImpact == null) ArcImpact = GameObject.Instantiate(Umi3dPlayerManager.Instance.PrefabArcImpact);
+            TeleportArc.Add(ArcImpact);
+            ArcController.errorPoint = ArcImpactNotPossible;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabArcStepDisplayerFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabArcStepDisplayer == null) return;
+            ArcController.stepDisplayerPrefab = Umi3dPlayerManager.Instance.PrefabArcStepDisplayer;
         }
 
         /// <summary>

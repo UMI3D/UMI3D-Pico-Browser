@@ -87,6 +87,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnAnimatorFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.AnimatorController == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnAnimatorFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnAnimatorFieldUpdate();
         }
 
         /// <summary>
@@ -95,6 +98,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnAvatarFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.Avatar == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnAvatarFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnAvatarFieldUpdate();
         }
 
         /// <summary>
@@ -103,14 +109,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnJoinMeshFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.MeshJoints == null) return;
-        }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnLeftArcFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.LeftArc == null) return;
+            (LeftHand as IUmi3dPlayer).OnJoinMeshFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnJoinMeshFieldUpdate();
         }
 
         /// <summary>
@@ -119,6 +120,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnLeftHandFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.LeftHand == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnLeftHandFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnLeftHandFieldUpdate();
         }
 
         /// <summary>
@@ -127,6 +131,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnMainCameraFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.MainCamera == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnMainCameraFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnMainCameraFieldUpdate();
         }
 
         /// <summary>
@@ -135,14 +142,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnPlayerFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.Player == null) return;
-        }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnRightArcFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.RightArc == null) return;
+            (LeftHand as IUmi3dPlayer).OnPlayerFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnPlayerFieldUpdate();
         }
 
         /// <summary>
@@ -151,6 +153,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnRightHandFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.RightHand == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnRightHandFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnRightHandFieldUpdate();
         }
 
         /// <summary>
@@ -159,11 +164,28 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnPrefabArcImpactFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.PrefabArcImpact == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnPrefabArcImpactFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnPrefabArcImpactFieldUpdate();
         }
 
         void IUmi3dPlayer.OnPrefabArcImpactNotPossibleFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.PrefabArcImpactNotPossible == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnPrefabArcImpactNotPossibleFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnPrefabArcImpactNotPossibleFieldUpdate();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabArcStepDisplayerFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabArcStepDisplayer == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnPrefabArcStepDisplayerFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnPrefabArcStepDisplayerFieldUpdate();
         }
 
         /// <summary>
@@ -172,6 +194,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.MeshSurface == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnSurfaceMeshFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnSurfaceMeshFieldUpdate();
         }
 
         #endregion

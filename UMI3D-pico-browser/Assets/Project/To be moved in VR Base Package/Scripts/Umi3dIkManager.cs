@@ -228,13 +228,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        void IUmi3dPlayer.OnLeftArcFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         void IUmi3dPlayer.OnLeftHandFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.LeftHand == null) return;
@@ -268,13 +261,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        void IUmi3dPlayer.OnRightArcFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         void IUmi3dPlayer.OnRightHandFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.RightHand == null) return;
@@ -296,6 +282,14 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnPrefabArcImpactNotPossibleFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.PrefabArcImpactNotPossible == null) return;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabArcStepDisplayerFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabArcStepDisplayer == null) return;
         }
 
         /// <summary>

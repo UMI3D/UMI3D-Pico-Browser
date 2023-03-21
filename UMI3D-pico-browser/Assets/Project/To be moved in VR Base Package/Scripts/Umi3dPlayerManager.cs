@@ -33,24 +33,24 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             OnPlayerFieldUpdate();
             OnMainCameraFieldUpdate();
-            OnLeftArcFieldUpdate();
-            OnRightArcFieldUpdate();
             OnAnimatorFieldUpdate();
             OnAvatarFieldUpdate();
             OnJoinMeshFieldUpdate();
             OnSurfaceMeshFieldUpdate();
             OnLeftHandFieldUpdate();
             OnRightHandFieldUpdate();
+            OnPrefabArcImpactNotPossibleFieldUpdate();
+            OnPrefabArcImpactFieldUpdate();
+            OnPrefabArcStepDisplayerFieldUpdate();
         }
         void OnPlayerFieldUpdate();
         void OnMainCameraFieldUpdate();
         void OnLeftHandFieldUpdate();
         void OnRightHandFieldUpdate();
 
-        void OnLeftArcFieldUpdate();
-        void OnRightArcFieldUpdate();
         void OnPrefabArcImpactNotPossibleFieldUpdate();
         void OnPrefabArcImpactFieldUpdate();
+        void OnPrefabArcStepDisplayerFieldUpdate();
 
         void OnAnimatorFieldUpdate();
         void OnAvatarFieldUpdate();
@@ -80,14 +80,14 @@ namespace umi3dVRBrowsersBase.ikManagement
         public GameObject RightHand;
 
         [Header("Player Umi3d SDK")]
-        [Tooltip("Left teleporting arc")]
-        public TeleportArc LeftArc;
-        [Tooltip("Right teleporting arc")]
-        public TeleportArc RightArc;
         [Tooltip("Prefab for the arc impact not possible")]
         public GameObject PrefabArcImpactNotPossible;
         [Tooltip("Prefab for the arc impact")]
         public GameObject PrefabArcImpact;
+        [Tooltip("Prefab for the arc step displayer")]
+        public GameObject PrefabArcStepDisplayer;
+        [Tooltip("Prefab for the selector")]
+        public GameObject PrefabSelector;
 
         [Header("Avatar")]
         [Tooltip("The animator controller.")]
@@ -219,9 +219,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         }
 
         [ContextMenu("Teleport left")]
-        protected void TeleportLeft() => Teleport(LeftArc);
+        protected void TeleportLeft() => Teleport(HandManager.LeftHand.ArcController);
         [ContextMenu("Teleport right")]
-        protected void TeleportRight() => Teleport(RightArc);
+        protected void TeleportRight() => Teleport(HandManager.RightHand.ArcController);
 
         private void Reset()
         {
@@ -258,15 +258,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        void IUmi3dPlayer.OnLeftArcFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnLeftArcFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnLeftArcFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         void IUmi3dPlayer.OnLeftHandFieldUpdate()
         {
             if (LeftHand == null) return;
@@ -285,7 +276,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (MainCamera == null) return;
 
             (IkManager as IUmi3dPlayer)?.OnMainCameraFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnMainCameraFieldUpdate();
         }
 
         /// <summary>
@@ -299,17 +290,6 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             (IkManager as IUmi3dPlayer)?.OnPlayerFieldUpdate();
             (HandManager as IUmi3dPlayer)?.OnPlayerFieldUpdate();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        void IUmi3dPlayer.OnRightArcFieldUpdate()
-        {
-            if (RightArc == null) return;
-
-            (IkManager as IUmi3dPlayer)?.OnRightArcFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnRightArcFieldUpdate();
         }
 
         /// <summary>
@@ -328,7 +308,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
         void IUmi3dPlayer.OnPrefabArcImpactFieldUpdate()
         {
             if (PrefabArcImpact == null) return;
@@ -340,13 +319,23 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
         void IUmi3dPlayer.OnPrefabArcImpactNotPossibleFieldUpdate()
         {
             if (PrefabArcImpactNotPossible == null) return;
 
             (IkManager as IUmi3dPlayer)?.OnPrefabArcImpactNotPossibleFieldUpdate();
             (HandManager as IUmi3dPlayer)?.OnPrefabArcImpactNotPossibleFieldUpdate();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabArcStepDisplayerFieldUpdate()
+        {
+            if (PrefabArcStepDisplayer == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnPrefabArcStepDisplayerFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnPrefabArcStepDisplayerFieldUpdate();
         }
 
         /// <summary>
