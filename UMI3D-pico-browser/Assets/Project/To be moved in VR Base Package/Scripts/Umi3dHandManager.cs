@@ -188,6 +188,14 @@ namespace umi3dVRBrowsersBase.ikManagement
             (RightHand as IUmi3dPlayer).OnPrefabArcStepDisplayerFieldUpdate();
         }
 
+        void IUmi3dPlayer.OnPrefabSelectorFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabSelector == null) return;
+
+            (LeftHand as IUmi3dPlayer).OnPrefabSelectorFieldUpdate();
+            (RightHand as IUmi3dPlayer).OnPrefabSelectorFieldUpdate();
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

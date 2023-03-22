@@ -42,6 +42,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             OnPrefabArcImpactNotPossibleFieldUpdate();
             OnPrefabArcImpactFieldUpdate();
             OnPrefabArcStepDisplayerFieldUpdate();
+            OnPrefabSelectorFieldUpdate();
         }
         void OnPlayerFieldUpdate();
         void OnMainCameraFieldUpdate();
@@ -51,6 +52,7 @@ namespace umi3dVRBrowsersBase.ikManagement
         void OnPrefabArcImpactNotPossibleFieldUpdate();
         void OnPrefabArcImpactFieldUpdate();
         void OnPrefabArcStepDisplayerFieldUpdate();
+        void OnPrefabSelectorFieldUpdate();
 
         void OnAnimatorFieldUpdate();
         void OnAvatarFieldUpdate();
@@ -80,6 +82,8 @@ namespace umi3dVRBrowsersBase.ikManagement
         public GameObject RightHand;
 
         [Header("Player Umi3d SDK")]
+        [Tooltip("Prefab for the invisible unit skeleton")]
+        public GameObject PrefabInvisibleUnitSkeleton;
         [Tooltip("Prefab for the arc impact not possible")]
         public GameObject PrefabArcImpactNotPossible;
         [Tooltip("Prefab for the arc impact")]
@@ -127,6 +131,11 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             var umi3dPlayer = this as IUmi3dPlayer;
             umi3dPlayer.OnValidate();
+
+            if (PrefabInvisibleUnitSkeleton != null)
+            {
+                IkManager.CollaborationTracking.UnitSkeleton = PrefabInvisibleUnitSkeleton;
+            }
         }
 
         /// <summary>
@@ -336,6 +345,14 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             (IkManager as IUmi3dPlayer)?.OnPrefabArcStepDisplayerFieldUpdate();
             (HandManager as IUmi3dPlayer)?.OnPrefabArcStepDisplayerFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnPrefabSelectorFieldUpdate()
+        {
+            if (PrefabSelector == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnPrefabSelectorFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnPrefabSelectorFieldUpdate();
         }
 
         /// <summary>

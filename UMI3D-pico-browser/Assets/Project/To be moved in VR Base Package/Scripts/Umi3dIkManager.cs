@@ -120,6 +120,8 @@ namespace umi3dVRBrowsersBase.ikManagement
             Avatar.Add(Feet);
             Feet.Add(LeftFoot);
             Feet.Add(RightFoot);
+
+            Ybot.transform.localScale = new Vector3(0.5555556f, 0.5555556f, 0.5555556f);
         }
 
         /// <summary>
@@ -150,12 +152,16 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             SkeletonTracking.boneType = BoneType.CenterFeet;
 
-            Ybot.transform.localScale = new Vector3(0.5555556f, 0.5555556f, 0.5555556f);
             Animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+
             IkControl.LeftBodyRestPose = Mixamorig.LeftHandBodyInteraction;
             IkControl.RightBodyRestPose = Mixamorig.RightHandBodyInteraction;
             IkControl.LeftFoot = LeftFootBodyInteraction;
             IkControl.RightFoot = RightFootBodyInteraction;
+            IkControl.LeftBodyInteraction = Umi3dPlayerManager.Instance.HandManager.LeftHand.BasicHand.HandBodyInteraction;
+            IkControl.RightBodyInteraction = Umi3dPlayerManager.Instance.HandManager.RightHand.BasicHand.HandBodyInteraction;
+            IkControl.LeftHand = Umi3dPlayerManager.Instance.HandManager.LeftHand.IkTargetBodyInteraction;
+            IkControl.RightHand = Umi3dPlayerManager.Instance.HandManager.RightHand.IkTargetBodyInteraction;
 
             MeshJoints.rootBone = Mixamorig.Hips.transform;
             MeshSurface.rootBone = Mixamorig.Hips.transform;
@@ -290,6 +296,11 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnPrefabArcStepDisplayerFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.PrefabArcStepDisplayer == null) return;
+        }
+
+        void IUmi3dPlayer.OnPrefabSelectorFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabSelector == null) return;
         }
 
         /// <summary>

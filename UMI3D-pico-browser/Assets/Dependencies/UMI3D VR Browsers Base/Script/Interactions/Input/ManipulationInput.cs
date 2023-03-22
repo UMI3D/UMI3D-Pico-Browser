@@ -26,7 +26,7 @@ namespace umi3dVRBrowsersBase.interactions.input
     public class ManipulationInput : AbstractCursorBasedManipulationInput
     {
         [SerializeField]
-        private List<DofGroupEnum> implementedDofs = new List<DofGroupEnum>();
+        public List<DofGroupEnum> implementedDofs = new List<DofGroupEnum>();
 
         #region Methods
 

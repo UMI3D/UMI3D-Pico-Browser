@@ -15,6 +15,7 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3dVRBrowsersBase.interactions.selection;
 using umi3dVRBrowsersBase.navigation;
 using UnityEngine;
 
@@ -156,6 +157,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (ArcImpactNotPossible == null) ArcImpactNotPossible = GameObject.Instantiate(Umi3dPlayerManager.Instance.PrefabArcImpactNotPossible);
             TeleportArc.Add(ArcImpactNotPossible);
             ArcController.impactPoint = ArcImpact;
+            ArcImpactNotPossible.SetActive(false);
         }
 
         /// <summary>
@@ -168,6 +170,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (ArcImpact == null) ArcImpact = GameObject.Instantiate(Umi3dPlayerManager.Instance.PrefabArcImpact);
             TeleportArc.Add(ArcImpact);
             ArcController.errorPoint = ArcImpactNotPossible;
+            ArcImpact.SetActive(false);
         }
 
         /// <summary>
@@ -177,6 +180,25 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             if (Umi3dPlayerManager.Instance.PrefabArcStepDisplayer == null) return;
             ArcController.stepDisplayerPrefab = Umi3dPlayerManager.Instance.PrefabArcStepDisplayer;
+        }
+
+        void IUmi3dPlayer.OnPrefabSelectorFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabSelector == null)
+            {
+                InputController.Selector = null;
+                InputController.SelectionManager = null;
+                return;
+            }
+
+            if (InputController.Selector == null)
+            {
+                InputController.Selector = GameObject.Instantiate(Umi3dPlayerManager.Instance.PrefabSelector);
+                InputController.Controller.Add(InputController.Selector);
+                if (InputController.SelectionManager == null) InputController.SelectionManager = InputController.Selector.GetComponent<VRSelectionManager>();
+                InputController.SelectionManager.controller = InputController.VrController;
+            }
+
         }
 
         /// <summary>
