@@ -14,16 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 using inetum.unityUtils;
-using System.Collections;
 using System.Collections.Generic;
 using umi3d.cdk;
 using umi3dVRBrowsersBase.connection;
 using umi3dVRBrowsersBase.interactions;
 using umi3dVRBrowsersBase.navigation;
-using Unity.Burst.Intrinsics;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace umi3dVRBrowsersBase.ikManagement
 {
@@ -127,8 +124,21 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         #endregion
 
+        protected bool HasBeenSetUp = false;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            HasBeenSetUp = true;
+        }
+
         private void OnValidate()
         {
+#if UNITY_EDITOR
+            if (UnityEditor.BuildPipeline.isBuildingPlayer) return;
+#endif
+            if (!HasBeenSetUp) return;
+
             var umi3dPlayer = this as IUmi3dPlayer;
             umi3dPlayer.OnValidate();
 
@@ -211,7 +221,7 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// Teleports player.
         /// </summary>
-        public void Teleport(TeleportArc arc)
+        protected void Teleport(TeleportArc arc)
         {
             Vector3? position = arc.GetPointedPoint();
 
@@ -228,14 +238,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         }
 
         [ContextMenu("Teleport left")]
-        protected void TeleportLeft() => Teleport(HandManager.LeftHand.ArcController);
+        public void TeleportLeft() => Teleport(HandManager.LeftHand.ArcController);
         [ContextMenu("Teleport right")]
-        protected void TeleportRight() => Teleport(HandManager.RightHand.ArcController);
-
-        private void Reset()
-        {
-            (this as IUmi3dPlayerLife).Create();
-        }
+        public void TeleportRight() => Teleport(HandManager.RightHand.ArcController);
 
         /// <summary>
         /// <inheritdoc/>
