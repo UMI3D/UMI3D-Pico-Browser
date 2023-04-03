@@ -31,21 +31,9 @@ namespace umi3d.picoBrowser
     {
         public Dictionary<ControllerType, bool> isTeleportDown = new Dictionary<ControllerType, bool>();
 
-        [Header("Left Controller")]
-        public InputAction LeftGrab;
-        public InputAction LeftJoystick;
-        public InputAction LeftPrimaryButton;
-        public InputAction LeftSecondaryButton;
-        public InputAction LeftTrigger;
-
-        [Header("Right Controller")]
-        public InputAction RightGrab;
-        public InputAction RightJoystick;
-        public InputAction RightPrimaryButton;
-        public InputAction RightSecondaryButton;
-        public InputAction RightTrigger;
-
+        [HideInInspector]
         public UnityEngine.XR.InputDevice LeftController;
+        [HideInInspector]
         public UnityEngine.XR.InputDevice RightController;
 
         private void Start()
@@ -74,6 +62,7 @@ namespace umi3d.picoBrowser
             return value;
         }
 
+        [HideInInspector]
         public bool GrabIsDown = false;
         public override bool GetGrabDown(ControllerType controller)
         {
@@ -155,6 +144,7 @@ namespace umi3d.picoBrowser
             return value;
         }
 
+        [HideInInspector]
         public bool JoystickIsDown = false;
         public override bool GetJoystickButtonDown(ControllerType controller)
         {
@@ -294,6 +284,7 @@ namespace umi3d.picoBrowser
             return value;
         }
 
+        [HideInInspector]
         public bool PrimaryIsDown = false;
         public override bool GetPrimaryButtonDown(ControllerType controller)
         {
@@ -357,6 +348,7 @@ namespace umi3d.picoBrowser
             return value;
         }
 
+        [HideInInspector]
         public bool SecondaryIsDown = false;
         public override bool GetSecondaryButtonDown(ControllerType controller)
         {
@@ -420,6 +412,7 @@ namespace umi3d.picoBrowser
             return value;
         }
 
+        [HideInInspector]
         public bool TriggerIsDown = false;
         public override bool GetTriggerDown(ControllerType controller)
         {
