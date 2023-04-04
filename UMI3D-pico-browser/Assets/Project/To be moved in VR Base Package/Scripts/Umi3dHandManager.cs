@@ -35,7 +35,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayerLife.Create()
         {
             if (LeftHand == null) LeftHand = new Umi3dHandController { Goal = AvatarIKGoal.LeftHand };
+            LeftHand.Goal = AvatarIKGoal.LeftHand;
             if (RightHand == null) RightHand = new Umi3dHandController { Goal = AvatarIKGoal.RightHand };
+            RightHand.Goal = AvatarIKGoal.RightHand;
 
             (LeftHand as IUmi3dPlayerLife).Create();
             (RightHand as IUmi3dPlayerLife).Create();
@@ -134,6 +136,14 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             (LeftHand as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
             (RightHand as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabInvisibleSkeletonFieldUpdate()
+        {
+
         }
 
         /// <summary>

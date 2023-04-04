@@ -200,13 +200,13 @@ namespace umi3dVRBrowsersBase.ikManagement
             LeftUpLeg.Find($"{RIG}LeftLeg", out LeftLeg);
             LeftLeg.Find($"{RIG}LeftFoot", out LeftFoot);
             LeftFoot.Find($"{RIG}LeftToeBase", out LeftToeBase);
-            LeftToeBase.Find($"{RIG}LeftToeEnd", out LeftToeEnd);
+            LeftToeBase.Find($"{RIG}LeftToe_End", out LeftToeEnd);
 
             Hips.Find($"{RIG}RightUpLeg", out RightUpLeg);
             RightUpLeg.Find($"{RIG}RightLeg", out RightLeg);
             RightLeg.Find($"{RIG}RightFoot", out RightFoot);
             RightFoot.Find($"{RIG}RightToeBase", out RightToeBase);
-            RightToeBase.Find($"{RIG}RightToeEnd", out RightToeEnd);
+            RightToeBase.Find($"{RIG}RightToe_End", out RightToeEnd);
 
             Hips.Find($"{RIG}Spine", out Spine0);
             Spine0.Find($"{RIG}Spine1", out Spine1);
@@ -214,7 +214,7 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             Spine2.Find($"{RIG}LeftShoulder", out LeftShoulder);
             LeftShoulder.Find($"{RIG}LeftArm", out LeftArm);
-            LeftArm.Find($"{RIG}LeftForearm", out LeftForearm);
+            LeftArm.Find($"{RIG}LeftForeArm", out LeftForearm);
             LeftForearm.Find($"{RIG}LeftHand", out LeftHand);
 
 
@@ -227,7 +227,7 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             Spine2.Find($"{RIG}RightShoulder", out RightShoulder);
             RightShoulder.Find($"{RIG}RightArm", out RightArm);
-            RightArm.Find($"{RIG}RightForearm", out RightForearm);
+            RightArm.Find($"{RIG}RightForeArm", out RightForearm);
             RightForearm.Find($"{RIG}RightHand", out RightHand);
 
             //{

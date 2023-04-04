@@ -16,6 +16,9 @@ limitations under the License.
 using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk;
+using umi3d.cdk.collaboration;
+using umi3d.cdk.userCapture;
+using umi3d.common.userCapture;
 using umi3dVRBrowsersBase.connection;
 using umi3dVRBrowsersBase.interactions;
 using umi3dVRBrowsersBase.navigation;
@@ -33,6 +36,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             OnLeftHandFieldUpdate();
             OnRightHandFieldUpdate();
             OnPrefabYBotFieldUpdate();
+            OnPrefabInvisibleSkeletonFieldUpdate();
             OnPrefabArcImpactNotPossibleFieldUpdate();
             OnPrefabArcImpactFieldUpdate();
             OnPrefabArcStepDisplayerFieldUpdate();
@@ -44,6 +48,7 @@ namespace umi3dVRBrowsersBase.ikManagement
         void OnRightHandFieldUpdate();
 
         void OnPrefabYBotFieldUpdate();
+        void OnPrefabInvisibleSkeletonFieldUpdate();
         void OnPrefabArcImpactNotPossibleFieldUpdate();
         void OnPrefabArcImpactFieldUpdate();
         void OnPrefabArcStepDisplayerFieldUpdate();
@@ -97,11 +102,13 @@ namespace umi3dVRBrowsersBase.ikManagement
         public VRInteractionMapper InteractionMapper;
         [HideInInspector]
         public SnapTurn SnapTurn;
+        [HideInInspector]
+        public UMI3DClientUserTrackingBone CameraTracking;
 
         #endregion
 
         #region Sub manager class
-        
+
         [Header("Avatar")]
         public Umi3dIkManager IkManager;
         [HideInInspector]
@@ -109,28 +116,10 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         #endregion
 
-        protected bool HasBeenSetUp = false;
-
         protected override void Awake()
         {
             base.Awake();
-            HasBeenSetUp = true;
-        }
-
-        private void OnValidate()
-        {
-#if UNITY_EDITOR
-            if (UnityEditor.BuildPipeline.isBuildingPlayer) return;
-#endif
-            if (!HasBeenSetUp) return;
-
-            var umi3dPlayer = this as IUmi3dPlayer;
-            umi3dPlayer.OnValidate();
-
-            if (PrefabInvisibleUnitSkeleton != null)
-            {
-                IkManager.CollaborationTracking.UnitSkeleton = PrefabInvisibleUnitSkeleton;
-            }
+            transform.parent = UMI3DCollaborationEnvironmentLoader.Instance.transform;
         }
 
         /// <summary>
@@ -149,7 +138,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             (this as IUmi3dPlayerLife).SetComponents();
             (this as IUmi3dPlayerLife).SetHierarchy();
 
-            OnValidate();
+            (this as IUmi3dPlayer).OnValidate();
         }
 
         /// <summary>
@@ -174,6 +163,8 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             if (Navigation.navigations == null) Navigation.navigations = new List<AbstractNavigation>();
             if (!Navigation.navigations.Contains(VRNavigation)) Navigation.navigations.Add(VRNavigation);
+
+            InteractionMapper.shouldProjectHoldableEventOnSpecificInput = true;
 
             (IkManager as IUmi3dPlayerLife).SetComponents();
             (HandManager as IUmi3dPlayerLife).SetComponents();
@@ -201,6 +192,13 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             IkManager = null;
             HandManager = null;
+        }
+
+        [ContextMenu("Validate")]
+        void Validate()
+        {
+            var umi3dPlayer = this as IUmi3dPlayer;
+            umi3dPlayer.OnValidate();
         }
 
         /// <summary>
@@ -247,6 +245,10 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             if (MainCamera == null) return;
 
+            MainCamera.GetOrAddComponent(out CameraTracking);
+            CameraTracking.boneType = BoneType.Viewpoint;
+            CameraTracking.isTracked = true;
+
             (IkManager as IUmi3dPlayer)?.OnMainCameraFieldUpdate();
             (HandManager as IUmi3dPlayer)?.OnMainCameraFieldUpdate();
         }
@@ -286,6 +288,14 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             (IkManager as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
             (HandManager as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnPrefabInvisibleSkeletonFieldUpdate()
+        {
+            if (PrefabInvisibleUnitSkeleton == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnPrefabInvisibleSkeletonFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnPrefabInvisibleSkeletonFieldUpdate();
         }
 
         /// <summary>
@@ -362,6 +372,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         }
 
         public static void Add(this GameObject parent, GameObject child)
-       => child.transform.parent = parent.transform;
+        {
+            if (child == null || parent == null) return;
+            child.transform.parent = parent.transform;
+        }
     }
 }
