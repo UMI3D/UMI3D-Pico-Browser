@@ -172,11 +172,11 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// </summary>
         void IUmi3dPlayerLife.AddComponents()
         {
-            if (VRNavigation == null) VRNavigation = this.AddComponent<umi3dVRBrowsersBase.navigation.UMI3DNavigation>();
-            if (Navigation == null) Navigation = this.AddComponent<umi3d.cdk.UMI3DNavigation>();
-            if (WaitForServer == null) WaitForServer = this.AddComponent<WaitForServer>();
-            if (InteractionMapper == null) InteractionMapper = this.AddComponent<VRInteractionMapper>();
-            if (SnapTurn == null) SnapTurn = this.AddComponent<SnapTurn>();
+            this.GetOrAddComponent<umi3dVRBrowsersBase.navigation.UMI3DNavigation>(out VRNavigation);
+            this.GetOrAddComponent<umi3d.cdk.UMI3DNavigation>(out Navigation);
+            this.GetOrAddComponent<WaitForServer>(out WaitForServer);
+            this.GetOrAddComponent<VRInteractionMapper>(out InteractionMapper);
+            this.GetOrAddComponent<SnapTurn>(out SnapTurn);
 
             (IkManager as IUmi3dPlayerLife).AddComponents();
             (HandManager as IUmi3dPlayerLife).AddComponents();
@@ -225,16 +225,16 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             Vector3? position = arc.GetPointedPoint();
 
-            //if (position.HasValue)
-            //{
-            //    Vector3 offset = this.transform.rotation * centerEyeAnchor.transform.localPosition;
-            //    this.transform.position = new Vector3
-            //    (
-            //        position.Value.x - offset.x,
-            //        position.Value.y,
-            //        position.Value.z - offset.z
-            //    );
-            //}
+            if (position.HasValue)
+            {
+                Vector3 offset = this.transform.rotation * MainCamera.transform.localPosition;
+                this.transform.position = new Vector3
+                (
+                    position.Value.x - offset.x,
+                    position.Value.y,
+                    position.Value.z - offset.z
+                );
+            }
         }
 
         [ContextMenu("Teleport left")]
@@ -369,6 +369,18 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             (IkManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
             (HandManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
+        }
+
+        
+    }
+
+    public static class GameObjectExtension
+    {
+        public static void GetOrAddComponent<T>(this Object go, out T component)
+            where T : UnityEngine.Component
+        {
+            component = go.GetComponent<T>();
+            if (component == null) component = go.AddComponent<T>();
         }
     }
 }

@@ -152,7 +152,7 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             SkeletonTracking.boneType = BoneType.CenterFeet;
 
-            Animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            Animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
 
             IkControl.LeftBodyRestPose = Mixamorig.LeftHandBodyInteraction;
             IkControl.RightBodyRestPose = Mixamorig.RightHandBodyInteraction;
