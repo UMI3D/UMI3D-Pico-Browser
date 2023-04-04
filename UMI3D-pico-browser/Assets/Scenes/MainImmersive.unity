@@ -411,7 +411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5988314907380347006, guid: 6d8cc188ac4cb49419e2616ed25f607d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000000202877
+      value: -0.000007685981
       objectReference: {fileID: 0}
     - target: {fileID: 6093459749334264534, guid: 6d8cc188ac4cb49419e2616ed25f607d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1140,6 +1140,10 @@ PrefabInstance:
       propertyPath: LeftTrigger.m_SingletonActionBindings.Array.data[6].m_Action
       value: Left Trigger
       objectReference: {fileID: 0}
+    - target: {fileID: 1817862147843440681, guid: 19b680a548910de4992cce6d9d7a559c, type: 3}
+      propertyPath: PrefabUnityYBot
+      value: 
+      objectReference: {fileID: 4419854832289971183, guid: e77758543054f954f80bf809fc7945cf, type: 3}
     - target: {fileID: 1817862147843440691, guid: 19b680a548910de4992cce6d9d7a559c, type: 3}
       propertyPath: m_RootOrder
       value: 1

@@ -30,12 +30,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             OnPlayerFieldUpdate();
             OnMainCameraFieldUpdate();
-            OnAnimatorFieldUpdate();
-            OnAvatarFieldUpdate();
-            OnJoinMeshFieldUpdate();
-            OnSurfaceMeshFieldUpdate();
             OnLeftHandFieldUpdate();
             OnRightHandFieldUpdate();
+            OnPrefabYBotFieldUpdate();
             OnPrefabArcImpactNotPossibleFieldUpdate();
             OnPrefabArcImpactFieldUpdate();
             OnPrefabArcStepDisplayerFieldUpdate();
@@ -46,15 +43,11 @@ namespace umi3dVRBrowsersBase.ikManagement
         void OnLeftHandFieldUpdate();
         void OnRightHandFieldUpdate();
 
+        void OnPrefabYBotFieldUpdate();
         void OnPrefabArcImpactNotPossibleFieldUpdate();
         void OnPrefabArcImpactFieldUpdate();
         void OnPrefabArcStepDisplayerFieldUpdate();
         void OnPrefabSelectorFieldUpdate();
-
-        void OnAnimatorFieldUpdate();
-        void OnAvatarFieldUpdate();
-        void OnJoinMeshFieldUpdate();
-        void OnSurfaceMeshFieldUpdate();
     }
 
     public interface IUmi3dPlayerLife
@@ -92,16 +85,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         [Tooltip("Prefab for the selector")]
         public GameObject PrefabSelector;
 
-        [Header("Avatar")]
-        [Tooltip("The animator controller.")]
-        public RuntimeAnimatorController AnimatorController;
-        [Tooltip("The avatar")]
-        public Avatar Avatar;
-        [Tooltip("Mesh for the joints")]
-        public Mesh MeshJoints;
-        [Tooltip("Mesh for the surface")]
-        public Mesh MeshSurface;
-
         #region Components
 
         [HideInInspector]
@@ -118,8 +101,8 @@ namespace umi3dVRBrowsersBase.ikManagement
         #endregion
 
         #region Sub manager class
-
-        //[HideInInspector]
+        
+        [Header("Avatar")]
         public Umi3dIkManager IkManager;
         [HideInInspector]
         public Umi3dHandManager HandManager;
@@ -247,33 +230,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        void IUmi3dPlayer.OnAnimatorFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnAvatarFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnAvatarFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnAvatarFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnJoinMeshFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnJoinMeshFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         void IUmi3dPlayer.OnLeftHandFieldUpdate()
         {
             if (LeftHand == null) return;
@@ -322,6 +278,17 @@ namespace umi3dVRBrowsersBase.ikManagement
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabYBotFieldUpdate()
+        {
+            if (PrefabUnityYBot == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
+        }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         void IUmi3dPlayer.OnPrefabArcImpactFieldUpdate()
@@ -361,19 +328,6 @@ namespace umi3dVRBrowsersBase.ikManagement
             (IkManager as IUmi3dPlayer)?.OnPrefabSelectorFieldUpdate();
             (HandManager as IUmi3dPlayer)?.OnPrefabSelectorFieldUpdate();
         }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
-        {
-            if (RightHand == null) return;
-
-            (IkManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
-        }
-
-        
     }
 
     public static class ObjectExtension
@@ -384,5 +338,30 @@ namespace umi3dVRBrowsersBase.ikManagement
             component = go.GetComponent<T>();
             if (component == null) component = go.AddComponent<T>();
         }
+
+        public static void FindOrCreate(this GameObject parent, string name, out GameObject child)
+        {
+            child = parent.transform.Find(name)?.gameObject;
+            if (child == null) child = new GameObject(name);
+            parent.Add(child);
+        }
+
+        public static void FindOrCreatePrefab(this GameObject parent, string name, out GameObject child, GameObject prefab)
+        {
+            child = parent.transform.Find(name)?.gameObject;
+            if (prefab == null) return;
+            if (child == null) child = GameObject.Instantiate(prefab);
+            parent.Add(child);
+        }
+
+        public static bool Find(this GameObject parent, string name, out GameObject child)
+        {
+            child = parent.transform.Find(name)?.gameObject;
+            if (child == null) return false;
+            else return true;
+        }
+
+        public static void Add(this GameObject parent, GameObject child)
+       => child.transform.parent = parent.transform;
     }
 }

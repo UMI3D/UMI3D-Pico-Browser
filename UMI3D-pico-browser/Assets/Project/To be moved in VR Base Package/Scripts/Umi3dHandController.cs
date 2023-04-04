@@ -148,6 +148,14 @@ namespace umi3dVRBrowsersBase.ikManagement
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabYBotFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabUnityYBot == null) return;
+        }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         void IUmi3dPlayer.OnPrefabArcImpactNotPossibleFieldUpdate()
@@ -199,34 +207,6 @@ namespace umi3dVRBrowsersBase.ikManagement
                 InputController.SelectionManager.controller = InputController.VrController;
             }
 
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnAnimatorFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnAvatarFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
-        {
         }
 
         #endregion
