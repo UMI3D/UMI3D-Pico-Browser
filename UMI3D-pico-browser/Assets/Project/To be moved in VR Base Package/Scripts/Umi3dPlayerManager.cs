@@ -79,6 +79,8 @@ namespace umi3dVRBrowsersBase.ikManagement
         public GameObject RightHand;
 
         [Header("Player Umi3d SDK")]
+        [Tooltip("Prefab for the YBot")]
+        public GameObject PrefabUnityYBot;
         [Tooltip("Prefab for the invisible unit skeleton")]
         public GameObject PrefabInvisibleUnitSkeleton;
         [Tooltip("Prefab for the arc impact not possible")]
@@ -117,7 +119,7 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         #region Sub manager class
 
-        [HideInInspector]
+        //[HideInInspector]
         public Umi3dIkManager IkManager;
         [HideInInspector]
         public Umi3dHandManager HandManager;
@@ -374,7 +376,7 @@ namespace umi3dVRBrowsersBase.ikManagement
         
     }
 
-    public static class GameObjectExtension
+    public static class ObjectExtension
     {
         public static void GetOrAddComponent<T>(this Object go, out T component)
             where T : UnityEngine.Component

@@ -86,14 +86,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// </summary>
         void IUmi3dPlayerLife.Create()
         {
-            CreateChildren();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        protected void CreateChildren()
-        {
             if (Avatar == null) Avatar = new GameObject($"Avatar");
             if (Skeleton == null) Skeleton = new GameObject($"Skeleton");
             if (Ybot == null) Ybot = new GameObject($"Ybot");
@@ -129,17 +121,24 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// </summary>
         void IUmi3dPlayerLife.AddComponents()
         {
-            if (AvatarHeight == null) AvatarHeight = Avatar.AddComponent<SetUpAvatarHeight>();
-            if (CollaborationTracking == null) CollaborationTracking = Avatar.AddComponent<UMI3DCollaborationClientUserTracking>();
-            if (SkeletonTracking == null) SkeletonTracking = Skeleton.AddComponent<UMI3DClientUserTrackingBone>();
-            if (Animator == null) Animator = Ybot.AddComponent<Animator>();
-            if (IkControl == null) IkControl = Ybot.AddComponent<IKControl>();
-            if (Movement == null) Movement = Ybot.AddComponent<PlayerMovement>();
-            if (MeshJoints == null) MeshJoints = AlphaJoints.AddComponent<SkinnedMeshRenderer>();
-            if (MeshSurface == null) MeshSurface = AlphaSurface.AddComponent<SkinnedMeshRenderer>();
-            if (FootBehaviour == null) FootBehaviour = Feet.AddComponent<FootTargetBehavior>();
-            if (LeftFootBodyInteraction == null) LeftFootBodyInteraction = LeftFoot.AddComponent<VirtualObjectBodyInteraction>();
-            if (RightFootBodyInteraction == null) RightFootBodyInteraction = RightFoot.AddComponent<VirtualObjectBodyInteraction>();
+            Avatar.GetOrAddComponent(out AvatarHeight);
+            Avatar.GetOrAddComponent(out CollaborationTracking);
+
+            Skeleton.GetOrAddComponent(out SkeletonTracking);
+
+            Ybot.GetOrAddComponent(out Animator);
+            Ybot.GetOrAddComponent(out IkControl);
+            Ybot.GetOrAddComponent(out Movement);
+
+            AlphaJoints.GetOrAddComponent(out MeshJoints);
+
+            AlphaSurface.GetOrAddComponent(out MeshSurface);
+
+            Feet.GetOrAddComponent(out FootBehaviour);
+
+            LeftFoot.GetOrAddComponent(out LeftFootBodyInteraction);
+
+            RightFoot.GetOrAddComponent(out RightFootBodyInteraction);
         }
 
         /// <summary>
