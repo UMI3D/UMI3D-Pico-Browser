@@ -108,6 +108,38 @@ namespace umi3dVRBrowsersBase.ikManagement
             RootHand.Add(IkTarget);
             RootHand.Add(BasicHand.BasicHand);
             RootHand.Add(TeleportArc);
+
+            IkTarget.transform.localPosition = Goal == AvatarIKGoal.LeftHand
+                ? new Vector3
+                (
+                    -0.015f,
+                    -0.03f,
+                    -0.115f
+                )
+                : new Vector3
+                (
+                    0.015f,
+                    -0.03f,
+                    0.115f
+                );
+            IkTarget.transform.localRotation = Quaternion.Euler
+                (
+                    Goal == AvatarIKGoal.LeftHand
+                    ? new Vector3
+                        (
+                            0f,
+                            0f,
+                            90f
+                        )
+                    : new Vector3
+                        (
+                            0f,
+                            0f,
+                            -90f
+                        )
+                );
+
+            InputController.Controller.transform.localScale = new Vector3(-1f, 1f, 1f);
         }
 
         /// <summary>

@@ -25,14 +25,27 @@ namespace umi3dVRBrowsersBase.ikManagement
     public class Umi3dMixamorigManager
     {
         public GameObject Hips;
+        public GameObject Neck;
+        public GameObject Head;
+
+        [Header("Legs")]
+        public GameObject LeftFoot;
+        public GameObject RightFoot;
+
+        [Header("Shoulders")]
+        public GameObject LeftHand;
+        public GameObject RightHand;
 
         #region Left Leg
 
         [Header("Left Leg")]
+        [HideInInspector]
         public GameObject LeftUpLeg;
+        [HideInInspector]
         public GameObject LeftLeg;
-        public GameObject LeftFoot;
+        [HideInInspector]
         public GameObject LeftToeBase;
+        [HideInInspector]
         public GameObject LeftToeEnd;
 
         #endregion
@@ -40,10 +53,13 @@ namespace umi3dVRBrowsersBase.ikManagement
         #region Right Leg
 
         [Header("Right Leg")]
+        [HideInInspector]
         public GameObject RightUpLeg;
+        [HideInInspector]
         public GameObject RightLeg;
-        public GameObject RightFoot;
+        [HideInInspector]
         public GameObject RightToeBase;
+        [HideInInspector]
         public GameObject RightToeEnd;
 
         #endregion
@@ -51,72 +67,33 @@ namespace umi3dVRBrowsersBase.ikManagement
         #region Spine
 
         [Header("Spine")]
+        [HideInInspector]
         public GameObject Spine0;
+        [HideInInspector] 
         public GameObject Spine1;
+        [HideInInspector] 
         public GameObject Spine2;
 
         #region Left Shoulder
 
         [Header("Left Shoulder")]
+        [HideInInspector]
         public GameObject LeftShoulder;
+        [HideInInspector]
         public GameObject LeftArm;
+        [HideInInspector]
         public GameObject LeftForearm;
-        public GameObject LeftHand;
-
-        #region Index
-
-        public GameObject LeftHandIndex1;
-        public GameObject LeftHandIndex2;
-        public GameObject LeftHandIndex3;
-        public GameObject LeftHandIndex4;
-
-        #endregion
-
-        #region Middle
-
-        public GameObject LeftHandMiddle1;
-        public GameObject LeftHandMiddle2;
-        public GameObject LeftHandMiddle3;
-        public GameObject LeftHandMiddle4;
-
-        #endregion
-
-        #region Pinky
-
-        public GameObject LeftHandPinky1;
-        public GameObject LeftHandPinky2;
-        public GameObject LeftHandPinky3;
-        public GameObject LeftHandPinky4;
-
-        #endregion
-
-        #region Ring
-
-        public GameObject LeftHandRing1;
-        public GameObject LeftHandRing2;
-        public GameObject LeftHandRing3;
-        public GameObject LeftHandRing4;
-
-        #endregion
-
-        #region Thumb
-
-        public GameObject LeftHandThumb1;
-        public GameObject LeftHandThumb2;
-        public GameObject LeftHandThumb3;
-        public GameObject LeftHandThumb4;
-
-        #endregion
 
         #endregion
 
         #region Neck
 
         [Header("Neck")]
-        public GameObject Neck;
-        public GameObject Head;
+        [HideInInspector]
         public GameObject HeadTop;
+        [HideInInspector]
         public GameObject LeftEye;
+        [HideInInspector]
         public GameObject RightEye;
 
         #endregion
@@ -124,55 +101,12 @@ namespace umi3dVRBrowsersBase.ikManagement
         #region Right Shoulder
 
         [Header("Right Shoulder")]
+        [HideInInspector]
         public GameObject RightShoulder;
+        [HideInInspector]
         public GameObject RightArm;
+        [HideInInspector]
         public GameObject RightForearm;
-        public GameObject RightHand;
-
-        #region Index
-
-        public GameObject RightHandIndex1;
-        public GameObject RightHandIndex2;
-        public GameObject RightHandIndex3;
-        public GameObject RightHandIndex4;
-
-        #endregion
-
-        #region Middle
-
-        public GameObject RightHandMiddle1;
-        public GameObject RightHandMiddle2;
-        public GameObject RightHandMiddle3;
-        public GameObject RightHandMiddle4;
-
-        #endregion
-
-        #region Pinky
-
-        public GameObject RightHandPinky1;
-        public GameObject RightHandPinky2;
-        public GameObject RightHandPinky3;
-        public GameObject RightHandPinky4;
-
-        #endregion
-
-        #region Ring
-
-        public GameObject RightHandRing1;
-        public GameObject RightHandRing2;
-        public GameObject RightHandRing3;
-        public GameObject RightHandRing4;
-
-        #endregion
-
-        #region Thumb
-
-        public GameObject RightHandThumb1;
-        public GameObject RightHandThumb2;
-        public GameObject RightHandThumb3;
-        public GameObject RightHandThumb4;
-
-        #endregion
 
         #endregion
 
