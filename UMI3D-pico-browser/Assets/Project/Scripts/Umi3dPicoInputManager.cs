@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2022 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -63,7 +63,9 @@ namespace umi3d.picoBrowser
         }
 
         [HideInInspector]
-        public bool GrabIsDown = false;
+        public bool GrabLeftIsDown = false;
+        [HideInInspector]
+        public bool GrabRightIsDown = false;
         public override bool GetGrabDown(ControllerType controller)
         {
             bool value;
@@ -71,16 +73,18 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    value = value && !GrabLeftIsDown;
+                    if (value) GrabLeftIsDown = true;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    value = value && !GrabRightIsDown;
+                    if (value) GrabRightIsDown = true;
                     break;
                 default:
                     return false;
             }
 
-            value = value && !GrabIsDown;
-            if (value) GrabIsDown = true;
             return value;
         }
 
@@ -91,16 +95,18 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    value = !value && GrabLeftIsDown;
+                    if (value) GrabLeftIsDown = false;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    value = !value && GrabRightIsDown;
+                    if (value) GrabRightIsDown = false;
                     break;
                 default:
                     return false;
             }
 
-            value = !value && GrabIsDown;
-            if (value) GrabIsDown = false;
             return value;
         }
 
@@ -145,7 +151,9 @@ namespace umi3d.picoBrowser
         }
 
         [HideInInspector]
-        public bool JoystickIsDown = false;
+        public bool JoystickLeftIsDown = false;
+        [HideInInspector]
+        public bool JoystickRightIsDown = false;
         public override bool GetJoystickButtonDown(ControllerType controller)
         {
             bool value;
@@ -153,17 +161,18 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    value = value && !JoystickLeftIsDown;
+                    if (value) JoystickLeftIsDown = true;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    value = value && !JoystickRightIsDown;
+                    if (value) JoystickRightIsDown = true;
                     break;
                 default:
                     return false;
             }
 
-
-            value = value && !JoystickIsDown;
-            if (value) JoystickIsDown = true;
             return value;
 
         }
@@ -175,19 +184,19 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    value = !value && JoystickLeftIsDown;
+                    if (value) JoystickLeftIsDown = false;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    value = !value && JoystickRightIsDown;
+                    if (value) JoystickRightIsDown = false;
                     break;
                 default:
                     return false;
             }
 
-
-            value = !value && JoystickIsDown;
-            if (value) JoystickIsDown = false;
             return value;
-
         }
 
         public override bool GetRightSnapTurn(ControllerType controller)
@@ -285,7 +294,9 @@ namespace umi3d.picoBrowser
         }
 
         [HideInInspector]
-        public bool PrimaryIsDown = false;
+        public bool PrimaryLeftIsDown = false;
+        [HideInInspector]
+        public bool PrimaryRightIsDown = false;
         public override bool GetPrimaryButtonDown(ControllerType controller)
         {
             bool value;
@@ -293,16 +304,18 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    value = value && !PrimaryLeftIsDown;
+                    if (value) PrimaryLeftIsDown = true;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    value = value && !PrimaryRightIsDown;
+                    if (value) PrimaryRightIsDown = true;
                     break;
                 default:
                     return false;
             }
 
-            value = value && !PrimaryIsDown;
-            if (value) PrimaryIsDown = true;
             return value;
         }
 
@@ -313,16 +326,18 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    value = !value && PrimaryLeftIsDown;
+                    if (value) PrimaryLeftIsDown = false;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    value = !value && PrimaryRightIsDown;
+                    if (value) PrimaryRightIsDown = false;
                     break;
                 default:
                     return false;
             }
 
-            value = !value && PrimaryIsDown;
-            if (value) PrimaryIsDown = false;
             return value;
         }
 
@@ -349,7 +364,9 @@ namespace umi3d.picoBrowser
         }
 
         [HideInInspector]
-        public bool SecondaryIsDown = false;
+        public bool SecondaryLeftIsDown = false;
+        [HideInInspector]
+        public bool SecondaryRightIsDown = false;
         public override bool GetSecondaryButtonDown(ControllerType controller)
         {
             bool value;
@@ -357,16 +374,18 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    value = value && !SecondaryLeftIsDown;
+                    if (value) SecondaryLeftIsDown = true;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    value = value && !SecondaryRightIsDown;
+                    if (value) SecondaryRightIsDown = true;
                     break;
                 default:
                     return false;
             }
-
-            value = value && !SecondaryIsDown;
-            if (value) SecondaryIsDown = true;
+            
             return value;
         }
 
@@ -377,16 +396,18 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    value = !value && SecondaryLeftIsDown;
+                    if (value) SecondaryLeftIsDown = false;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    value = !value && SecondaryRightIsDown;
+                    if (value) SecondaryRightIsDown = false;
                     break;
                 default:
                     return false;
             }
 
-            value = !value && SecondaryIsDown;
-            if (value) SecondaryIsDown = false;
             return value;
         }
 
@@ -413,7 +434,9 @@ namespace umi3d.picoBrowser
         }
 
         [HideInInspector]
-        public bool TriggerIsDown = false;
+        public bool TriggerLeftIsDown = false;
+        [HideInInspector]
+        public bool TriggerRightIsDown = false;
         public override bool GetTriggerDown(ControllerType controller)
         {
             bool value;
@@ -421,16 +444,18 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    value = value && !TriggerLeftIsDown;
+                    if (value) TriggerLeftIsDown = true;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    value = value && !TriggerRightIsDown;
+                    if (value) TriggerRightIsDown = true;
                     break;
                 default:
                     return false;
             }
 
-            value = value && !TriggerIsDown;
-            if (value) TriggerIsDown = true;
             return value;
         }
 
@@ -441,16 +466,18 @@ namespace umi3d.picoBrowser
             {
                 case ControllerType.LeftHandController:
                     LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    value = !value && TriggerLeftIsDown;
+                    if (value) TriggerLeftIsDown = false;
                     break;
                 case ControllerType.RightHandController:
                     RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    value = !value && TriggerRightIsDown;
+                    if (value) TriggerRightIsDown = false;
                     break;
                 default:
                     return false;
             }
 
-            value = !value && TriggerIsDown;
-            if (value) TriggerIsDown = false;
             return value;
         }
 

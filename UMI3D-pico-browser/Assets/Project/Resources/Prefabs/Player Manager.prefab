@@ -12770,7 +12770,7 @@ MonoBehaviour:
   m_UpdateTrackingType: 0
   m_EnableInputTracking: 1
   m_EnableInputActions: 1
-  m_ModelPrefab: {fileID: 2673240740586844490, guid: d792b21ba2f3e6e4ba026384d6d6536f, type: 3}
+  m_ModelPrefab: {fileID: 0}
   m_ModelParent: {fileID: 0}
   m_Model: {fileID: 0}
   m_AnimateModel: 0
@@ -15096,11 +15096,16 @@ MonoBehaviour:
   vibrationDuration: 1
   vibrationFrequency: 150
   vibrationAmplitude: 0.2
-  GrabIsDown: 0
-  JoystickIsDown: 0
-  PrimaryIsDown: 0
-  SecondaryIsDown: 0
-  TriggerIsDown: 0
+  GrabLeftIsDown: 0
+  GrabRightIsDown: 0
+  JoystickLeftIsDown: 0
+  JoystickRightIsDown: 0
+  PrimaryLeftIsDown: 0
+  PrimaryRightIsDown: 0
+  SecondaryLeftIsDown: 0
+  SecondaryRightIsDown: 0
+  TriggerLeftIsDown: 0
+  TriggerRightIsDown: 0
 --- !u!1 &1817862147853923999
 GameObject:
   m_ObjectHideFlags: 0
@@ -15302,7 +15307,7 @@ MonoBehaviour:
   m_UpdateTrackingType: 0
   m_EnableInputTracking: 1
   m_EnableInputActions: 1
-  m_ModelPrefab: {fileID: 2281696399307846454, guid: 94f7925a0585b274fbc5fe6b8f9b1f4e, type: 3}
+  m_ModelPrefab: {fileID: 0}
   m_ModelParent: {fileID: 0}
   m_Model: {fileID: 0}
   m_AnimateModel: 0
