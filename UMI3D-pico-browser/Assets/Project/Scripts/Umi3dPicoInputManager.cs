@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2022 Inetum
+Copyright 2019 - 2023 Inetum
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace umi3d.picoBrowser
 {
@@ -30,59 +31,83 @@ namespace umi3d.picoBrowser
     {
         public Dictionary<ControllerType, bool> isTeleportDown = new Dictionary<ControllerType, bool>();
 
-        [Header("Left Controller")]
-        public InputAction LeftGrab;
-        public InputAction LeftJoystick;
-        public InputAction LeftPrimaryButton;
-        public InputAction LeftSecondaryButton;
-        public InputAction LeftTrigger;
+        [HideInInspector]
+        public UnityEngine.XR.InputDevice LeftController;
+        [HideInInspector]
+        public UnityEngine.XR.InputDevice RightController;
 
-        [Header("Right Controller")]
-        public InputAction RightGrab;
-        public InputAction RightJoystick;
-        public InputAction RightPrimaryButton;
-        public InputAction RightSecondaryButton;
-        public InputAction RightTrigger;
+        private void Start()
+        {
+            LeftController = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+            RightController = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+        }
 
         #region Grab
 
         public override bool GetGrab(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftGrab.IsPressed();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    break;
                 case ControllerType.RightHandController:
-                    return RightGrab.IsPressed();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
+        [HideInInspector]
+        public bool GrabLeftIsDown = false;
+        [HideInInspector]
+        public bool GrabRightIsDown = false;
         public override bool GetGrabDown(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftGrab.WasPressedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    value = value && !GrabLeftIsDown;
+                    if (value) GrabLeftIsDown = true;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightGrab.WasPressedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    value = value && !GrabRightIsDown;
+                    if (value) GrabRightIsDown = true;
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
         public override bool GetGrabUp(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftGrab.WasReleasedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    value = !value && GrabLeftIsDown;
+                    if (value) GrabLeftIsDown = false;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightGrab.WasReleasedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
+                    value = !value && GrabRightIsDown;
+                    if (value) GrabRightIsDown = false;
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
         #endregion
@@ -91,54 +116,87 @@ namespace umi3d.picoBrowser
 
         public override Vector2 GetJoystickAxis(ControllerType controller)
         {
+            Vector2 value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftJoystick.ReadValue<Vector2>();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out value);
+                    break;
                 case ControllerType.RightHandController:
-                    return RightJoystick.ReadValue<Vector2>();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out value);
+                    break;
                 default:
                     return Vector2.zero;
             }
+
+            return value;
         }
 
         public override bool GetJoystickButton(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftJoystick.IsPressed();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    break;
                 case ControllerType.RightHandController:
-                    return RightJoystick.IsPressed();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
+        [HideInInspector]
+        public bool JoystickLeftIsDown = false;
+        [HideInInspector]
+        public bool JoystickRightIsDown = false;
         public override bool GetJoystickButtonDown(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftJoystick.WasPressedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    value = value && !JoystickLeftIsDown;
+                    if (value) JoystickLeftIsDown = true;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightJoystick.WasPressedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    value = value && !JoystickRightIsDown;
+                    if (value) JoystickRightIsDown = true;
+                    break;
                 default:
                     return false;
             }
+
+            return value;
+
         }
 
         public override bool GetJoystickButtonUp(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftJoystick.WasReleasedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    value = !value && JoystickLeftIsDown;
+                    if (value) JoystickLeftIsDown = false;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightJoystick.WasReleasedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
+                    value = !value && JoystickRightIsDown;
+                    if (value) JoystickRightIsDown = false;
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
         public override bool GetRightSnapTurn(ControllerType controller)
@@ -219,41 +277,68 @@ namespace umi3d.picoBrowser
 
         public override bool GetPrimaryButton(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftPrimaryButton.IsPressed();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    break;
                 case ControllerType.RightHandController:
-                    return RightPrimaryButton.IsPressed();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
+        [HideInInspector]
+        public bool PrimaryLeftIsDown = false;
+        [HideInInspector]
+        public bool PrimaryRightIsDown = false;
         public override bool GetPrimaryButtonDown(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftPrimaryButton.WasPressedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    value = value && !PrimaryLeftIsDown;
+                    if (value) PrimaryLeftIsDown = true;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightPrimaryButton.WasPressedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    value = value && !PrimaryRightIsDown;
+                    if (value) PrimaryRightIsDown = true;
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
         public override bool GetPrimaryButtonUp(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftPrimaryButton.WasReleasedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    value = !value && PrimaryLeftIsDown;
+                    if (value) PrimaryLeftIsDown = false;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightPrimaryButton.WasReleasedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
+                    value = !value && PrimaryRightIsDown;
+                    if (value) PrimaryRightIsDown = false;
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
         #endregion
@@ -262,41 +347,68 @@ namespace umi3d.picoBrowser
 
         public override bool GetSecondaryButton(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftSecondaryButton.IsPressed();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    break;
                 case ControllerType.RightHandController:
-                    return RightSecondaryButton.IsPressed();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
+        [HideInInspector]
+        public bool SecondaryLeftIsDown = false;
+        [HideInInspector]
+        public bool SecondaryRightIsDown = false;
         public override bool GetSecondaryButtonDown(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftSecondaryButton.WasPressedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    value = value && !SecondaryLeftIsDown;
+                    if (value) SecondaryLeftIsDown = true;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightSecondaryButton.WasPressedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    value = value && !SecondaryRightIsDown;
+                    if (value) SecondaryRightIsDown = true;
+                    break;
                 default:
                     return false;
             }
+            
+            return value;
         }
 
         public override bool GetSecondaryButtonUp(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftSecondaryButton.WasReleasedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    value = !value && SecondaryLeftIsDown;
+                    if (value) SecondaryLeftIsDown = false;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightSecondaryButton.WasReleasedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
+                    value = !value && SecondaryRightIsDown;
+                    if (value) SecondaryRightIsDown = false;
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
         #endregion
@@ -305,41 +417,68 @@ namespace umi3d.picoBrowser
 
         public override bool GetTrigger(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftTrigger.IsPressed();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    break;
                 case ControllerType.RightHandController:
-                    return RightTrigger.IsPressed();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
+        [HideInInspector]
+        public bool TriggerLeftIsDown = false;
+        [HideInInspector]
+        public bool TriggerRightIsDown = false;
         public override bool GetTriggerDown(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftTrigger.WasPressedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    value = value && !TriggerLeftIsDown;
+                    if (value) TriggerLeftIsDown = true;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightTrigger.WasPressedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    value = value && !TriggerRightIsDown;
+                    if (value) TriggerRightIsDown = true;
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
         public override bool GetTriggerUp(ControllerType controller)
         {
+            bool value;
             switch (controller)
             {
                 case ControllerType.LeftHandController:
-                    return LeftTrigger.WasReleasedThisFrame();
+                    LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    value = !value && TriggerLeftIsDown;
+                    if (value) TriggerLeftIsDown = false;
+                    break;
                 case ControllerType.RightHandController:
-                    return RightTrigger.WasReleasedThisFrame();
+                    RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
+                    value = !value && TriggerRightIsDown;
+                    if (value) TriggerRightIsDown = false;
+                    break;
                 default:
                     return false;
             }
+
+            return value;
         }
 
         #endregion

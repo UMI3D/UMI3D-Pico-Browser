@@ -90,22 +90,22 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         void IUmi3dPlayerLife.AddComponents()
         {
-            if (Projection == null) Projection = Controller.AddComponent<ProjectionMemory>();
-            if (VrController == null) VrController = Controller.AddComponent<VRController>();
+            Controller.GetOrAddComponent(out Projection);
+            Controller.GetOrAddComponent(out VrController);
 
-            if (IndexTriggerInputObserver == null) IndexTriggerInputObserver = IndexTrigger.AddComponent<VRInputObserver>();
-            if (HandTriggerInputObserver == null) HandTriggerInputObserver = HandTrigger.AddComponent<VRInputObserver>();
-            if (AButtonInputObserver == null) AButtonInputObserver = AButton.AddComponent<VRInputObserver>();
-            if (BButtonInputObserver == null) BButtonInputObserver = BButton.AddComponent<VRInputObserver>();
+            IndexTrigger.GetOrAddComponent(out IndexTriggerInputObserver);
+            HandTrigger.GetOrAddComponent(out HandTriggerInputObserver);
+            AButton.GetOrAddComponent(out AButtonInputObserver);
+            BButton.GetOrAddComponent(out BButtonInputObserver);
 
-            if (IndexTriggerBooleanInput == null) IndexTriggerBooleanInput = IndexTrigger.AddComponent<BooleanInput>();
-            if (HandTriggerBooleanInput == null) HandTriggerBooleanInput = HandTrigger.AddComponent<BooleanInput>();
-            if (AButtonBooleanInput == null) AButtonBooleanInput = AButton.AddComponent<BooleanInput>();
-            if (BButtonBooleanInput == null) BButtonBooleanInput = BButton.AddComponent<BooleanInput>();
+            IndexTrigger.GetOrAddComponent(out IndexTriggerBooleanInput);
+            HandTrigger.GetOrAddComponent(out HandTriggerBooleanInput);
+            AButton.GetOrAddComponent(out AButtonBooleanInput);
+            BButton.GetOrAddComponent(out BButtonBooleanInput);
 
-            if (IndexTriggerManipulationInput == null) IndexTriggerManipulationInput = IndexTrigger.AddComponent<ManipulationInput>();
-            if (HandTriggerManipulationInput == null) HandTriggerManipulationInput = HandTrigger.AddComponent<ManipulationInput>();
-            if (AButtonManipulationInput == null) AButtonManipulationInput = AButton.AddComponent<ManipulationInput>();
+            IndexTrigger.GetOrAddComponent(out IndexTriggerManipulationInput);
+            HandTrigger.GetOrAddComponent(out HandTriggerManipulationInput);
+            AButton.GetOrAddComponent(out AButtonManipulationInput);
         }
 
         void IUmi3dPlayerLife.Clear()
@@ -114,21 +114,25 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         void IUmi3dPlayerLife.Create()
         {
-            if (Controller == null) Controller = new GameObject($"{Goal} Input Controller");
-            if (Interactions == null) Interactions = new GameObject($"Interactions");
-            if (ManipulationPoint == null) ManipulationPoint = new GameObject("Manipulation Point");
+            var handController = Goal == AvatarIKGoal.LeftHand
+                ? Umi3dPlayerManager.Instance.HandManager.LeftHand
+                : Umi3dPlayerManager.Instance.HandManager.RightHand;
 
-            if (IndexTrigger == null) IndexTrigger = new GameObject($"IndexTrigger");
-            if (HandTrigger == null) HandTrigger = new GameObject($"HandGrab");
-            if (AButton == null) AButton = new GameObject($"AButton");
-            if (BButton == null) BButton = new GameObject("BButton");
+            handController.RootHand.FindOrCreate($"{Goal} Input Controller", out Controller);
+
+            Controller.FindOrCreate($"Interactions", out Interactions);
+            Controller.FindOrCreate($"Manipulation Point", out ManipulationPoint);
+
+            Interactions.FindOrCreate($"IndexTrigger", out IndexTrigger);
+            Interactions.FindOrCreate($"HandGrab", out HandTrigger);
+            Interactions.FindOrCreate($"AButton", out AButton);
+            Interactions.FindOrCreate($"BButton", out BButton);
         }
 
         void IUmi3dPlayerLife.SetComponents()
         {
             VrController.projectionMemory = Projection;
             VrController.type = Goal == AvatarIKGoal.LeftHand ? ControllerType.LeftHandController : ControllerType.RightHandController;
-            VrController.bone = Goal == AvatarIKGoal.LeftHand ? Umi3dPlayerManager.Instance.IkManager.Mixamorig.LeftHand.GetComponent<UMI3DClientUserTrackingBone>() : Umi3dPlayerManager.Instance.IkManager.Mixamorig.RightHand.GetComponent<UMI3DClientUserTrackingBone>();
             VrController.manipulationInputs = new List<ManipulationInput>
             {
                 IndexTriggerManipulationInput,

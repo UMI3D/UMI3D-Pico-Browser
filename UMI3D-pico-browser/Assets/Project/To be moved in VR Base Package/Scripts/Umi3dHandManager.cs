@@ -35,7 +35,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayerLife.Create()
         {
             if (LeftHand == null) LeftHand = new Umi3dHandController { Goal = AvatarIKGoal.LeftHand };
+            LeftHand.Goal = AvatarIKGoal.LeftHand;
             if (RightHand == null) RightHand = new Umi3dHandController { Goal = AvatarIKGoal.RightHand };
+            RightHand.Goal = AvatarIKGoal.RightHand;
 
             (LeftHand as IUmi3dPlayerLife).Create();
             (RightHand as IUmi3dPlayerLife).Create();
@@ -84,39 +86,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        void IUmi3dPlayer.OnAnimatorFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.AnimatorController == null) return;
-
-            (LeftHand as IUmi3dPlayer).OnAnimatorFieldUpdate();
-            (RightHand as IUmi3dPlayer).OnAnimatorFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnAvatarFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.Avatar == null) return;
-
-            (LeftHand as IUmi3dPlayer).OnAvatarFieldUpdate();
-            (RightHand as IUmi3dPlayer).OnAvatarFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.MeshJoints == null) return;
-
-            (LeftHand as IUmi3dPlayer).OnJoinMeshFieldUpdate();
-            (RightHand as IUmi3dPlayer).OnJoinMeshFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         void IUmi3dPlayer.OnLeftHandFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.LeftHand == null) return;
@@ -159,6 +128,25 @@ namespace umi3dVRBrowsersBase.ikManagement
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabYBotFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabUnityYBot == null) return;
+
+            (LeftHand as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
+            (RightHand as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabInvisibleSkeletonFieldUpdate()
+        {
+
+        }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         void IUmi3dPlayer.OnPrefabArcImpactFieldUpdate()
@@ -194,17 +182,6 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             (LeftHand as IUmi3dPlayer).OnPrefabSelectorFieldUpdate();
             (RightHand as IUmi3dPlayer).OnPrefabSelectorFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.MeshSurface == null) return;
-
-            (LeftHand as IUmi3dPlayer).OnSurfaceMeshFieldUpdate();
-            (RightHand as IUmi3dPlayer).OnSurfaceMeshFieldUpdate();
         }
 
         #endregion

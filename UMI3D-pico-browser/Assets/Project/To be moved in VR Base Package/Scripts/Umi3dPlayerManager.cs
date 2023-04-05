@@ -16,6 +16,9 @@ limitations under the License.
 using inetum.unityUtils;
 using System.Collections.Generic;
 using umi3d.cdk;
+using umi3d.cdk.collaboration;
+using umi3d.cdk.userCapture;
+using umi3d.common.userCapture;
 using umi3dVRBrowsersBase.connection;
 using umi3dVRBrowsersBase.interactions;
 using umi3dVRBrowsersBase.navigation;
@@ -30,12 +33,10 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             OnPlayerFieldUpdate();
             OnMainCameraFieldUpdate();
-            OnAnimatorFieldUpdate();
-            OnAvatarFieldUpdate();
-            OnJoinMeshFieldUpdate();
-            OnSurfaceMeshFieldUpdate();
             OnLeftHandFieldUpdate();
             OnRightHandFieldUpdate();
+            OnPrefabYBotFieldUpdate();
+            OnPrefabInvisibleSkeletonFieldUpdate();
             OnPrefabArcImpactNotPossibleFieldUpdate();
             OnPrefabArcImpactFieldUpdate();
             OnPrefabArcStepDisplayerFieldUpdate();
@@ -46,15 +47,12 @@ namespace umi3dVRBrowsersBase.ikManagement
         void OnLeftHandFieldUpdate();
         void OnRightHandFieldUpdate();
 
+        void OnPrefabYBotFieldUpdate();
+        void OnPrefabInvisibleSkeletonFieldUpdate();
         void OnPrefabArcImpactNotPossibleFieldUpdate();
         void OnPrefabArcImpactFieldUpdate();
         void OnPrefabArcStepDisplayerFieldUpdate();
         void OnPrefabSelectorFieldUpdate();
-
-        void OnAnimatorFieldUpdate();
-        void OnAvatarFieldUpdate();
-        void OnJoinMeshFieldUpdate();
-        void OnSurfaceMeshFieldUpdate();
     }
 
     public interface IUmi3dPlayerLife
@@ -79,6 +77,8 @@ namespace umi3dVRBrowsersBase.ikManagement
         public GameObject RightHand;
 
         [Header("Player Umi3d SDK")]
+        [Tooltip("Prefab for the YBot")]
+        public GameObject PrefabUnityYBot;
         [Tooltip("Prefab for the invisible unit skeleton")]
         public GameObject PrefabInvisibleUnitSkeleton;
         [Tooltip("Prefab for the arc impact not possible")]
@@ -89,16 +89,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         public GameObject PrefabArcStepDisplayer;
         [Tooltip("Prefab for the selector")]
         public GameObject PrefabSelector;
-
-        [Header("Avatar")]
-        [Tooltip("The animator controller.")]
-        public RuntimeAnimatorController AnimatorController;
-        [Tooltip("The avatar")]
-        public Avatar Avatar;
-        [Tooltip("Mesh for the joints")]
-        public Mesh MeshJoints;
-        [Tooltip("Mesh for the surface")]
-        public Mesh MeshSurface;
 
         #region Components
 
@@ -112,40 +102,24 @@ namespace umi3dVRBrowsersBase.ikManagement
         public VRInteractionMapper InteractionMapper;
         [HideInInspector]
         public SnapTurn SnapTurn;
+        [HideInInspector]
+        public UMI3DClientUserTrackingBone CameraTracking;
 
         #endregion
 
         #region Sub manager class
 
-        [HideInInspector]
+        [Header("Avatar")]
         public Umi3dIkManager IkManager;
         [HideInInspector]
         public Umi3dHandManager HandManager;
 
         #endregion
 
-        protected bool HasBeenSetUp = false;
-
         protected override void Awake()
         {
             base.Awake();
-            HasBeenSetUp = true;
-        }
-
-        private void OnValidate()
-        {
-#if UNITY_EDITOR
-            if (UnityEditor.BuildPipeline.isBuildingPlayer) return;
-#endif
-            if (!HasBeenSetUp) return;
-
-            var umi3dPlayer = this as IUmi3dPlayer;
-            umi3dPlayer.OnValidate();
-
-            if (PrefabInvisibleUnitSkeleton != null)
-            {
-                IkManager.CollaborationTracking.UnitSkeleton = PrefabInvisibleUnitSkeleton;
-            }
+            transform.parent = UMI3DCollaborationEnvironmentLoader.Instance.transform;
         }
 
         /// <summary>
@@ -164,7 +138,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             (this as IUmi3dPlayerLife).SetComponents();
             (this as IUmi3dPlayerLife).SetHierarchy();
 
-            OnValidate();
+            (this as IUmi3dPlayer).OnValidate();
         }
 
         /// <summary>
@@ -172,11 +146,11 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// </summary>
         void IUmi3dPlayerLife.AddComponents()
         {
-            if (VRNavigation == null) VRNavigation = this.AddComponent<umi3dVRBrowsersBase.navigation.UMI3DNavigation>();
-            if (Navigation == null) Navigation = this.AddComponent<umi3d.cdk.UMI3DNavigation>();
-            if (WaitForServer == null) WaitForServer = this.AddComponent<WaitForServer>();
-            if (InteractionMapper == null) InteractionMapper = this.AddComponent<VRInteractionMapper>();
-            if (SnapTurn == null) SnapTurn = this.AddComponent<SnapTurn>();
+            this.GetOrAddComponent<umi3dVRBrowsersBase.navigation.UMI3DNavigation>(out VRNavigation);
+            this.GetOrAddComponent<umi3d.cdk.UMI3DNavigation>(out Navigation);
+            this.GetOrAddComponent<WaitForServer>(out WaitForServer);
+            this.GetOrAddComponent<VRInteractionMapper>(out InteractionMapper);
+            this.GetOrAddComponent<SnapTurn>(out SnapTurn);
 
             (IkManager as IUmi3dPlayerLife).AddComponents();
             (HandManager as IUmi3dPlayerLife).AddComponents();
@@ -189,6 +163,8 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             if (Navigation.navigations == null) Navigation.navigations = new List<AbstractNavigation>();
             if (!Navigation.navigations.Contains(VRNavigation)) Navigation.navigations.Add(VRNavigation);
+
+            InteractionMapper.shouldProjectHoldableEventOnSpecificInput = true;
 
             (IkManager as IUmi3dPlayerLife).SetComponents();
             (HandManager as IUmi3dPlayerLife).SetComponents();
@@ -218,6 +194,13 @@ namespace umi3dVRBrowsersBase.ikManagement
             HandManager = null;
         }
 
+        [ContextMenu("Validate")]
+        void Validate()
+        {
+            var umi3dPlayer = this as IUmi3dPlayer;
+            umi3dPlayer.OnValidate();
+        }
+
         /// <summary>
         /// Teleports player.
         /// </summary>
@@ -225,49 +208,22 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             Vector3? position = arc.GetPointedPoint();
 
-            //if (position.HasValue)
-            //{
-            //    Vector3 offset = this.transform.rotation * centerEyeAnchor.transform.localPosition;
-            //    this.transform.position = new Vector3
-            //    (
-            //        position.Value.x - offset.x,
-            //        position.Value.y,
-            //        position.Value.z - offset.z
-            //    );
-            //}
+            if (position.HasValue)
+            {
+                Vector3 offset = this.transform.rotation * MainCamera.transform.localPosition;
+                this.transform.position = new Vector3
+                (
+                    position.Value.x - offset.x,
+                    position.Value.y,
+                    position.Value.z - offset.z
+                );
+            }
         }
 
         [ContextMenu("Teleport left")]
         public void TeleportLeft() => Teleport(HandManager.LeftHand.ArcController);
         [ContextMenu("Teleport right")]
         public void TeleportRight() => Teleport(HandManager.RightHand.ArcController);
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnAnimatorFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnAnimatorFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnAvatarFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnAvatarFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnAvatarFieldUpdate();
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
-        {
-            (IkManager as IUmi3dPlayer)?.OnJoinMeshFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnJoinMeshFieldUpdate();
-        }
 
         /// <summary>
         /// <inheritdoc/>
@@ -288,6 +244,10 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnMainCameraFieldUpdate()
         {
             if (MainCamera == null) return;
+
+            MainCamera.GetOrAddComponent(out CameraTracking);
+            CameraTracking.boneType = BoneType.Viewpoint;
+            CameraTracking.isTracked = true;
 
             (IkManager as IUmi3dPlayer)?.OnMainCameraFieldUpdate();
             (HandManager as IUmi3dPlayer)?.OnMainCameraFieldUpdate();
@@ -317,6 +277,25 @@ namespace umi3dVRBrowsersBase.ikManagement
             (HandManager as IUmi3dPlayer)?.OnRightHandFieldUpdate();
 
             RightHand.Add(HandManager.RightHand.RootHand);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabYBotFieldUpdate()
+        {
+            if (PrefabUnityYBot == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnPrefabYBotFieldUpdate();
+        }
+
+        void IUmi3dPlayer.OnPrefabInvisibleSkeletonFieldUpdate()
+        {
+            if (PrefabInvisibleUnitSkeleton == null) return;
+
+            (IkManager as IUmi3dPlayer)?.OnPrefabInvisibleSkeletonFieldUpdate();
+            (HandManager as IUmi3dPlayer)?.OnPrefabInvisibleSkeletonFieldUpdate();
         }
 
         /// <summary>
@@ -359,16 +338,43 @@ namespace umi3dVRBrowsersBase.ikManagement
             (IkManager as IUmi3dPlayer)?.OnPrefabSelectorFieldUpdate();
             (HandManager as IUmi3dPlayer)?.OnPrefabSelectorFieldUpdate();
         }
+    }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
+    public static class ObjectExtension
+    {
+        public static void GetOrAddComponent<T>(this Object go, out T component)
+            where T : UnityEngine.Component
         {
-            if (RightHand == null) return;
+            component = go.GetComponent<T>();
+            if (component == null) component = go.AddComponent<T>();
+        }
 
-            (IkManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
-            (HandManager as IUmi3dPlayer)?.OnSurfaceMeshFieldUpdate();
+        public static void FindOrCreate(this GameObject parent, string name, out GameObject child)
+        {
+            child = parent.transform.Find(name)?.gameObject;
+            if (child == null) child = new GameObject(name);
+            parent.Add(child);
+        }
+
+        public static void FindOrCreatePrefab(this GameObject parent, string name, out GameObject child, GameObject prefab)
+        {
+            child = parent.transform.Find(name)?.gameObject;
+            if (prefab == null) return;
+            if (child == null) child = GameObject.Instantiate(prefab);
+            parent.Add(child);
+        }
+
+        public static bool Find(this GameObject parent, string name, out GameObject child)
+        {
+            child = parent.transform.Find(name)?.gameObject;
+            if (child == null) return false;
+            else return true;
+        }
+
+        public static void Add(this GameObject parent, GameObject child)
+        {
+            if (child == null || parent == null) return;
+            child.transform.parent = parent.transform;
         }
     }
 }

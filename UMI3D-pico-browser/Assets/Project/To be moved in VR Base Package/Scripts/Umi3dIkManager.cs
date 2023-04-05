@@ -31,23 +31,12 @@ namespace umi3dVRBrowsersBase.ikManagement
     {
         #region Children
 
-        [HideInInspector]
         public GameObject Avatar;
-        [HideInInspector]
         public GameObject Skeleton;
-        [HideInInspector]
         public GameObject Ybot;
-        [HideInInspector]
-        public GameObject AlphaJoints;
-        [HideInInspector]
-        public GameObject AlphaSurface;
-        [HideInInspector]
         public Umi3dMixamorigManager Mixamorig;
-        [HideInInspector]
         public GameObject Feet;
-        [HideInInspector]
         public GameObject LeftFoot;
-        [HideInInspector]
         public GameObject RightFoot;
 
         #endregion
@@ -55,11 +44,11 @@ namespace umi3dVRBrowsersBase.ikManagement
         #region Components
 
         [HideInInspector]
-        public UMI3DClientUserTrackingBone CameraTracking;
-        [HideInInspector]
         public SetUpAvatarHeight AvatarHeight;
         [HideInInspector]
         public UMI3DCollaborationClientUserTracking CollaborationTracking;
+        [HideInInspector]
+        public AdaptHandPose HandPose;
         [HideInInspector]
         public UMI3DClientUserTrackingBone SkeletonTracking;
         [HideInInspector]
@@ -68,10 +57,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         public IKControl IkControl;
         [HideInInspector]
         public PlayerMovement Movement;
-        [HideInInspector]
-        public SkinnedMeshRenderer MeshJoints;
-        [HideInInspector]
-        public SkinnedMeshRenderer MeshSurface;
         [HideInInspector]
         public FootTargetBehavior FootBehaviour;
         [HideInInspector]
@@ -86,25 +71,17 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// </summary>
         void IUmi3dPlayerLife.Create()
         {
-            CreateChildren();
-        }
+            Umi3dPlayerManager.Instance.gameObject.FindOrCreate($"Avatar", out Avatar);
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        protected void CreateChildren()
-        {
-            if (Avatar == null) Avatar = new GameObject($"Avatar");
-            if (Skeleton == null) Skeleton = new GameObject($"Skeleton");
-            if (Ybot == null) Ybot = new GameObject($"Ybot");
-            if (AlphaJoints == null) AlphaJoints = new GameObject($"AlphaJoints");
-            if (AlphaSurface == null) AlphaSurface = new GameObject($"AlphaSurface");
+            Avatar.FindOrCreate($"Skeleton", out Skeleton);
+            Avatar.FindOrCreate($"Feet", out Feet);
+
+            Skeleton.FindOrCreatePrefab($"Unit ybot(Clone)", out Ybot, Umi3dPlayerManager.Instance.PrefabUnityYBot);
             if (Mixamorig == null) Mixamorig = new Umi3dMixamorigManager();
-            if (Feet == null) Feet = new GameObject($"Feet");
-            if (LeftFoot == null) LeftFoot = new GameObject($"LeftFoot");
-            if (RightFoot == null) RightFoot = new GameObject($"RightFoot");
+            if (Ybot != null) Mixamorig.CreateMixamorigHierarchy();
 
-            Mixamorig.CreateMixamorigHierarchy();
+            Feet.FindOrCreate($"LeftFoot", out LeftFoot);
+            Feet.FindOrCreate($"RightFoot", out RightFoot);
         }
 
         /// <summary>
@@ -114,14 +91,9 @@ namespace umi3dVRBrowsersBase.ikManagement
         {
             Avatar.Add(Skeleton);
             Skeleton.Add(Ybot);
-            Ybot.Add(AlphaJoints);
-            Ybot.Add(AlphaSurface);
-            Ybot.Add(Mixamorig.Hips);
             Avatar.Add(Feet);
             Feet.Add(LeftFoot);
             Feet.Add(RightFoot);
-
-            Ybot.transform.localScale = new Vector3(0.5555556f, 0.5555556f, 0.5555556f);
         }
 
         /// <summary>
@@ -129,52 +101,32 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// </summary>
         void IUmi3dPlayerLife.AddComponents()
         {
-            if (AvatarHeight == null) AvatarHeight = Avatar.AddComponent<SetUpAvatarHeight>();
-            if (CollaborationTracking == null) CollaborationTracking = Avatar.AddComponent<UMI3DCollaborationClientUserTracking>();
-            if (SkeletonTracking == null) SkeletonTracking = Skeleton.AddComponent<UMI3DClientUserTrackingBone>();
-            if (Animator == null) Animator = Ybot.AddComponent<Animator>();
-            if (IkControl == null) IkControl = Ybot.AddComponent<IKControl>();
-            if (Movement == null) Movement = Ybot.AddComponent<PlayerMovement>();
-            if (MeshJoints == null) MeshJoints = AlphaJoints.AddComponent<SkinnedMeshRenderer>();
-            if (MeshSurface == null) MeshSurface = AlphaSurface.AddComponent<SkinnedMeshRenderer>();
-            if (FootBehaviour == null) FootBehaviour = Feet.AddComponent<FootTargetBehavior>();
-            if (LeftFootBodyInteraction == null) LeftFootBodyInteraction = LeftFoot.AddComponent<VirtualObjectBodyInteraction>();
-            if (RightFootBodyInteraction == null) RightFootBodyInteraction = RightFoot.AddComponent<VirtualObjectBodyInteraction>();
+            Avatar.GetOrAddComponent(out AvatarHeight);
+            Avatar.GetOrAddComponent(out CollaborationTracking);
+            Avatar.GetOrAddComponent(out HandPose);
+
+            Skeleton.GetOrAddComponent(out SkeletonTracking);
+
+            if (Ybot != null)
+            {
+                Ybot.GetOrAddComponent(out Animator);
+                Ybot.GetOrAddComponent(out IkControl);
+                Ybot.GetOrAddComponent(out Movement);
+            }
+
+            Feet.GetOrAddComponent(out FootBehaviour);
+
+            LeftFoot.GetOrAddComponent(out LeftFootBodyInteraction);
+
+            RightFoot.GetOrAddComponent(out RightFootBodyInteraction);
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         void IUmi3dPlayerLife.SetComponents()
-        {
-            AvatarHeight.IKControl = IkControl;
-            AvatarHeight.Neck = Mixamorig.Neck.transform;
-
+        {   
             SkeletonTracking.boneType = BoneType.CenterFeet;
-
-            Animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-
-            IkControl.LeftBodyRestPose = Mixamorig.LeftHandBodyInteraction;
-            IkControl.RightBodyRestPose = Mixamorig.RightHandBodyInteraction;
-            IkControl.LeftFoot = LeftFootBodyInteraction;
-            IkControl.RightFoot = RightFootBodyInteraction;
-            IkControl.LeftBodyInteraction = Umi3dPlayerManager.Instance.HandManager.LeftHand.BasicHand.HandBodyInteraction;
-            IkControl.RightBodyInteraction = Umi3dPlayerManager.Instance.HandManager.RightHand.BasicHand.HandBodyInteraction;
-            IkControl.LeftHand = Umi3dPlayerManager.Instance.HandManager.LeftHand.IkTargetBodyInteraction;
-            IkControl.RightHand = Umi3dPlayerManager.Instance.HandManager.RightHand.IkTargetBodyInteraction;
-
-            MeshJoints.rootBone = Mixamorig.Hips.transform;
-            MeshSurface.rootBone = Mixamorig.Hips.transform;
-            MeshJoints.localBounds = new Bounds
-            {
-                center = new Vector3(9.536743e-07f, -0.1948793f, 0.001876384f),
-                extents = new Vector3(0.9452735f, 0.7953514f, 0.1378017f)
-            };
-            MeshSurface.localBounds = new Bounds
-            {
-                center = new Vector3(9.536743e-07f, -0.09565458f, 0.02162284f),
-                extents = new Vector3(0.9734249f, 0.9023672f, 0.1821343f)
-            };
 
             LeftFootBodyInteraction.goal = AvatarIKGoal.LeftFoot;
             RightFootBodyInteraction.goal = AvatarIKGoal.RightFoot;
@@ -207,33 +159,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        void IUmi3dPlayer.OnAnimatorFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.AnimatorController == null) return;
-            Animator.runtimeAnimatorController = Umi3dPlayerManager.Instance.AnimatorController;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnAvatarFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.Avatar == null) return;
-            Animator.avatar = Umi3dPlayerManager.Instance.Avatar;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.MeshJoints == null) return;
-            MeshJoints.sharedMesh = Umi3dPlayerManager.Instance.MeshJoints;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         void IUmi3dPlayer.OnLeftHandFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.LeftHand == null) return;
@@ -248,9 +173,6 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             if (AvatarHeight != null) AvatarHeight.OVRAnchor = Umi3dPlayerManager.Instance.MainCamera.transform;
             if (CollaborationTracking != null) CollaborationTracking.viewpoint = Umi3dPlayerManager.Instance.MainCamera.transform;
-            if (CameraTracking == null) CameraTracking = Umi3dPlayerManager.Instance.MainCamera.gameObject.AddComponent<UMI3DClientUserTrackingBone>();
-            CameraTracking.boneType = BoneType.Viewpoint;
-            CameraTracking.isTracked = true;
             if (Umi3dPlayerManager.Instance.MainCamera.gameObject.GetComponent<BasicAllVolumesTracker>() == null) Umi3dPlayerManager.Instance.MainCamera.gameObject.AddComponent<BasicAllVolumesTracker>();
         }
 
@@ -270,6 +192,51 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnRightHandFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.RightHand == null) return;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabYBotFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabUnityYBot == null) return;
+
+            Skeleton.FindOrCreatePrefab($"Unit ybot(Clone)", out Ybot, Umi3dPlayerManager.Instance.PrefabUnityYBot);
+            if (Ybot != null)
+            {
+                Mixamorig.CreateMixamorigHierarchy();
+                Ybot.GetOrAddComponent(out Animator);
+                Ybot.GetOrAddComponent(out IkControl);
+                Ybot.GetOrAddComponent(out Movement);
+
+                AvatarHeight.IKControl = IkControl;
+                AvatarHeight.Neck = Mixamorig.Neck.transform;
+
+                HandPose.IKControl = IkControl;
+                HandPose.RightHand = Umi3dPlayerManager.Instance.HandManager.RightHand.BasicHand.HandBodyInteraction;
+                HandPose.LeftHand = Umi3dPlayerManager.Instance.HandManager.LeftHand.BasicHand.HandBodyInteraction;
+
+                IkControl.LeftBodyRestPose = Mixamorig.LeftHandBodyInteraction;
+                IkControl.RightBodyRestPose = Mixamorig.RightHandBodyInteraction;
+                IkControl.LeftFoot = LeftFootBodyInteraction;
+                IkControl.RightFoot = RightFootBodyInteraction;
+                IkControl.LeftBodyInteraction = Umi3dPlayerManager.Instance.HandManager.LeftHand.BasicHand.HandBodyInteraction;
+                IkControl.RightBodyInteraction = Umi3dPlayerManager.Instance.HandManager.RightHand.BasicHand.HandBodyInteraction;
+                IkControl.LeftHand = Umi3dPlayerManager.Instance.HandManager.LeftHand.IkTargetBodyInteraction;
+                IkControl.RightHand = Umi3dPlayerManager.Instance.HandManager.RightHand.IkTargetBodyInteraction;
+
+                FootBehaviour.IKControl = IkControl;
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabInvisibleSkeletonFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabInvisibleUnitSkeleton == null) return;
+
+            CollaborationTracking.UnitSkeleton = Umi3dPlayerManager.Instance.PrefabInvisibleUnitSkeleton;
         }
 
         /// <summary>
@@ -301,15 +268,6 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayer.OnPrefabSelectorFieldUpdate()
         {
             if (Umi3dPlayerManager.Instance.PrefabSelector == null) return;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
-        {
-            if (Umi3dPlayerManager.Instance.MeshSurface == null) return;
-            MeshSurface.sharedMesh = Umi3dPlayerManager.Instance.MeshSurface;
         }
 
         #endregion

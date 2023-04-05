@@ -15,6 +15,8 @@ limitations under the License.
 */
 using System.Collections;
 using System.Collections.Generic;
+using umi3d.cdk.userCapture;
+using umi3dVRBrowsersBase.interactions;
 using umi3dVRBrowsersBase.interactions.selection;
 using umi3dVRBrowsersBase.navigation;
 using UnityEngine;
@@ -55,11 +57,14 @@ namespace umi3dVRBrowsersBase.ikManagement
         void IUmi3dPlayerLife.Create()
         {
             if (RootHand == null) RootHand = new GameObject($"UMI3D {Goal} Anchor");
-            if (IkTarget == null) IkTarget = new GameObject($"IK {Goal} Target");
-            if (TeleportArc == null) TeleportArc = new GameObject($"{Goal} Teleport Arc");
+
+            RootHand.FindOrCreate($"IK {Goal} Target", out IkTarget);
+            RootHand.FindOrCreate($"{Goal} Teleport Arc", out TeleportArc);
 
             if (InputController == null) InputController = new Umi3dInputController { Goal = Goal };
+            InputController.Goal = Goal;
             if (BasicHand == null) BasicHand = new Umi3dBasicHand { Goal = Goal };
+            BasicHand.Goal = Goal;
 
             (BasicHand as IUmi3dPlayerLife).Create();
             (InputController as IUmi3dPlayerLife).Create();
@@ -73,8 +78,8 @@ namespace umi3dVRBrowsersBase.ikManagement
             (BasicHand as IUmi3dPlayerLife).AddComponents();
             (InputController as IUmi3dPlayerLife).AddComponents();
 
-            if (IkTargetBodyInteraction == null) IkTargetBodyInteraction = IkTarget.AddComponent<VirtualObjectBodyInteraction>();
-            if (ArcController == null) ArcController = TeleportArc.AddComponent<TeleportArc>();
+            IkTarget.GetOrAddComponent(out IkTargetBodyInteraction);
+            TeleportArc.GetOrAddComponent(out ArcController);
         }
 
         /// <summary>
@@ -87,7 +92,6 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             IkTargetBodyInteraction.goal = Goal;
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"Add navmesh to layer");
             ArcController.rayStartPoint = TeleportArc.transform;
             ArcController.navmeshLayer = LayerMask.NameToLayer("Navmesh"); 
         }
@@ -104,6 +108,38 @@ namespace umi3dVRBrowsersBase.ikManagement
             RootHand.Add(IkTarget);
             RootHand.Add(BasicHand.BasicHand);
             RootHand.Add(TeleportArc);
+
+            IkTarget.transform.localPosition = Goal == AvatarIKGoal.LeftHand
+                ? new Vector3
+                (
+                    -0.015f,
+                    -0.03f,
+                    -0.115f
+                )
+                : new Vector3
+                (
+                    0.015f,
+                    -0.03f,
+                    0.115f
+                );
+            IkTarget.transform.localRotation = Quaternion.Euler
+                (
+                    Goal == AvatarIKGoal.LeftHand
+                    ? new Vector3
+                        (
+                            0f,
+                            0f,
+                            90f
+                        )
+                    : new Vector3
+                        (
+                            0f,
+                            0f,
+                            -90f
+                        )
+                );
+
+            InputController.Controller.transform.localScale = new Vector3(-1f, 1f, 1f);
         }
 
         /// <summary>
@@ -145,6 +181,29 @@ namespace umi3dVRBrowsersBase.ikManagement
         /// </summary>
         void IUmi3dPlayer.OnRightHandFieldUpdate()
         {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabYBotFieldUpdate()
+        {
+            if (Umi3dPlayerManager.Instance.PrefabUnityYBot == null) return;
+            if (Umi3dPlayerManager.Instance.IkManager.Ybot != null)
+            {
+                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"here");
+                InputController.VrController.bone = Goal == AvatarIKGoal.LeftHand 
+                    ? Umi3dPlayerManager.Instance.IkManager.Mixamorig.LeftHand.GetComponent<UMI3DClientUserTrackingBone>() 
+                    : Umi3dPlayerManager.Instance.IkManager.Mixamorig.RightHand.GetComponent<UMI3DClientUserTrackingBone>();
+            }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        void IUmi3dPlayer.OnPrefabInvisibleSkeletonFieldUpdate()
+        {
+
         }
 
         /// <summary>
@@ -199,34 +258,6 @@ namespace umi3dVRBrowsersBase.ikManagement
                 InputController.SelectionManager.controller = InputController.VrController;
             }
 
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnAnimatorFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnAvatarFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnJoinMeshFieldUpdate()
-        {
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        void IUmi3dPlayer.OnSurfaceMeshFieldUpdate()
-        {
         }
 
         #endregion
