@@ -121,7 +121,6 @@ namespace umi3dVRBrowsersBase.connection
 
                 while (OVRAnchor.localPosition.y == 0)
                     yield return null;
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"sort du while");
             }
             else
             {
@@ -133,7 +132,6 @@ namespace umi3dVRBrowsersBase.connection
                 sessionScaleFactor = Vector3.one * height * 1.05f;
 
             skeletonContainer.localScale = sessionScaleFactor;
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"session scale factor {sessionScaleFactor}");
 
             neckOffset = new Vector3(0, -0.060f * OVRAnchor.localPosition.y, -0.07f);
 
@@ -165,7 +163,7 @@ namespace umi3dVRBrowsersBase.connection
 
                 Vector3 virtualNeckPosition = OVRAnchor.TransformPoint(neckOffset);
 
-                transform.position = new Vector3(virtualNeckPosition.x, virtualNeckPosition.y - diffY, virtualNeckPosition.z);
+                transform.position = new Vector3(virtualNeckPosition.x, 0, virtualNeckPosition.z);
 
                 skeletonContainer.position = new Vector3(virtualNeckPosition.x, virtualNeckPosition.y - diffY, virtualNeckPosition.z);
 

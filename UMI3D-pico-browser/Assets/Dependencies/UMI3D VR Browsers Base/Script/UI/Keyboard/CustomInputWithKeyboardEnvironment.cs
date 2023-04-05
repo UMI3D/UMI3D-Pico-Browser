@@ -63,8 +63,8 @@ namespace umi3dVRBrowsersBase.ui.keyboard
         /// <param name="editionCallback"></param>
         public void SetEditionCallback(Action<string> editionCallback)
         {
-            this.editionCallback = (res) =>
-            {
+            this.editionCallback = (res) => 
+            { 
                 editionCallback?.Invoke(res);
                 PlayerMenuManager.Instance.gameObject.SetActive(true);
                 StartCoroutine(UnSelectAllSelectable());

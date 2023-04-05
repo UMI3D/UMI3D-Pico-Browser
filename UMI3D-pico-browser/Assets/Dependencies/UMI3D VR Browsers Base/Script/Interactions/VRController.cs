@@ -113,8 +113,8 @@ namespace umi3dVRBrowsersBase.interactions
         /// <returns></returns>
         public override bool IsCompatibleWith(AbstractTool tool)
         {
-            return tool.interactions.TrueForAll(inter =>
-                (inter is ManipulationDto) ?
+            return tool.interactionsLoaded.TrueForAll(inter =>
+                (inter is ManipulationDto ) ?
                 (inter as ManipulationDto).dofSeparationOptions.Exists(
                     group => !group.separations.Exists(
                         dof => (dof.dofs == DofGroupEnum.X_RX) || (dof.dofs == DofGroupEnum.Y_RY) || (dof.dofs == DofGroupEnum.Z_RZ)))
@@ -130,9 +130,9 @@ namespace umi3dVRBrowsersBase.interactions
         {
             return false;
 
-            List<AbstractInteractionDto> manips = tool.interactions.FindAll(x => x is ManipulationDto);
-            List<AbstractInteractionDto> events = tool.interactions.FindAll(x => x is EventDto);
-            List<AbstractInteractionDto> param = tool.interactions.FindAll(x => x is AbstractParameterDto);
+            List<AbstractInteractionDto> manips = tool.interactionsLoaded.FindAll(x => x is ManipulationDto);
+            List<AbstractInteractionDto> events = tool.interactionsLoaded.FindAll(x => x is EventDto);
+            List<AbstractInteractionDto> param = tool.interactionsLoaded.FindAll(x => x is AbstractParameterDto);
             return ((manips.Count > 1) || (events.Count > 3) || (param.Count > 0));
         }
 
@@ -153,7 +153,7 @@ namespace umi3dVRBrowsersBase.interactions
         /// <param name="interactions"></param>
         public override void CreateInteractionsMenuFor(AbstractTool tool)
         {
-            List<AbstractInteractionDto> interactions = tool.interactions;
+            List<AbstractInteractionDto> interactions = tool.interactionsLoaded;
             List<AbstractInteractionDto> manips = interactions.FindAll(inter => inter is ManipulationDto);
             foreach (AbstractInteractionDto manip in manips)
             {

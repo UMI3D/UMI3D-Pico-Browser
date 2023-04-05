@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
@@ -56,7 +57,7 @@ namespace umi3dVRBrowsersBase.interactions.input
         /// Associated callback
         /// </summary>
         /// <see cref="Associate(AbstractInteractionDto)"/>
-        protected UnityAction<ValueType> callback;
+        protected Action<ValueType> callback;
 
         #endregion
 
@@ -107,9 +108,6 @@ namespace umi3dVRBrowsersBase.interactions.input
                 PlayerMenuManager.Instance.CtrlToolMenu.AddParameter((controller as VRController).type, menuItem, DesynchronizeMenuItem);
 
                 var param = interaction as ParameterType;
-
-                UnityEngine.Debug.Log(interaction.GetType());
-
                 callback = x =>
                 {
                     paramType.value = x;
@@ -117,6 +115,8 @@ namespace umi3dVRBrowsersBase.interactions.input
                     UMI3DClientServer.SendData(new ParameterSettingRequestDto()
                     {
                         boneType = bone.boneType,
+                        bonePosition = bone.transform.position,
+                        boneRotation = bone.transform.rotation,
                         toolId = toolId,
                         parameter = new ParameterType()
                         {

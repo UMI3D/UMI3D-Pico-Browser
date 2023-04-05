@@ -1516,8 +1516,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 427771538}
-  m_LocalRotation: {x: 4.5474735e-11, y: 0.70710593, z: -0.000036667974, w: 0.7071077}
-  m_LocalPosition: {x: -0.0539, y: 0.027, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: -0.000018537152, z: 0.7071068, w: 0.000018537152}
+  m_LocalPosition: {x: -0.0539, y: -0.02, z: 0}
   m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1527,7 +1527,7 @@ Transform:
   - {fileID: 598362508}
   m_Father: {fileID: 631318861}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0.003, y: 90, z: -0.003}
+  m_LocalEulerAnglesHint: {x: 0.003, y: 90, z: 180}
 --- !u!114 &427771540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3804,8 +3804,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1101121928}
-  m_LocalRotation: {x: 4.3655746e-11, y: 0.7071058, z: -0.000036667974, w: 0.70710784}
-  m_LocalPosition: {x: 0.0539, y: 0.027, z: -0}
+  m_LocalRotation: {x: 0.7071068, y: -0.000018537152, z: 0.7071068, w: 0.000018537152}
+  m_LocalPosition: {x: 0.0539, y: -0.02, z: -0}
   m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3815,7 +3815,7 @@ Transform:
   - {fileID: 62750689}
   m_Father: {fileID: 227149920}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0.003, y: 90, z: -0.003}
+  m_LocalEulerAnglesHint: {x: 0.003, y: 90, z: 180}
 --- !u!114 &1101121930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8796,8 +8796,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laserObject: {fileID: 1817862147090306386}
   impactPoint: {fileID: 1817862147830541417}
-  defaultMaterial: {fileID: 2100000, guid: 816bcb36847146341a08d62ec4cb0b48, type: 2}
-  selectionMaterial: {fileID: 2100000, guid: e04bfa8c794d264428bed8da8e9a800a, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 27b22803fda298c45a15fe4995274bf1, type: 2}
+  selectionMaterial: {fileID: 2100000, guid: d3f0a2ffe7805cd4cad171a0d32da68f, type: 2}
 --- !u!1 &1817862146271390737
 GameObject:
   m_ObjectHideFlags: 0
@@ -10320,7 +10320,7 @@ Transform:
   m_GameObject: {fileID: 1817862146838174658}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1817862147279460274}
@@ -10445,6 +10445,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   vrInput: {fileID: 1817862146842050344}
   onActionUp:
     m_PersistentCalls:
@@ -10471,6 +10472,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   activationButton: {fileID: 1817862146842050344}
   networkFrameRate: 1
   translationStrenght: 1
@@ -10690,6 +10692,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   vrInput: {fileID: 1817862146937942034}
   onActionUp:
     m_PersistentCalls:
@@ -10716,6 +10719,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   activationButton: {fileID: 1817862146937942034}
   networkFrameRate: 1
   translationStrenght: 1
@@ -11438,6 +11442,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   vrInput: {fileID: 1817862147188455896}
   onActionUp:
     m_PersistentCalls:
@@ -11831,6 +11836,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   vrInput: {fileID: 1817862147271454086}
   onActionUp:
     m_PersistentCalls:
@@ -11857,6 +11863,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   activationButton: {fileID: 1817862147271454086}
   networkFrameRate: 1
   translationStrenght: 1
@@ -11946,6 +11953,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   vrInput: {fileID: 1817862147276661525}
   onActionUp:
     m_PersistentCalls:
@@ -11972,6 +11980,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   activationButton: {fileID: 1817862147276661525}
   networkFrameRate: 1
   translationStrenght: 1
@@ -12418,6 +12427,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   vrInput: {fileID: 1817862147349036423}
   onActionUp:
     m_PersistentCalls:
@@ -13142,6 +13152,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   vrInput: {fileID: 1817862147574468421}
   onActionUp:
     m_PersistentCalls:
@@ -13168,6 +13179,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   activationButton: {fileID: 1817862147574468421}
   networkFrameRate: 1
   translationStrenght: 1
@@ -14258,8 +14270,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laserObject: {fileID: 1817862147977147888}
   impactPoint: {fileID: 1817862146821670112}
-  defaultMaterial: {fileID: 2100000, guid: 816bcb36847146341a08d62ec4cb0b48, type: 2}
-  selectionMaterial: {fileID: 2100000, guid: e04bfa8c794d264428bed8da8e9a800a, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 27b22803fda298c45a15fe4995274bf1, type: 2}
+  selectionMaterial: {fileID: 2100000, guid: d3f0a2ffe7805cd4cad171a0d32da68f, type: 2}
 --- !u!1 &1817862147830541417
 GameObject:
   m_ObjectHideFlags: 0
@@ -14418,14 +14430,18 @@ MonoBehaviour:
     Ybot: {fileID: 1352688448}
     Mixamorig:
       Hips: {fileID: 1777040983}
+      Neck: {fileID: 1323756207}
+      Head: {fileID: 1988552254}
+      LeftFoot: {fileID: 1689895991}
+      RightFoot: {fileID: 785136338}
+      LeftHand: {fileID: 227149917}
+      RightHand: {fileID: 631318858}
       LeftUpLeg: {fileID: 786408008}
       LeftLeg: {fileID: 2091862462}
-      LeftFoot: {fileID: 1689895991}
       LeftToeBase: {fileID: 1274460418}
       LeftToeEnd: {fileID: 1269413846}
       RightUpLeg: {fileID: 1864961669}
       RightLeg: {fileID: 682124300}
-      RightFoot: {fileID: 785136338}
       RightToeBase: {fileID: 83807750}
       RightToeEnd: {fileID: 2059290362}
       Spine0: {fileID: 981645897}
@@ -14434,56 +14450,12 @@ MonoBehaviour:
       LeftShoulder: {fileID: 2085432546}
       LeftArm: {fileID: 1038181793}
       LeftForearm: {fileID: 796588092}
-      LeftHand: {fileID: 227149917}
-      LeftHandIndex1: {fileID: 0}
-      LeftHandIndex2: {fileID: 0}
-      LeftHandIndex3: {fileID: 0}
-      LeftHandIndex4: {fileID: 0}
-      LeftHandMiddle1: {fileID: 0}
-      LeftHandMiddle2: {fileID: 0}
-      LeftHandMiddle3: {fileID: 0}
-      LeftHandMiddle4: {fileID: 0}
-      LeftHandPinky1: {fileID: 0}
-      LeftHandPinky2: {fileID: 0}
-      LeftHandPinky3: {fileID: 0}
-      LeftHandPinky4: {fileID: 0}
-      LeftHandRing1: {fileID: 0}
-      LeftHandRing2: {fileID: 0}
-      LeftHandRing3: {fileID: 0}
-      LeftHandRing4: {fileID: 0}
-      LeftHandThumb1: {fileID: 0}
-      LeftHandThumb2: {fileID: 0}
-      LeftHandThumb3: {fileID: 0}
-      LeftHandThumb4: {fileID: 0}
-      Neck: {fileID: 1323756207}
-      Head: {fileID: 1988552254}
       HeadTop: {fileID: 1765458320}
       LeftEye: {fileID: 513107102}
       RightEye: {fileID: 2146278275}
       RightShoulder: {fileID: 136597530}
       RightArm: {fileID: 1903058979}
       RightForearm: {fileID: 1683060944}
-      RightHand: {fileID: 631318858}
-      RightHandIndex1: {fileID: 0}
-      RightHandIndex2: {fileID: 0}
-      RightHandIndex3: {fileID: 0}
-      RightHandIndex4: {fileID: 0}
-      RightHandMiddle1: {fileID: 0}
-      RightHandMiddle2: {fileID: 0}
-      RightHandMiddle3: {fileID: 0}
-      RightHandMiddle4: {fileID: 0}
-      RightHandPinky1: {fileID: 0}
-      RightHandPinky2: {fileID: 0}
-      RightHandPinky3: {fileID: 0}
-      RightHandPinky4: {fileID: 0}
-      RightHandRing1: {fileID: 0}
-      RightHandRing2: {fileID: 0}
-      RightHandRing3: {fileID: 0}
-      RightHandRing4: {fileID: 0}
-      RightHandThumb1: {fileID: 0}
-      RightHandThumb2: {fileID: 0}
-      RightHandThumb3: {fileID: 0}
-      RightHandThumb4: {fileID: 0}
       LeftHandBodyInteraction: {fileID: 227149918}
       RightHandBodyInteraction: {fileID: 631318860}
     Feet: {fileID: 1817862146887244570}
@@ -14746,16 +14718,6 @@ MonoBehaviour:
   vibrationDuration: 1
   vibrationFrequency: 150
   vibrationAmplitude: 0.2
-  GrabLeftIsDown: 0
-  GrabRightIsDown: 0
-  JoystickLeftIsDown: 0
-  JoystickRightIsDown: 0
-  PrimaryLeftIsDown: 0
-  PrimaryRightIsDown: 0
-  SecondaryLeftIsDown: 0
-  SecondaryRightIsDown: 0
-  TriggerLeftIsDown: 0
-  TriggerRightIsDown: 0
 --- !u!1 &1817862147853923999
 GameObject:
   m_ObjectHideFlags: 0
@@ -15366,6 +15328,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   vrInput: {fileID: 1817862147988670349}
   onActionUp:
     m_PersistentCalls:
@@ -15392,6 +15355,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   boneType: 0
+  boneTransform: {fileID: 0}
   activationButton: {fileID: 1817862147988670349}
   networkFrameRate: 1
   translationStrenght: 1

@@ -139,7 +139,9 @@ namespace umi3dVRBrowsersBase.ikManagement
                         )
                 );
 
-            InputController.Controller.transform.localScale = new Vector3(-1f, 1f, 1f);
+            InputController.Controller.transform.localScale = Goal == AvatarIKGoal.LeftHand
+                ? new Vector3(-1f, 1f, 1f)
+                : new Vector3(1f, 1f, 1f);
         }
 
         /// <summary>
