@@ -49,7 +49,8 @@ namespace umi3d.cdk.collaboration
 
         public static PublicIdentityDto PublicIdentity => worldControllerClient?.PublicIdentity;
 
-        protected override ForgeConnectionDto connectionDto => environmentClient?.connectionDto;
+        protected override EnvironmentConnectionDto connectionDto => environmentClient?.connectionDto;
+        public override UMI3DVersion.Version version => environmentClient?.version;
 
         public static Func<MultiProgress> EnvironmentProgress = null;
 
@@ -111,8 +112,13 @@ namespace umi3d.cdk.collaboration
 
         private void Start()
         {
-            UMI3DNetworkingHelper.AddModule(new UMI3DCollaborationNetworkingModule());
-            UMI3DNetworkingHelper.AddModule(new common.collaboration.UMI3DCollaborationNetworkingModule());
+            UMI3DSerializer.AddModule(new UMI3DSerializerBasicModules());
+            UMI3DSerializer.AddModule(new UMI3DSerializerStringModules());
+            UMI3DSerializer.AddModule(new UMI3DSerializerVectorModules());
+            UMI3DSerializer.AddModule(new UMI3DSerializerAnimationModules());
+            UMI3DSerializer.AddModule(new UMI3DSerializerShaderModules());
+            UMI3DSerializer.AddModule(new UMI3DCollaborationSerializerModule());
+            UMI3DSerializer.AddModule(new common.collaboration.UMI3DCollaborationSerializerModule());
         }
 
 
@@ -173,10 +179,10 @@ namespace umi3d.cdk.collaboration
                     {
                         Instance.OnRedirection.Invoke();
                         loadingEntities.Clear();
+                        UMI3DEnvironmentLoader.Clear();
 
                         UMI3DEnvironmentClient env = environmentClient;
                         environmentClient = null;
-                        UMI3DEnvironmentLoader.Clear();
 
                         if (env != null)
                             await env.Logout();
