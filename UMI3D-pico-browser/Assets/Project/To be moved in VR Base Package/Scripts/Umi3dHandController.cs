@@ -93,7 +93,7 @@ namespace umi3dVRBrowsersBase.ikManagement
             IkTargetBodyInteraction.goal = Goal;
 
             ArcController.rayStartPoint = TeleportArc.transform;
-            ArcController.navmeshLayer = LayerMask.NameToLayer("Navmesh"); 
+            ArcController.navmeshLayer = (1 << LayerMask.NameToLayer("Navmesh")); 
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace umi3dVRBrowsersBase.ikManagement
                 (
                     0.015f,
                     -0.03f,
-                    0.115f
+                    -0.115f
                 );
             IkTarget.transform.localRotation = Quaternion.Euler
                 (
@@ -193,7 +193,6 @@ namespace umi3dVRBrowsersBase.ikManagement
             if (Umi3dPlayerManager.Instance.PrefabUnityYBot == null) return;
             if (Umi3dPlayerManager.Instance.IkManager.Ybot != null)
             {
-                UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"here");
                 InputController.VrController.bone = Goal == AvatarIKGoal.LeftHand 
                     ? Umi3dPlayerManager.Instance.IkManager.Mixamorig.LeftHand.GetComponent<UMI3DClientUserTrackingBone>() 
                     : Umi3dPlayerManager.Instance.IkManager.Mixamorig.RightHand.GetComponent<UMI3DClientUserTrackingBone>();

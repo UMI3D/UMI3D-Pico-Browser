@@ -79,8 +79,10 @@ namespace umi3d.picoBrowser
             RightController = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+
             bool value;
 
             GrabLeftState.IncreamentFrame();

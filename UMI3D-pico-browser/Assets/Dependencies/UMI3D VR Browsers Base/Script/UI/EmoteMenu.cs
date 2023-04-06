@@ -141,14 +141,14 @@ namespace umi3dVRBrowsersBase.ui
         public void Hide()
         {
             Canvas.Go.SetActive(false);
-            EmoteButtonStatusChanged.Invoke(false);
+            EmoteButtonStatusChanged?.Invoke(false);
         }
         [ContextMenu("Display")]
         public void Display()
         {
             Canvas.Go.SetActive(true);
             UpdateCanvasPosition();
-            EmoteButtonStatusChanged.Invoke(true);
+            EmoteButtonStatusChanged?.Invoke(true);
         }
 
         [ContextMenu("Look")]

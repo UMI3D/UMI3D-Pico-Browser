@@ -214,38 +214,33 @@ namespace umi3dVRBrowsersBase.ikManagement
 
         void IUmi3dPlayerLife.AddComponents()
         {
-            if (HandBodyInteraction == null) HandBodyInteraction = BasicHand.AddComponent<VirtualObjectBodyInteraction>();
-            if (SphereBodyInteraction == null) SphereBodyInteraction = Sphere.AddComponent<VirtualObjectBodyInteractionEndBone>();
-            {
-                if (Thumb1BodyInteraction == null) Thumb1BodyInteraction = Thumb1.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Thumb2BodyInteraction == null) Thumb2BodyInteraction = Thumb2.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Thumb3BodyInteraction == null) Thumb3BodyInteraction = Thumb3.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Thumb4BodyInteraction == null) Thumb4BodyInteraction = Thumb4.AddComponent<VirtualObjectBodyInteractionEndBone>();
-            }
-            {
-                if (Index1BodyInteraction == null) Index1BodyInteraction = Index1.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Index2BodyInteraction == null) Index2BodyInteraction = Index2.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Index3BodyInteraction == null) Index3BodyInteraction = Index3.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Index4BodyInteraction == null) Index4BodyInteraction = Index4.AddComponent<VirtualObjectBodyInteractionEndBone>();
-            }
-            {
-                if (Middle1BodyInteraction == null) Middle1BodyInteraction = Middle1.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Middle2BodyInteraction == null) Middle2BodyInteraction = Middle2.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Middle3BodyInteraction == null) Middle3BodyInteraction = Middle3.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Middle4BodyInteraction == null) Middle4BodyInteraction = Middle4.AddComponent<VirtualObjectBodyInteractionEndBone>();
-            }
-            {
-                if (Ring1BodyInteraction == null) Ring1BodyInteraction = Ring1.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Ring2BodyInteraction == null) Ring2BodyInteraction = Ring2.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Ring3BodyInteraction == null) Ring3BodyInteraction = Ring3.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Ring4BodyInteraction == null) Ring4BodyInteraction = Ring4.AddComponent<VirtualObjectBodyInteractionEndBone>();
-            }
-            {
-                if (Pinky1BodyInteraction == null) Pinky1BodyInteraction = Pinky1.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Pinky2BodyInteraction == null) Pinky2BodyInteraction = Pinky2.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Pinky3BodyInteraction == null) Pinky3BodyInteraction = Pinky3.AddComponent<VirtualObjectBodyInteractionBone>();
-                if (Pinky4BodyInteraction == null) Pinky4BodyInteraction = Pinky4.AddComponent<VirtualObjectBodyInteractionEndBone>();
-            }
+            BasicHand.GetOrAddComponent(out HandBodyInteraction);
+            Sphere.GetOrAddComponent(out SphereBodyInteraction);
+
+            Thumb1.GetOrAddComponent(out Thumb1BodyInteraction);
+            Thumb2.GetOrAddComponent(out Thumb2BodyInteraction);
+            Thumb3.GetOrAddComponent(out Thumb3BodyInteraction);
+            Thumb4.GetOrAddComponent(out Thumb4BodyInteraction);
+
+            Index1.GetOrAddComponent(out Index1BodyInteraction);
+            Index2.GetOrAddComponent(out Index2BodyInteraction);
+            Index3.GetOrAddComponent(out Index3BodyInteraction);
+            Index4.GetOrAddComponent(out Index4BodyInteraction);
+
+            Middle1.GetOrAddComponent(out Middle1BodyInteraction);
+            Middle2.GetOrAddComponent(out Middle2BodyInteraction);
+            Middle3.GetOrAddComponent(out Middle3BodyInteraction);
+            Middle4.GetOrAddComponent(out Middle4BodyInteraction);
+
+            Ring1.GetOrAddComponent(out Ring1BodyInteraction);
+            Ring2.GetOrAddComponent(out Ring2BodyInteraction);
+            Ring3.GetOrAddComponent(out Ring3BodyInteraction);
+            Ring4.GetOrAddComponent(out Ring4BodyInteraction);
+
+            Pinky1.GetOrAddComponent(out Pinky1BodyInteraction);
+            Pinky2.GetOrAddComponent(out Pinky2BodyInteraction);
+            Pinky3.GetOrAddComponent(out Pinky3BodyInteraction);
+            Pinky4.GetOrAddComponent(out Pinky4BodyInteraction);
         }
 
         void IUmi3dPlayerLife.SetComponents()
@@ -311,6 +306,16 @@ namespace umi3dVRBrowsersBase.ikManagement
                 Pinky2.Add(Pinky3);
                 Pinky3.Add(Pinky4);
             }
+
+            BasicHand.transform.localPosition = new Vector3(0f, 0f, -.1f);
+            BasicHand.transform.rotation = Quaternion.Euler
+            (
+                Goal == AvatarIKGoal.LeftHand
+                ? new Vector3 (-90f, 90f, 0f) 
+                : new Vector3 (-90f, -90f, 0f)
+            );
+            Sphere.transform.localRotation = Quaternion.Euler(new Vector3(0f, 90f, 0f));
+            Sphere.transform.localScale = Vector3.one * .02f;
         }
 
         void IUmi3dPlayerLife.Clear()
