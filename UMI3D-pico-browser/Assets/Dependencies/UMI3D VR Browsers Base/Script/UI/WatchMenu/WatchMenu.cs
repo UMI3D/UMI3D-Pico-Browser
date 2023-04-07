@@ -178,7 +178,7 @@ namespace umi3dVRBrowsersBase.ui.watchMenu
 
             EmoteMenu.EmoteButtonStatusChanged += value =>
             {
-                pinMenuButton.Toggle(value);
+                pinMenuButton?.Toggle(value);
                 IsOpen = value;
             };
 
