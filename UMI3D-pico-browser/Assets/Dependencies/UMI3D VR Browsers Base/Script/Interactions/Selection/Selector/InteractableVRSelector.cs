@@ -225,6 +225,14 @@ namespace umi3dVRBrowsersBase.interactions.selection.selector
                 }
             }
 
+            if (AbstractInteractionMapper.Instance == null) return;
+            if
+            (
+                selectionInfo == null
+                || selectionInfo.selectedObject == null
+                || selectionInfo.selectedObject.Interactable == null
+                || selectionInfo.selectedObject.Interactable.dto == null
+            ) return;
             var interactionTool = AbstractInteractionMapper.Instance.GetTool(selectionInfo.selectedObject.Interactable.dto.id);
             if (selectionInfo is InteractableSelectionData)
                 (selectionInfo as InteractableSelectionData).tool = interactionTool;
