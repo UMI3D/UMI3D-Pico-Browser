@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+using System;
 using System.Collections.Generic;
 using umi3dVRBrowsersBase.interactions;
 using Unity.XR.PXR;
@@ -72,6 +73,16 @@ namespace umi3d.picoBrowser
         public UnityEngine.XR.InputDevice LeftController;
         [HideInInspector]
         public UnityEngine.XR.InputDevice RightController;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            foreach (ControllerType ctrl in Enum.GetValues(typeof(ControllerType)))
+            {
+                isTeleportDown.Add(ctrl, false);
+            }
+        }
 
         private void Start()
         {
