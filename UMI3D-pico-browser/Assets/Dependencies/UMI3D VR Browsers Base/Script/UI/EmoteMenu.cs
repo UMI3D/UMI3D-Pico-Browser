@@ -121,8 +121,16 @@ namespace umi3dVRBrowsersBase.ui
             if (EventSystem.current == null) UnityEngine.Debug.LogError($"Event System null.");
             Canvas.Scale = .005f;
             Hide();
+        }
 
+        private void OnEnable()
+        {
             EmoteManager.Instance.EmotesLoaded += EmoteConfigReceived;
+        }
+
+        private void OnDisable()
+        {
+            EmoteManager.Instance.EmotesLoaded -= EmoteConfigReceived;
         }
 
         protected void EmoteConfigReceived(List<Emote> emotes)

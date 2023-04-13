@@ -101,7 +101,6 @@ namespace umi3dVRBrowsersBase.connection
                 if (LoadingPanel.Exists)
                     LoadingPanel.Instance?.Display("Loading environment ...");
             }
-
             else DisplayAccept(ids.Count, callback);
         }
 
