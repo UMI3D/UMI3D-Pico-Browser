@@ -49,6 +49,8 @@ namespace umi3dVRBrowsersBase.ikManagement
         public GameObject ArcImpact;
         [HideInInspector]
         public TeleportArc ArcController;
+        [HideInInspector]
+        public VRInputObserver TeleportObserver;
 
         #region IUmi3dPlayerLife
 
@@ -81,6 +83,7 @@ namespace umi3dVRBrowsersBase.ikManagement
 
             IkTarget.GetOrAddComponent(out IkTargetBodyInteraction);
             TeleportArc.GetOrAddComponent(out ArcController);
+            TeleportArc.GetOrAddComponent(out TeleportObserver);
         }
 
         /// <summary>
@@ -94,7 +97,10 @@ namespace umi3dVRBrowsersBase.ikManagement
             IkTargetBodyInteraction.goal = Goal;
 
             ArcController.rayStartPoint = TeleportArc.transform;
-            ArcController.navmeshLayer = (1 << LayerMask.NameToLayer("Navmesh")); 
+            ArcController.navmeshLayer = (1 << LayerMask.NameToLayer("Navmesh"));
+
+            TeleportObserver.action = ActionType.Teleport;
+            TeleportObserver.controller = Goal == AvatarIKGoal.LeftHand ? ControllerType.LeftHandController : ControllerType.RightHandController;
         }
 
         /// <summary>
