@@ -144,7 +144,18 @@ namespace umi3dVRBrowsersBase.interactions.selection.selector
         {
             controller = GetComponentInParent<VRSelectionManager>().controller; //controller is required before awake
             base.Awake();
-            UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnEnvironmentLeave);
+        }
+
+        private void OnEnable()
+        {
+            if (UMI3DCollaborationClientServer.Exists)
+                UMI3DCollaborationClientServer.Instance.OnRedirection.AddListener(OnEnvironmentLeave);
+        }
+
+        private void OnDisable()
+        {
+            if (UMI3DCollaborationClientServer.Exists)
+                UMI3DCollaborationClientServer.Instance.OnRedirection.RemoveListener(OnEnvironmentLeave);
         }
 
         protected virtual void Update()

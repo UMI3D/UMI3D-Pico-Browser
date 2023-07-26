@@ -72,9 +72,7 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
         /// <summary>
         /// True is the laser is infinite
         /// </summary>
-        public bool IsInfinite => _isInfinite;
-
-        private bool _isInfinite = true;
+        private bool isInfinite = true;
 
         /// <summary>
         /// Max length of the laser
@@ -139,6 +137,8 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
 
                 trackingInfo.targetContainer.Interactable.HoverEnter(
                     controller.bone.boneType,
+                    controller.bone.transform.position,
+                    new Vector4(controller.bone.transform.rotation.x, controller.bone.transform.rotation.y, controller.bone.transform.rotation.z, controller.bone.transform.rotation.w),
                     trackingInfo.targetContainer.Interactable.id,
                     trackingInfo.targetContainer.transform.InverseTransformPoint(trackingInfo.raycastHit.point),
                     trackingInfo.targetContainer.transform.InverseTransformDirection(trackingInfo.raycastHit.normal),
@@ -147,18 +147,7 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
                 if (trackingInfo.target.dto.HoverEnterAnimationId != 0)
                 {
                     changelastBone.Invoke(controller.bone.boneType);
-                    var anim = UMI3DNodeAnimation.Get(trackingInfo.target.dto.HoverEnterAnimationId);
-                    if (anim != null)
-                    {
-                        anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(trackingInfo.target.dto.HoverEnterAnimationId), new SetEntityPropertyDto()
-                        {
-                            entityId = trackingInfo.target.dto.HoverEnterAnimationId,
-                            property = UMI3DPropertyKeys.AnimationPlaying,
-                            value = true
-                        });
-
-                        anim.Start();
-                    }
+                    StartAnim(trackingInfo.target.dto.HoverEnterAnimationId);
                 }
             });
 
@@ -171,6 +160,8 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
                 {
                     trackingInfo.targetContainer.Interactable.HoverExit(
                         controller.bone.boneType,
+                        controller.bone.transform.position,
+                        new Vector4(controller.bone.transform.rotation.x, controller.bone.transform.rotation.y, controller.bone.transform.rotation.z, controller.bone.transform.rotation.w),
                         trackingInfo.targetContainer.Interactable.id,
                         trackingInfo.targetContainer.transform.InverseTransformPoint(trackingInfo.raycastHit.point),
                         trackingInfo.targetContainer.transform.InverseTransformDirection(trackingInfo.raycastHit.normal),
@@ -194,18 +185,7 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
                 if (trackingInfo.target.dto.HoverExitAnimationId != 0)
                 {
                     changelastBone.Invoke(controller.bone.boneType);
-                    var anim = UMI3DNodeAnimation.Get(trackingInfo.target.dto.HoverExitAnimationId);
-                    if (anim != null)
-                    {
-                        anim.SetUMI3DProperty(UMI3DEnvironmentLoader.GetEntity(trackingInfo.target.dto.HoverExitAnimationId), new SetEntityPropertyDto()
-                        {
-                            entityId = trackingInfo.target.dto.HoverExitAnimationId,
-                            property = UMI3DPropertyKeys.AnimationPlaying,
-                            value = true
-                        });
-
-                        anim.Start();
-                    }
+                    StartAnim(trackingInfo.target.dto.HoverExitAnimationId);
                 }
             });
 
@@ -216,11 +196,32 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
 
                 trackingInfo.targetContainer.Interactable.Hovered(
                     controller.bone.boneType,
+                    controller.bone.transform.position,
+                    new Vector4(controller.bone.transform.rotation.x, controller.bone.transform.rotation.y, controller.bone.transform.rotation.z, controller.bone.transform.rotation.w),
                     trackingInfo.targetContainer.Interactable.id,
                     trackingInfo.targetContainer.transform.InverseTransformPoint(trackingInfo.raycastHit.point),
                     trackingInfo.targetContainer.transform.InverseTransformDirection(trackingInfo.raycastHit.normal),
                     trackingInfo.directionWorld);
             });
+        }
+
+        protected async void StartAnim(ulong id)
+        {
+            var anim = UMI3DAbstractAnimation.Get(id);
+            if (anim != null)
+            {
+                await anim.SetUMI3DProperty(
+                    new SetUMI3DPropertyData(
+                         new SetEntityPropertyDto()
+                         {
+                             entityId = id,
+                             property = UMI3DPropertyKeys.AnimationPlaying,
+                             value = true
+                         },
+                        UMI3DEnvironmentLoader.GetEntity(id))
+                    );
+                anim.Start();
+            }
         }
 
         public static bool IsNullOrDestroyed(System.Object obj)
@@ -382,7 +383,7 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
         public void SetImpactPoint(Vector3 point, bool displayImpact = true)
         {
             impactPointRenderer.enabled = displayImpact;
-            _isInfinite = !displayImpact;
+            isInfinite = !displayImpact;
             impactPoint.transform.position = point;
             transform.localScale = new Vector3(transform.localScale.x, Vector3.Distance(this.transform.position, point), transform.localScale.z);
         }

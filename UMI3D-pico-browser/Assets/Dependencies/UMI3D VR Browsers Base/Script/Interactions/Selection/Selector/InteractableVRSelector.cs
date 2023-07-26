@@ -91,10 +91,12 @@ namespace umi3dVRBrowsersBase.interactions.selection.selector
 
         private void OnPointerUp()
         {
+
         }
 
         private void OnPointerDown()
         {
+
         }
 
         private void LockSelector()
@@ -228,6 +230,14 @@ namespace umi3dVRBrowsersBase.interactions.selection.selector
             }
 
             // Find out tool to project
+            if (AbstractInteractionMapper.Instance == null) return;
+            if 
+            (
+                selectionInfo == null 
+                || selectionInfo.selectedObject == null 
+                || selectionInfo.selectedObject.Interactable == null 
+                || selectionInfo.selectedObject.Interactable.dto == null
+            ) return;
             var interactionTool = AbstractInteractionMapper.Instance.GetTool(selectionInfo.selectedObject.Interactable.dto.id);
             if (selectionInfo is InteractableSelectionData)
                 (selectionInfo as InteractableSelectionData).tool = interactionTool;

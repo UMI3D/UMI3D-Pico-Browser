@@ -86,6 +86,13 @@ namespace umi3dVRBrowsersBase.connection
         {
             if (LoadingPanel.Exists)
                 LoadingPanel.Instance.Hide();
+            else
+            {
+                // Fix for Laval
+                UnityEngine.Debug.Log("<color=red>For Laval: </color>" + $"To be updated");
+                callback(true);
+                return;
+            }
 
             if (ids.Count == 0)
             {
@@ -94,7 +101,6 @@ namespace umi3dVRBrowsersBase.connection
                 if (LoadingPanel.Exists)
                     LoadingPanel.Instance?.Display("Loading environment ...");
             }
-
             else DisplayAccept(ids.Count, callback);
         }
 
@@ -103,7 +109,7 @@ namespace umi3dVRBrowsersBase.connection
         /// </summary>
         /// <param name="form"></param>
         /// <param name="callback"></param>
-        private void GetParameterDtos(FormDto form, Action<FormAnswerDto> callback)
+        private void GetParameterDtos(ConnectionFormDto form, Action<FormAnswerDto> callback)
         {
             FormAsker.Instance.Display(form, callback);
         }
