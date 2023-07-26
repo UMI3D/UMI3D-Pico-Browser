@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<linker>
+
+  <assembly fullname="System">
+
+    <type fullname="System.ComponentModel.TypeConverter" preserve="all" />
+
+    <!-- <namespace fullname="System.ComponentModel" preserve="all" /> -->
+
+  </assembly>
+  <assembly fullname="Google.Protobuf" preserve="all"/>
+  <assembly fullname="System.Reflection" preserve="all"/>
+  <assembly fullname="System.Collections.Immutable" preserve="all"/>
+  <assembly fullname="System.Memory" preserve="all"/>
+  <assembly fullname="System.Buffers" preserve="all"/>
+  <assembly fullname="System.Runtime.CompilerServices.Unsafe" preserve="all"/>
+  <assembly fullname="System" preserve="all" />
+  <assembly fullname="protobuf-net" preserve="all" />
+  <assembly fullname="DataModelBindings" preserve="all"/>
+  <assembly fullname="MumbleProto" preserve="all"/>
+  <assembly fullname="MyProtoModel" preserve="all"/>
+  
+</linker>
+

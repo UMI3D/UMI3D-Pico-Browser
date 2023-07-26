@@ -110,6 +110,19 @@ namespace umi3dVRBrowsersBase.connection
                 Umi3DVersionLabel.text = Application.version;
             }
 
+            umi3d.cdk.collaboration.UMI3DCollaborationClientServer.EnvironmentProgress = () =>
+            {
+                var p = new MultiProgress("Join Environement");
+                p.ResumeAfterFail = async (e) =>
+                {
+                    UnityEngine.Debug.Log("<color=Orange>Join environment fail: </color>" + $"{e}");
+                    await Task.Delay(10000);
+                    return true;
+                };
+
+                return p;
+            };
+
             keyboard.Hide();
         }
 

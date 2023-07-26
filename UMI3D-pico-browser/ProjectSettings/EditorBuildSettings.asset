@@ -6,9 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Dependencies/UMI3D VR Browsers Base/Scene/StartScene.unity
+    guid: d1162b709298a0142a26044a94149e03
+  - enabled: 1
+    path: Assets/Dependencies/UMI3D VR Browsers Base/Scene/ConnectionScene.unity
+    guid: 44aa666eee370bf4a80d4017f9d43047
+  - enabled: 1
+    path: Assets/Project/Scenes/MainImmersive.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
+    path: Assets/EXCLUDED/Load Bundle/LoadBundleScene.unity
+    guid: 09869bd204200f544ac61de2b5240bc1
   m_configObjects:
-    Unity.XR.PICO.LivePreview.Settings: {fileID: 11400000, guid: 5ee8b8800f299f6478c73c1d8af4f683, type: 2}
-    Unity.XR.PXR.Settings: {fileID: 11400000, guid: 1a9cbd76328f07142a712c1f9437e65d, type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6ba3f68efeb2bee4bbc6f80fd7da5310, type: 2}
+    Unity.XR.PICO.LivePreview.Settings: {fileID: 11400000, guid: 1b031d5673c994942b6ae4f0ca64b914,
+      type: 2}
+    Unity.XR.PXR.Settings: {fileID: 11400000, guid: ad7ce786c9f4dfe4ab0913cef8f649d2,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: e24bb04eaea4ed748987c901ff8cebb3,
+      type: 2}

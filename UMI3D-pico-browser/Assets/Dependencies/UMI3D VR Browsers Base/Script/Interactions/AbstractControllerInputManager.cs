@@ -248,7 +248,7 @@ namespace umi3dVRBrowsersBase.interactions
             }
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             foreach (ControllerType ctrl in Enum.GetValues(typeof(ControllerType)))
             {
