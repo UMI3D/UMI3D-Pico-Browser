@@ -32,6 +32,7 @@ namespace umi3d.common
         public const uint GetLocalInfoRequest = 7;
         public const uint RedirectionRequest = 8;
         public const uint ForceLogoutRequest = 9;
+        public const uint PlayPoseRequest = 10;
 
         public const uint UserMicrophoneStatus = 21;
         public const uint UserAvatarStatus = 22;
@@ -51,6 +52,10 @@ namespace umi3d.common
 
         public const uint MultiSetEntityProperty = 110;
 
+        public const uint UpdateBindingsActivation = 120;
+        public const uint AddBinding = 121;
+        public const uint RemoveBinding = 122;
+
 
         public const uint ProjectTool = 200;
         public const uint SwitchTool = 201;
@@ -62,8 +67,14 @@ namespace umi3d.common
         public const uint StopInterpolationProperty = 303;
         public const uint SetSendingCameraProperty = 304;
         public const uint SetSendingTracking = 305;
-        public const uint VehicleRequest = 306;
-        public const uint VehicleConfirmation = 307;
+        public const uint FrameRequest = 306;
+        public const uint FrameConfirmation = 307;
+        public const uint SetUTSBoneTargetFPS = 308;
+
+        public const uint FpsNavigationMode = 400;
+        public const uint FlyingNavigationMode = 401;
+        public const uint LayeredFlyingNavigationMode = 402;
+        public const uint LockedNavigationMode = 403;
 
         public const uint InteractionRequest = 10001;
         public const uint EventStateChanged = 10002;
@@ -76,14 +87,21 @@ namespace umi3d.common
         public const uint ParameterSettingRequest = 10009;
         public const uint ToolProjected = 10010;
         public const uint ToolReleased = 10011;
+
         public const uint UserCameraProperties = 10012;
         public const uint UserTrackingFrame = 10013;
         public const uint NotificationCallback = 10014;
         public const uint BoardedVehicleRequest = 10015;
+        public const uint UserTrackingBone = 10016;
 
         public const uint EmoteRequest = 10020;
 
+        public const uint ValidatePoseConditionRequest = 10030;
+        public const uint ActivatePoseAnimatorRequest = 10031;
+
         public const uint VolumeUserTransit = 10100;
+
+        public const uint WebViewUrlRequest = 10200;
 
     }
 

@@ -1,5 +1,6 @@
 ﻿/*
 Copyright 2019 - 2023 Inetum
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -11,6 +12,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections;
 using umi3d.common;
 using UnityEngine;
@@ -29,6 +31,7 @@ namespace umi3d.cdk
         private const DebugScope scope = DebugScope.CDK | DebugScope.Core | DebugScope.Animation;
 
         private VideoPlayer videoPlayer;
+        private GameObject videoPlayerGameObject;
         private Material mat;
         private RenderTexture renderTexture;
 
@@ -78,12 +81,12 @@ namespace umi3d.cdk
             mat.mainTexture = renderTexture;
 
             // create unity VideoPlayer
-            var videoPlayerGameObject = new GameObject("video");
+            videoPlayerGameObject = new GameObject("video");
             videoPlayerGameObject.transform.SetParent(UMI3DResourcesManager.Instance.transform);
             videoPlayer = videoPlayerGameObject.AddComponent<VideoPlayer>();
 
             // setup video player
-            FileDto fileDto = UMI3DEnvironmentLoader.Parameters.ChooseVariant(dto.videoResource.variants);
+            FileDto fileDto = UMI3DEnvironmentLoader.AbstractParameters.ChooseVariant(dto.videoResource.variants);
             if (!UMI3DClientServer.Instance.AuthorizationInHeader)
                 videoPlayer.url = UMI3DResourcesManager.Instance.SetAuthorisationWithParameter(fileDto.url, UMI3DClientServer.getAuthorization());
             else
@@ -124,9 +127,16 @@ namespace umi3d.cdk
             }
         }
 
+        [Obsolete("Use Clear() instead")]
         public void Clean()
         {
+            Clear();
+        }
+
+        public override void Clear()
+        {
             videoPlayer.Stop();
+            GameObject.Destroy(videoPlayerGameObject);
         }
 
         private async void VideoPlayer_errorReceived(VideoPlayer source, string message)

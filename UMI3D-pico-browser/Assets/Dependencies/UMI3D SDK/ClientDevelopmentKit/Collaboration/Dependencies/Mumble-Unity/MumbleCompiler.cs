@@ -30,7 +30,7 @@ using System.Linq;
 
 public class MumbleCompiler 
 {
-    const string plugginfloder = @"Assets\Dependencies\UMI3D SDK\ClientDevelopmentKit\Collaboration\Dependencies\Mumble-Unity/Plugins";
+    const string plugginfloder = @"Assets\UMI3D SDK\ClientDevelopmentKit\Collaboration\Dependencies\Mumble-Unity/Plugins";
 
     [MenuItem("Protobuf/Build model")]
     private static void BuildMyProtoModel()

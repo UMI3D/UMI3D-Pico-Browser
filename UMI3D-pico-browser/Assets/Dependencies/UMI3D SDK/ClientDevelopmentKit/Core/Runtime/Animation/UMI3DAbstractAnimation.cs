@@ -1,5 +1,6 @@
 ﻿/*
 Copyright 2019 - 2023 Inetum
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -14,7 +15,6 @@ limitations under the License.
 using MainThreadDispatcher;
 using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using umi3d.common;
 using UnityEngine;
@@ -90,7 +90,7 @@ namespace umi3d.cdk
                             }
                             else
                             {
-                                (value.entity.Object as UMI3DAbstractAnimation).Start(UMI3DClientServer.Instance.GetTime() - dto.startTime);
+                                (value.entity.Object as UMI3DAbstractAnimation).Start(ConvertStartTime(dto.startTime));
                             }
                         }
                         else
@@ -104,6 +104,10 @@ namespace umi3d.cdk
                     if (dto is UMI3DVideoPlayerDto)
                     {
                         (value.entity.Object as UMI3DVideoPlayer).SetLoopValue(dto.looping);
+                    }
+                    else if (dto is UMI3DAudioPlayerDto)
+                    {
+                        (value.entity.Object as UMI3DAudioPlayer).SetLoopValue(dto.looping);
                     }
                     break;
                 case UMI3DPropertyKeys.AnimationStartTime:
@@ -137,7 +141,7 @@ namespace umi3d.cdk
                             }
                             else
                             {
-                                (value.entity.Object as UMI3DAbstractAnimation).Start(UMI3DClientServer.Instance.GetTime() - dto.startTime);
+                                (value.entity.Object as UMI3DAbstractAnimation).Start(ConvertStartTime(dto.startTime));
                             }
                         }
                         else
@@ -152,6 +156,10 @@ namespace umi3d.cdk
                     {
                         (value.entity.Object as UMI3DVideoPlayer).SetLoopValue(dto.looping);
                     }
+                    else if (dto is UMI3DAudioPlayerDto)
+                    {
+                        (value.entity.Object as UMI3DAudioPlayer).SetLoopValue(dto.looping);
+                    }
                     break;
                 case UMI3DPropertyKeys.AnimationStartTime:
                     dto.startTime = UMI3DSerializer.Read<ulong>(value.container);
@@ -164,6 +172,25 @@ namespace umi3d.cdk
                     return await Task.FromResult(false);
             }
             return await Task.FromResult(true);
+        }
+
+        /// <summary>
+        /// Compute start time given from server time to star time from resource time.
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <returns></returns>
+        private float ConvertStartTime(ulong startTime)
+        {
+            ulong serverTime = UMI3DClientServer.Instance.GetTime();
+
+            if (startTime > serverTime)
+            {
+                return 0f;
+            }
+            else
+            {
+                return serverTime - startTime;
+            }
         }
 
         /// <summary>
@@ -193,7 +220,7 @@ namespace umi3d.cdk
                 if (dto.startTime == default)
                     UnityMainThreadDispatcher.Instance().Enqueue(StartNextFrame());
                 else
-                    UnityMainThreadDispatcher.Instance().Enqueue(StartNextFrameAt(UMI3DClientServer.Instance.GetTime() - dto.startTime));
+                    UnityMainThreadDispatcher.Instance().Enqueue(StartNextFrameAt(ConvertStartTime(dto.startTime)));
             }
 #endif
         }
@@ -226,7 +253,7 @@ namespace umi3d.cdk
         /// </summary>
         public async void Destroy()
         {
-            await UMI3DEnvironmentLoader.DeleteEntity(dto.id);
+            await UMI3DEnvironmentLoader.DeleteEntity(dto.id, null);
         }
 
         /// <summary>
@@ -272,5 +299,10 @@ namespace umi3d.cdk
             else
                 AnimationEnded?.Invoke();
         }
+
+        /// <summary>
+        /// Defines what to clear when this object is deleted.
+        /// </summary>
+        public abstract void Clear();
     }
 }

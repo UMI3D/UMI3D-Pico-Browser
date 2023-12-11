@@ -19,7 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using umi3d.common;
-using umi3d.common.collaboration;
+using umi3d.common.collaboration.dto;
+using umi3d.common.collaboration.dto.signaling;
 using UnityEngine;
 
 namespace umi3d.cdk.collaboration
@@ -27,15 +28,30 @@ namespace umi3d.cdk.collaboration
     /// <summary>
     /// Loader for <see cref="UMI3DCollaborationEnvironmentDto"/>.
     /// </summary>
-    public class UMI3DCollaborationEnvironmentLoader : UMI3DEnvironmentLoader
+    public class UMI3DCollaborationEnvironmentLoader : UMI3DEnvironmentLoader, ICollaborationEnvironmentManager
     {
-        public static new UMI3DCollaborationEnvironmentLoader Instance { get => UMI3DEnvironmentLoader.Instance as UMI3DCollaborationEnvironmentLoader; set => UMI3DEnvironmentLoader.Instance = value; }
+        public static new UMI3DCollaborationEnvironmentLoader Instance
+        {
+            get
+            {
+                if (ApplicationIsQuitting)
+                    return null;
+                if (!Exists)
+                    instance = new UMI3DCollaborationEnvironmentLoader();
+                if (UMI3DEnvironmentLoader.Instance is UMI3DCollaborationEnvironmentLoader collabEnvironmentLoader)
+                    return collabEnvironmentLoader;
+                else
+                    throw new Umi3dException("EnvironmentLoader instance is no UMI3DCollaborationEnvironmentLoader");
+            }
+        }
 
-        public List<UMI3DUser> UserList;
-        public static event Action OnUpdateUserList;
+        public IReadOnlyList<UMI3DUser> UserList => userList;
+        private List<UMI3DUser> userList = new();
 
-        public List<UMI3DUser> JoinnedUserList => UserList.Where(u => u.status >= StatusType.AWAY || (UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId())).ToList();
-        public static event Action OnUpdateJoinnedUserList;
+        public event Action OnUpdateUserList;
+
+        public IReadOnlyList<UMI3DUser> JoinnedUserList => UserList.Where(u => u.status >= StatusType.AWAY || (UMI3DCollaborationClientServer.Exists && u.id == UMI3DCollaborationClientServer.Instance.GetUserId())).ToList();
+        public event Action OnUpdateJoinnedUserList;
 
         private ulong lastTimeUserMessageListReceived = 0;
 
@@ -61,11 +77,16 @@ namespace umi3d.cdk.collaboration
         public override async Task ReadUMI3DExtension(GlTFEnvironmentDto _dto, GameObject node)
         {
             await base.ReadUMI3DExtension(_dto, node);
+
             var dto = (_dto?.extensions)?.umi3d as UMI3DCollaborationEnvironmentDto;
-            if (dto == null) return;
-            UserList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
+            if (dto == null) 
+                return;
+
+            userList = dto.userList.Select(u => new UMI3DUser(u)).ToList();
+
             OnUpdateUserList?.Invoke();
             OnUpdateJoinnedUserList?.Invoke();
+
             AudioManager.Instance.OnUserSpeaking.AddListener(OnUserSpeaking);
         }
 
@@ -174,6 +195,8 @@ namespace umi3d.cdk.collaboration
                         string value = UMI3DSerializer.Read<string>(data.container);
                         return UpdateUser(data.propertyKey, data.entity, value);
                     }
+
+
                 case UMI3DPropertyKeys.UserOnStartSpeakingAnimationId:
                 case UMI3DPropertyKeys.UserOnStopSpeakingAnimationId:
                     {
@@ -184,6 +207,7 @@ namespace umi3d.cdk.collaboration
                     return false;
             }
         }
+
 
         /// <summary>
         /// Update Userlist
@@ -258,13 +282,15 @@ namespace umi3d.cdk.collaboration
             return user?.UpdateUser(property, value) ?? false;
         }
 
+
+
         private void InsertUser(UMI3DCollaborationEnvironmentDto dto, int index, UserDto userDto)
         {
-            if (UserList.Exists((user) => user.id == userDto.id)) return;
+            if (userList.Exists((user) => user.id == userDto.id)) return;
 
             if (index >= 0 && index <= UserList.Count)
             {
-                UserList.Insert(index, new UMI3DUser(userDto));
+                userList.Insert(index, new UMI3DUser(userDto));
                 OnUpdateUserList?.Invoke();
                 OnUpdateJoinnedUserList?.Invoke();
             }
@@ -281,7 +307,7 @@ namespace umi3d.cdk.collaboration
             if (index >= 0 && index < UserList.Count)
             {
                 UMI3DUser Olduser = UserList[index];
-                UserList.RemoveAt(index);
+                userList.RemoveAt(index);
                 Olduser.Destroy();
                 OnUpdateUserList?.Invoke();
                 OnUpdateJoinnedUserList?.Invoke();
@@ -314,7 +340,7 @@ namespace umi3d.cdk.collaboration
         private void ReplaceAllUser(UMI3DCollaborationEnvironmentDto dto, List<UserDto> usersNew)
         {
             foreach (UMI3DUser user in UserList) user.Destroy();
-            UserList = usersNew.Select(u => new UMI3DUser(u)).ToList();
+            userList = usersNew.Select(u => new UMI3DUser(u)).ToList();
             OnUpdateUserList?.Invoke();
             OnUpdateJoinnedUserList?.Invoke();
         }

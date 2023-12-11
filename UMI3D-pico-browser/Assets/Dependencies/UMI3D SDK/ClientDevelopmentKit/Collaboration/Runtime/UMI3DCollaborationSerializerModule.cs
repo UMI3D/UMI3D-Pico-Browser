@@ -16,7 +16,7 @@ limitations under the License.
 
 using umi3d.cdk.interaction;
 using umi3d.common;
-using umi3d.common.collaboration;
+using umi3d.common.collaboration.dto.signaling;
 using umi3d.common.interaction;
 
 namespace umi3d.cdk.collaboration
@@ -26,8 +26,22 @@ namespace umi3d.cdk.collaboration
     /// </summary>
     public class UMI3DCollaborationSerializerModule : UMI3DSerializerModule
     {
+        public bool? IsCountable<T>()
+        {
+            return true switch
+            {
+                true when typeof(T) == typeof(UserDto) => true,
+                true when typeof(T) == typeof(AnimationChainDto) => true,
+                true when typeof(T) == typeof(UMI3DNodeAnimation.OperationChain) => true,
+                true when typeof(T) == typeof(AbstractInteractionDto) => true,
+                true when typeof(T) == typeof(DofGroupOptionDto) => true,
+                true when typeof(T) == typeof(DofGroupDto) => true,
+                _ => null
+            };
+        }
+
         /// <inheritdoc/>
-        public override bool Read<T>(ByteContainer container, out bool readable, out T result)
+        public bool Read<T>(ByteContainer container, out bool readable, out T result)
         {
             switch (true)
             {
@@ -42,7 +56,7 @@ namespace umi3d.cdk.collaboration
                     {
                         id = UMI3DSerializer.Read<ulong>(container),
                         status = (StatusType)UMI3DSerializer.Read<uint>(container),
-                        avatarId = UMI3DSerializer.Read<ulong>(container),
+                        //avatarId = UMI3DSerializer.Read<ulong>(container),
                         audioSourceId = UMI3DSerializer.Read<ulong>(container),
                         audioFrequency = UMI3DSerializer.Read<int>(container),
                         videoSourceId = UMI3DSerializer.Read<ulong>(container),
@@ -59,12 +73,14 @@ namespace umi3d.cdk.collaboration
                         audioLogin = UMI3DSerializer.Read<string>(container),
                         audioUseMumble = UMI3DSerializer.Read<bool>(container),
 
-                        login = UMI3DSerializer.Read<string>(container)
+                        login = UMI3DSerializer.Read<string>(container),
+                        userSize = UMI3DSerializer.Read<Vector3Dto>(container),
+
                     };
                     result = (T)(object)user;
                     readable = true;
                     return true;
-                case true when typeof(T) == typeof(UMI3DAnimationDto.AnimationChainDto):
+                case true when typeof(T) == typeof(AnimationChainDto):
                     {
                         if (container.length < sizeof(ulong) + sizeof(float))
                         {
@@ -72,7 +88,7 @@ namespace umi3d.cdk.collaboration
                             readable = false;
                             return true;
                         }
-                        var value = new UMI3DAnimationDto.AnimationChainDto()
+                        var value = new AnimationChainDto()
                         {
                             animationId = UMI3DSerializer.Read<ulong>(container),
                             startOnProgress = UMI3DSerializer.Read<float>(container),
@@ -126,7 +142,7 @@ namespace umi3d.cdk.collaboration
         }
 
         /// <inheritdoc/>
-        public override bool Write<T>(T value, out Bytable bytable)
+        public bool Write<T>(T value, out Bytable bytable, params object[] parameters)
         {
             bytable = null;
             return false;
