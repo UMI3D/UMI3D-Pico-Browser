@@ -11,11 +11,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using umi3d.cdk;
 using umi3d.cdk.interaction;
+using umi3d.cdk.userCapture.pose;
 using umi3d.common;
 using umi3dBrowsers.interaction.selection;
 using umi3dBrowsers.interaction.selection.cursor;
@@ -32,6 +34,7 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
     /// </summary>
     public class RayCursor : AbstractPointingCursor
     {
+
         [Header("Laser"), SerializeField, Tooltip("Laser's cylindric part.")]
         public GameObject laserObject;
 
@@ -39,6 +42,9 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
 
         [Header("ImpactPoint"), SerializeField, Tooltip("Laser's impact sphere.")]
         private GameObject impactPoint;
+
+        [SerializeField]
+        private LayerMask _uiMask;
 
         private Renderer impactPointRenderer;
 
@@ -136,17 +142,17 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
                     return;
 
                 trackingInfo.targetContainer.Interactable.HoverEnter(
-                    controller.bone.boneType,
+                    controller.bone.Bonetype,
                     controller.bone.transform.position,
                     new Vector4(controller.bone.transform.rotation.x, controller.bone.transform.rotation.y, controller.bone.transform.rotation.z, controller.bone.transform.rotation.w),
                     trackingInfo.targetContainer.Interactable.id,
                     trackingInfo.targetContainer.transform.InverseTransformPoint(trackingInfo.raycastHit.point),
                     trackingInfo.targetContainer.transform.InverseTransformDirection(trackingInfo.raycastHit.normal),
-                    trackingInfo.directionWorld);
+                    trackingInfo.directionWorld);             
 
                 if (trackingInfo.target.dto.HoverEnterAnimationId != 0)
                 {
-                    changelastBone.Invoke(controller.bone.boneType);
+                    changelastBone.Invoke(controller.bone.Bonetype);
                     StartAnim(trackingInfo.target.dto.HoverEnterAnimationId);
                 }
             });
@@ -159,7 +165,7 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
                 if (!IsNullOrDestroyed(trackingInfo.targetContainer))
                 {
                     trackingInfo.targetContainer.Interactable.HoverExit(
-                        controller.bone.boneType,
+                        controller.bone.Bonetype,
                         controller.bone.transform.position,
                         new Vector4(controller.bone.transform.rotation.x, controller.bone.transform.rotation.y, controller.bone.transform.rotation.z, controller.bone.transform.rotation.w),
                         trackingInfo.targetContainer.Interactable.id,
@@ -173,18 +179,18 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
                     {
                         toolId = trackingInfo.targetContainer.Interactable.id,
                         hoveredObjectId = trackingInfo.targetContainer.Interactable.id,
-                        boneType = controller.bone.boneType,
+                        boneType = controller.bone.Bonetype,
                         state = false,
-                        normal = Vector3.zero,
-                        position = Vector3.zero,
-                        direction = Vector3.zero
+                        normal = Vector3.zero.Dto(),
+                        position = Vector3.zero.Dto(),
+                        direction = Vector3.zero.Dto()
                     };
-                    UMI3DClientServer.SendData(hoverDto, true);
+                    UMI3DClientServer.SendRequest(hoverDto, true);
                 }
 
                 if (trackingInfo.target.dto.HoverExitAnimationId != 0)
                 {
-                    changelastBone.Invoke(controller.bone.boneType);
+                    changelastBone.Invoke(controller.bone.Bonetype);
                     StartAnim(trackingInfo.target.dto.HoverExitAnimationId);
                 }
             });
@@ -195,7 +201,7 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
                     return;
 
                 trackingInfo.targetContainer.Interactable.Hovered(
-                    controller.bone.boneType,
+                    controller.bone.Bonetype,
                     controller.bone.transform.position,
                     new Vector4(controller.bone.transform.rotation.x, controller.bone.transform.rotation.y, controller.bone.transform.rotation.z, controller.bone.transform.rotation.w),
                     trackingInfo.targetContainer.Interactable.id,
@@ -246,6 +252,15 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
 
         public void Update()
         {
+            // Priority on touch UI
+            var ray = new Ray(transform.position, transform.up);
+            (RaycastHit[] hits, int hitCount) hitsInfo = umi3d.common.Physics.RaycastAll(ray, maxLength, _uiMask);
+            if (hitsInfo.hitCount > 0)
+            {
+                SetImpactOnClosest(hitsInfo);
+                return;
+            }
+
             raycastHelperSelectable = new RaySelectionZone<Selectable>(transform.position, transform.up);
             raycastHelperInteractable = new RaySelectionZone<InteractableContainer>(transform.position, transform.up);
             raycastHelperElement = new RaySelectionZone<AbstractClientInteractableElement>(transform.position, transform.up);
@@ -264,10 +279,15 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
 
             var listReachableObjects = listObjects.Where(x => IsAtReach(x.Key, x.Value.distance));
 
-            if (listReachableObjects.Any())
-                SetImpactOnClosest(listReachableObjects.Select(x => x.Value));
+            if (listReachableObjects.Count() > 0)
+            {
+                var hits = listReachableObjects.Select(x => x.Value);
+                SetImpactOnClosest((hits.ToArray(), hits.Count())); 
+            }
             else
-                SetInfinitePoint();
+            {
+                SetInfinitePoint(); 
+            }
 
             //cache cursor tracking info
             lastTrackingInfo = trackingInfo;
@@ -362,17 +382,24 @@ namespace umi3dVRBrowsersBase.interactions.selection.cursor
         /// Look for the best raycasthit and set the impact point
         /// </summary>
         /// <param name="raycastHits"></param>
-        private void SetImpactOnClosest(IEnumerable<RaycastHit> raycastHits)
+        private void SetImpactOnClosest((RaycastHit[] hits, int hitCount) hitsInfo)
         {
-            var minDist = raycastHits.Min(x => x.distance);
-            foreach (RaycastHit rh in raycastHits)
+            if (hitsInfo.hitCount == 0)
             {
-                if (rh.distance == minDist)
+                return;
+            }
+            var minDist = hitsInfo.hits[0].distance;
+            var minHit = hitsInfo.hits[0];
+            for (int i = 1; i < hitsInfo.hitCount; i++)
+            {
+                if (hitsInfo.hits[i].distance < minDist)
                 {
-                    SetImpactPoint(rh.point);
-                    break;
+                    minDist = hitsInfo.hits[i].distance;
+                    minHit = hitsInfo.hits[i];
                 }
             }
+
+            SetImpactPoint(minHit.point);
         }
 
         /// <summary>

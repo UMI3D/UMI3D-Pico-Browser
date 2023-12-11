@@ -16,9 +16,9 @@ limitations under the License.
 
 using System.Collections;
 using umi3d.cdk;
+using umi3d.cdk.userCapture.pose;
 using umi3d.common;
 using umi3d.common.interaction;
-using umi3dVRBrowsersBase.ui;
 using umi3dVRBrowsersBase.ui.keyboard;
 using umi3dVRBrowsersBase.ui.playerMenu;
 using UnityEngine;
@@ -134,8 +134,8 @@ namespace umi3dVRBrowsersBase.interactions.input
                                 id = interaction.id,
                                 toolId = toolId,
                                 hoveredObjectId = hoveredObjectId,
-                                bonePosition = boneTransform.position,
-                                boneRotation = boneTransform.rotation,
+                                bonePosition = boneTransform.position.Dto(),
+                                boneRotation = boneTransform.rotation.Dto(),
                             }, true);
                             risingEdgeEventSent = true;
                         }
@@ -147,8 +147,8 @@ namespace umi3dVRBrowsersBase.interactions.input
                                 toolId = toolId,
                                 id = interaction.id,
                                 hoveredObjectId = hoveredObjectId,
-                                bonePosition = boneTransform.position,
-                                boneRotation = boneTransform.rotation,
+                                bonePosition = boneTransform.position.Dto(),
+                                boneRotation = boneTransform.rotation.Dto(),
                             }, true);
                         }
                         (controller as VRController).IsInputPressed = true;
@@ -175,8 +175,8 @@ namespace umi3dVRBrowsersBase.interactions.input
                                     boneType = boneType,
                                     id = interaction.id,
                                     toolId = toolId,
-                                    bonePosition = boneTransform.position,
-                                    boneRotation = boneTransform.rotation,
+                                    bonePosition = boneTransform.position.Dto(),
+                                    boneRotation = boneTransform.rotation.Dto(),
                                 }, true);
                                 risingEdgeEventSent = false;
                             }

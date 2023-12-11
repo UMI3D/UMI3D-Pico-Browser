@@ -62,9 +62,9 @@ namespace umi3d.picoBrowser
             }
 
             /// <summary>
-            /// Increament the frame counter.
+            /// Increments the frame counter.
             /// </summary>
-            public void IncreamentFrame() => Frame++;
+            public void IncrementFrame() => Frame++;
         }
 
         public Dictionary<ControllerType, bool> isTeleportDown = new Dictionary<ControllerType, bool>();
@@ -99,38 +99,38 @@ namespace umi3d.picoBrowser
 
             bool value;
 
-            GrabLeftState.IncreamentFrame();
+            GrabLeftState.IncrementFrame();
             LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
             GrabLeftState.SetPressState(value);
-            GrabRightState.IncreamentFrame();
+            GrabRightState.IncrementFrame();
             RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out value);
             GrabRightState.SetPressState(value);
 
-            JoystickLeftButtonState.IncreamentFrame();
+            JoystickLeftButtonState.IncrementFrame();
             LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
             JoystickLeftButtonState.SetPressState(value);
-            JoystickRightButtonState.IncreamentFrame();
+            JoystickRightButtonState.IncrementFrame();
             RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out value);
             JoystickRightButtonState.SetPressState(value);
 
-            PrimaryLeftState.IncreamentFrame();
+            PrimaryLeftState.IncrementFrame();
             LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
             PrimaryLeftState.SetPressState(value);
-            PrimaryRightState.IncreamentFrame();
+            PrimaryRightState.IncrementFrame();
             RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out value);
             PrimaryRightState.SetPressState(value);
 
-            SecondaryLeftState.IncreamentFrame();
+            SecondaryLeftState.IncrementFrame();
             LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
             SecondaryLeftState.SetPressState(value);
-            SecondaryRightState.IncreamentFrame();
+            SecondaryRightState.IncrementFrame();
             RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out value);
             SecondaryRightState.SetPressState(value);
 
-            TriggerLeftState.IncreamentFrame();
+            TriggerLeftState.IncrementFrame();
             LeftController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
             TriggerLeftState.SetPressState(value);
-            TriggerRightState.IncreamentFrame();
+            TriggerRightState.IncrementFrame();
             RightController.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out value);
             TriggerRightState.SetPressState(value);
         }

@@ -319,8 +319,7 @@ namespace umi3dVRBrowsersBase.interactions.selection.selector
         }
 
         /// <summary>
-        /// Create an appropriate selection intent data container
-        /// used to keep track of the detection occurence in the selection process.
+        /// Create an appropriate selection intent data.
         /// </summary>
         /// <param name="obj">Object that is selection intent target.</param>
         /// <param name="origin">Paradigm of selection used.</param>
@@ -385,10 +384,9 @@ namespace umi3dVRBrowsersBase.interactions.selection.selector
         /// <param name="selectionInfo"></param>
         protected virtual void Select(SelectionIntentData<T> selectionInfo)
         {
-            //the selector was selecting something before
             if (isSelecting)
             {
-                if (selectionInfo == null && LastSelected != null) //the selector should remember it choose to select nothing this time
+                if (selectionInfo == null && LastSelected != null) //the selector was selecting something before and should remember it choose to select nothing this time
                 {
                     Deselect(LastSelected);
                     LastSelected = null;
@@ -402,13 +400,14 @@ namespace umi3dVRBrowsersBase.interactions.selection.selector
                     if (PlayerMenuManager.Instance.parameterGear.IsDisplayed)
                         PlayerMenuManager.Instance.parameterGear.Hide();
                 }
+
             }
 
             projector.Project(selectionInfo.selectedObject, controller);
             selectionInfo.hasBeenSelected = true;
             LastSelected = selectionInfo;
             isSelecting = true;
-            selectionEvent.Invoke(selectionInfo);
+            selectionEvent?.Invoke(selectionInfo);
             foreach (var detector in PointingDetectors)
                 detector.Reinit();
             foreach (var detector in ProximityDetectors)

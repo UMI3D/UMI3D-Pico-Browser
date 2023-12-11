@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.menu.interaction;
-using umi3d.cdk.userCapture;
+using umi3d.cdk.userCapture.tracking;
 using umi3d.common.interaction;
 using umi3dVRBrowsersBase.interactions.input;
 using umi3dVRBrowsersBase.ui.playerMenu;
@@ -41,7 +41,7 @@ namespace umi3dVRBrowsersBase.interactions
         /// <summary>
         /// Asoociated bone.
         /// </summary>
-        public UMI3DClientUserTrackingBone bone;
+        public Tracker bone;
 
         #region Inputs Fields
 
@@ -103,6 +103,8 @@ namespace umi3dVRBrowsersBase.interactions
             if (currentTool == tool) // It means projection succedded
             {
                 PlayerMenuManager.Instance.MenuHeader.DisplayControllerButton(true, type, tool.name);
+
+                tool.onProjected(bone.Bonetype);
             }
         }
 
@@ -114,7 +116,7 @@ namespace umi3dVRBrowsersBase.interactions
         public override bool IsCompatibleWith(AbstractTool tool)
         {
             return tool.interactionsLoaded.TrueForAll(inter =>
-                (inter is ManipulationDto) ?
+                (inter is ManipulationDto ) ?
                 (inter as ManipulationDto).dofSeparationOptions.Exists(
                     group => !group.separations.Exists(
                         dof => (dof.dofs == DofGroupEnum.X_RX) || (dof.dofs == DofGroupEnum.Y_RY) || (dof.dofs == DofGroupEnum.Z_RZ)))
@@ -277,7 +279,7 @@ namespace umi3dVRBrowsersBase.interactions
         public override void Release(AbstractTool tool, InteractionMappingReason reason)
         {
             base.Release(tool, reason);
-            tool.onReleased(bone.boneType);
+            tool.onReleased(bone.Bonetype);
 
             PlayerMenuManager.Instance.CtrlToolMenu.ClearBindingList(type);
             PlayerMenuManager.Instance.MenuHeader.DisplayControllerButton(false, type, string.Empty);

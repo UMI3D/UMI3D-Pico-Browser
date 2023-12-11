@@ -123,7 +123,7 @@ namespace umi3dVRBrowsersBase.connection
             return url;
         }
 
-        public async Task<MediaDto> GetMedia(PlayerPrefsManager.FavoriteServerData connectionData)
+        public async Task<MediaDto> GetMedia(PlayerPrefsManager.VirtualWorldData connectionData)
         {
             if (LoadingPanel.Exists)
                 LoadingPanel.Instance.Display("Connecting ...");
@@ -131,7 +131,7 @@ namespace umi3dVRBrowsersBase.connection
             //this.data = data;
             LoginPasswordAsker.Instance.Hide();
 
-            var curentUrl = FormatUrl(connectionData.serverUrl, null) + UMI3DNetworkingKeys.media;
+            var curentUrl = FormatUrl(connectionData.worldUrl, null) + UMI3DNetworkingKeys.media;
             url = curentUrl;
             try
             {
@@ -321,7 +321,7 @@ namespace umi3dVRBrowsersBase.connection
         /// <returns></returns>
         private IEnumerator LoadConnectionScene()
         {
-            AsyncOperation async = SceneManager.LoadSceneAsync(thisScene, LoadSceneMode.Single);
+            UnityEngine.AsyncOperation async = SceneManager.LoadSceneAsync(thisScene, LoadSceneMode.Single);
             yield return new WaitUntil(() => async.isDone);
             Destroy(this.gameObject);
         }

@@ -14,6 +14,7 @@ limitations under the License.
 using TMPro;
 using umi3d.cdk.interaction;
 using umi3dBrowsers.interaction.selection.zoneselection;
+using umi3dVRBrowsersBase.interactions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -21,8 +22,8 @@ using UnityEngine.UI;
 namespace umi3dBrowsers.interaction.selection.projector
 {
     /// <summary>
-    /// Projector for UI Selectable.
-    /// Identifies the Selectable type and interacts with it.
+    /// Projector for Selectable.
+    /// Identifies the Selectable type and interact with it.
     /// </summary>
     /// /// Does not really projects the UMI3D interactions but act like it is projecting the client own's interactions.
     public class SelectableProjector : IProjector<Selectable>
@@ -30,7 +31,7 @@ namespace umi3dBrowsers.interaction.selection.projector
         /// <inheritdoc/>
         public void Project(Selectable selectable, AbstractController controller)
         {
-            var pointerEventData = new PointerEventData(EventSystem.current) { clickCount = 1 };
+            var pointerEventData = new PointerEventData(EventSystem.current) { clickCount = 1, pointerId = (int) (controller as VRController).type };
             selectable.OnPointerEnter(pointerEventData);
         }
 
@@ -44,7 +45,7 @@ namespace umi3dBrowsers.interaction.selection.projector
             if (selectable != null) //protects against cases when UI element is destroyed but not deselected
             {
                 selectable.OnPointerExit(pointerEventData);
-                if (!(selectable is InputField || selectable is TMP_InputField)) //keep keyboard focus on input fields
+                if(!(selectable is InputField || selectable is TMP_InputField)) //keep keyboard focus on input fields
                     selectable.OnDeselect(pointerEventData);
             }
         }
@@ -91,6 +92,11 @@ namespace umi3dBrowsers.interaction.selection.projector
                 case Slider slider:
                     slider.Click(controller.transform);
                     break;
+
+                default:
+
+                    SendDefaultSelectableEvent(selectable, controller, eventData, false);
+                    break;
             }
         }
 
@@ -107,7 +113,30 @@ namespace umi3dBrowsers.interaction.selection.projector
                     button.PressDown(eventData);
                     currentlyPressedButton = button;
                     break;
+
+                default:
+                    SendDefaultSelectableEvent(selectable, controller, eventData, true);
+                    break;
             }
+        }
+
+        /// <summary>
+        /// Triggers the UI actions associated to the selectable when selectable was not handled by other methods.
+        /// </summary>
+        /// <param name="selectable"></param>
+        /// <param name="controller"></param>
+        /// <param name="eventData"></param>
+        private void SendDefaultSelectableEvent(Selectable selectable, AbstractController controller, PointerEventData eventData, bool down)
+        {
+            RaySelectionZone<Selectable> raycastHelper = new RaySelectionZone<Selectable>(controller.transform);
+            var closestAndRaycastHit = raycastHelper.GetClosestAndRaycastHit();
+
+            eventData.pointerCurrentRaycast = new RaycastResult { worldPosition = closestAndRaycastHit.raycastHit.point };
+
+            if (down)
+                ExecuteEvents.Execute(selectable.gameObject, eventData,ExecuteEvents.pointerDownHandler);
+            else
+                ExecuteEvents.Execute(selectable.gameObject, eventData, ExecuteEvents.pointerUpHandler);
         }
 
         /// <summary>
@@ -304,5 +333,14 @@ namespace umi3dBrowsers.interaction.selection.projector
         }
 
         #endregion Slider
+
+        #region RawImage
+
+        public static void Click(this RawImage image, PointerEventData pointerEventData)
+        {
+            ExecuteEvents.Execute(image.gameObject, pointerEventData, ExecuteEvents.pointerDownHandler);
+        }
+
+        #endregion RawImage
     }
 }

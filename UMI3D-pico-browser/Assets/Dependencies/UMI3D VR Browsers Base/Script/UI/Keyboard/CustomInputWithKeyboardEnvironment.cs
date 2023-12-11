@@ -95,8 +95,6 @@ namespace umi3dVRBrowsersBase.ui.keyboard
         {
             base.OnSelect(eventData);
 
-            UnityEngine.Debug.Log("<color=green>TODO: </color>" + $"keyboard with environment");
-
             if (keyboard != null && !keyboard.WasClosedLastFrame)
             {
                 Transform playerMenuTransform = PlayerMenuManager.Instance.MenuCanvasTransform;

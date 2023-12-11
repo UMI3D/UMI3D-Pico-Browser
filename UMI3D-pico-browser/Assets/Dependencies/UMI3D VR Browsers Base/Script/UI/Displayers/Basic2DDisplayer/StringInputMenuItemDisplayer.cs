@@ -15,6 +15,7 @@ using umi3d.cdk.menu;
 using umi3d.cdk.menu.view;
 using umi3dVRBrowsersBase.connection;
 using umi3dVRBrowsersBase.ui.keyboard;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace umi3dVRBrowsersBase.ui.displayers
@@ -50,6 +51,14 @@ namespace umi3dVRBrowsersBase.ui.displayers
             inputField.text = menuItem.GetValue();
             inputField.onValueChanged.AddListener(NotifyValueChange);
             label.text = menuItem.Name;
+
+            if (menuItem.isDisplayer)
+            {
+                label.alignment = TextAnchor.MiddleCenter;
+                inputField.gameObject.SetActive(false);
+                var rect = GetComponent<RectTransform>();
+                rect.sizeDelta = new Vector2(rect.sizeDelta.x, rect.sizeDelta.y / 2f);
+            }
 
             inputField.SetKeyboard(ConnectionMenuManager.instance.keyboard);
         }

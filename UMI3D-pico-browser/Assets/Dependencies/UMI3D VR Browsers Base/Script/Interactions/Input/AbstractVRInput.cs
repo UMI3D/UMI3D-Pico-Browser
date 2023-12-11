@@ -64,10 +64,9 @@ namespace umi3dVRBrowsersBase.interactions.input
 
             if (controller is VRController vrController)
             {
-                boneType = vrController.bone.boneType;
+                boneType = vrController.bone.Bonetype;
                 boneTransform = vrController.bone.transform;
-            } 
-            else
+            } else
             {
                 Debug.LogError("Internal error, controllers must be VRController");
             }

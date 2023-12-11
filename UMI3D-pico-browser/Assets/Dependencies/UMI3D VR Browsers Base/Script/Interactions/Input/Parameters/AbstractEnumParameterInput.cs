@@ -65,9 +65,9 @@ namespace umi3dVRBrowsersBase.interactions.input
                             name = stringEnum.name,
                             possibleValues = stringEnum.possibleValues
                         },
-                        boneType = bone.boneType,
-                        bonePosition = bone.transform.position,
-                        boneRotation = bone.transform.rotation,
+                        boneType = bone.Bonetype,
+                        bonePosition = bone.transform.position.Dto(),
+                        boneRotation = bone.transform.rotation.Dto(),
                     }, true);
                 };
 

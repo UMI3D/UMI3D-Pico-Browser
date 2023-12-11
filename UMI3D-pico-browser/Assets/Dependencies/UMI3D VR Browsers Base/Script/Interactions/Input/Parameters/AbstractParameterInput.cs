@@ -18,6 +18,7 @@ using umi3d.cdk;
 using umi3d.cdk.interaction;
 using umi3d.cdk.menu;
 using umi3d.cdk.userCapture;
+using umi3d.cdk.userCapture.tracking;
 using umi3d.common.interaction;
 using umi3d.common.userCapture;
 using umi3dVRBrowsersBase.ui.playerMenu;
@@ -46,7 +47,7 @@ namespace umi3dVRBrowsersBase.interactions.input
         /// <summary>
         /// Avatar bone linked to this input.
         /// </summary>
-        public UMI3DClientUserTrackingBone bone;
+        public Tracker bone;
 
         /// <summary>
         /// Interaction currently associated to this input.
@@ -114,9 +115,9 @@ namespace umi3dVRBrowsersBase.interactions.input
 
                     UMI3DClientServer.SendData(new ParameterSettingRequestDto()
                     {
-                        boneType = bone.boneType,
-                        bonePosition = bone.transform.position,
-                        boneRotation = bone.transform.rotation,
+                        boneType = bone.Bonetype,
+                        bonePosition = bone.transform.position.Dto(),
+                        boneRotation = bone.transform.rotation.Dto(),
                         toolId = toolId,
                         parameter = new ParameterType()
                         {

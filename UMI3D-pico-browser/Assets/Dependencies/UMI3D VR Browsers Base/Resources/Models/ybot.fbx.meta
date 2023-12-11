@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6b73da0d2c370b34da82fd05471c31dd
+guid: 42b8dd0711a245241bb640a2a7efb0d0
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
@@ -8,7 +8,7 @@ ModelImporter:
     second: mixamo.com
   externalObjects: {}
   materials:
-    materialImportMode: 1
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -17,7 +17,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
-    removeConstantScaleCurves: 0
+    removeConstantScaleCurves: 1
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -78,7 +78,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-  referencedClips: []
+  referencedClips:
+  - 01cb7c7d0be49054b92aa2aa3e53ec13
+  - bbb8684b899dd8f4a8919879c4dd862f
+  - fc7b6f81346a4df48ae713f8ea97c16a
   importAnimation: 1
   humanDescription:
     serializedVersion: 3
