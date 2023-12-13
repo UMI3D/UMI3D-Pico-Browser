@@ -67,7 +67,7 @@ namespace umi3dVRBrowsersBase.interactions.selection.selector
             // probably should not belong in that piece of code
             if (!activated)
                 return;
-
+            UnityEngine.Debug.Log($"{AbstractControllerInputManager.Exists}");
             if (AbstractControllerInputManager.Instance.GetButtonDown(controller.type, ActionType.Trigger)
                 || AbstractControllerInputManager.Instance.GetButtonDown(controller.type, ActionType.Grab))
             {
