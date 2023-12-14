@@ -2493,7 +2493,7 @@ PrefabInstance:
     - target: {fileID: 5988314907380347006, guid: 6d8cc188ac4cb49419e2616ed25f607d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.00093177595
+      value: -0.000009536092
       objectReference: {fileID: 0}
     - target: {fileID: 6093459749334264534, guid: 6d8cc188ac4cb49419e2616ed25f607d,
         type: 3}
@@ -8117,7 +8117,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1049886751}
-  - component: {fileID: 1049886752}
   m_Layer: 0
   m_Name: mixamorig:RightToe_End
   m_TagString: Untagged
@@ -8140,20 +8139,6 @@ Transform:
   m_Father: {fileID: 1007111522}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1049886752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1049886750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneType: 0
-  positionComputed: 0
 --- !u!1 &1051725234
 GameObject:
   m_ObjectHideFlags: 0
@@ -10511,7 +10496,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1382784464}
-  - component: {fileID: 1382784465}
   m_Layer: 0
   m_Name: mixamorig:LeftToe_End
   m_TagString: Untagged
@@ -10534,20 +10518,6 @@ Transform:
   m_Father: {fileID: 1417789095}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1382784465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1382784463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0aa0e47305894f4ea13a82debadbd14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneType: 0
-  positionComputed: 0
 --- !u!1 &1385131046
 GameObject:
   m_ObjectHideFlags: 0
