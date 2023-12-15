@@ -14,9 +14,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Project/Scenes/MainImmersive.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: Assets/EXCLUDED/Load Bundle/LoadBundleScene.unity
-    guid: 09869bd204200f544ac61de2b5240bc1
   m_configObjects:
     Unity.XR.PICO.LivePreview.Settings: {fileID: 11400000, guid: 1b031d5673c994942b6ae4f0ca64b914,
       type: 2}
