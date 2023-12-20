@@ -1253,13 +1253,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e529daf256d964ab0f322cadf440e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowedAvatarNode: {fileID: 1567646433}
+  FollowedAvatarNode: {fileID: 1141248488}
   OVRRig: {fileID: 801105546}
   SkeletonAnimator: {fileID: 575529204}
   LeftTarget: {fileID: 800298303}
   RightTarget: {fileID: 1556547449}
-  LeftTracker: {fileID: 800298305}
-  RightTracker: {fileID: 1556547451}
+  LeftTracker: {fileID: 0}
+  RightTracker: {fileID: 0}
 --- !u!4 &200068054
 Transform:
   m_ObjectHideFlags: 0
@@ -2398,7 +2398,7 @@ PrefabInstance:
     - target: {fileID: 5988314907380347006, guid: 6d8cc188ac4cb49419e2616ed25f607d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0000072528283
+      value: 0.000040399682
       objectReference: {fileID: 0}
     - target: {fileID: 6093459749334264534, guid: 6d8cc188ac4cb49419e2616ed25f607d,
         type: 3}
